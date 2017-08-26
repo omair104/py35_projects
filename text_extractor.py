@@ -1,14 +1,14 @@
 import os, time
 from collections import defaultdict
 data_dict = defaultdict(list)
-import numpy as np
+import numpy as np 
 
-org_file_directory=r'H:\circle\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\txt'
+org_file_directory=r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\txt'
 file_name = 'allen.txt'
 path_org_file= os.path.join(org_file_directory, file_name)
 
 
-directory_file = r'H:\\circle\\Parsed Corpus of Early English Correspondence (RAW AND FULL)\\2510\PCEEC\\corpus\\txt\\extracted'
+directory_file = r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\\2510\PCEEC\\corpus\\txt\\extracted'
 
 
 #scan_upto = 'ALLEN'
@@ -16,8 +16,11 @@ name = os.path.splitext(file_name)[0]
 scan_upto = name.upper()+','
 print(scan_upto)
 
-#org_file = open(path_org_file, 'r')
-#print(org_file)
+remove_list= ['$', '</paren>' ,'<paren>', '{ED:Englefield}','{ED:Louvain}', '{ED:Owen}', '{ED:Dr._Morys_Clynnog}', '{ED:ADDRESSED_BY_ALLEN:}', 
+              '<P_8>','<P_9>', '<P_10>','<P_11>', '<P_12>', '<P_13>', '<P_14>' ,'<P_14>', '<P_15>','<P_16>','<P_17>','<P_18>','<P_19>','<P_73>', '<P_230', 
+              '<P_231>','<P_235>',
+              '<heading>','</heading>']
+
 
 with open(path_org_file) as f:
     content = f.readlines()
@@ -55,7 +58,6 @@ for x in range(0, len(content)):
         
 #print(data_dict)
 
-
 for file_name in data_dict:
     file = os.path.join(directory_file, file_name+'.txt')
     print(file_name)
@@ -85,8 +87,10 @@ for file_name in data_dict:
     letter_name = header_3[1].rstrip()
     letter_date = header_3[3].rstrip()
     letter_autograph= header_3[5].rstrip()
+    corpus='parsed_corpus_of_early_english_correspondence'
+    num=letter_name[-1]
     
-    written_header = '<author_age=%s> <author_date_of_birth=%s> <author_gender=%s> <author_name=%s> <recipient_age=%s> <recipient_date_of_birth=%s> <recipient_gender=%s> <recipient_name=%s> <letter_autograph=%s> <letter_date=%s> <letter_name=%s> \n' %(author_age, author_dob, author_gender, author_name, recipient_age, recipient_dob, recipient_gender, recipient_name, letter_autograph, letter_date, letter_name) 
+    written_header = '<file> <no=%s> <corpusnumber=%s> <corpus=%s> <author=%s> <dialect=bre> <authorage=%s> <pubdate=%s> <genre1=letter> <genre2=X> <encoding=utf-8> <text> \n' %(num, letter_name, corpus, author_name, author_age, letter_date) 
     
     f.write(written_header+ '\n')
     
@@ -97,12 +101,23 @@ for file_name in data_dict:
         #print(start_line)
         
         while(scan_upto not in content[start_line]):
-            f.write(content[start_line])
+            filtered_line = content[start_line]
+            for remove_element in remove_list:
+                filtered_line=filtered_line.replace(remove_element,'')
+
+            f.write(filtered_line)
             start_line = start_line+1
             
         #print(content[start_line].rsplit(scan_upto, 1)[0])
-        f.write(content[start_line].rsplit(scan_upto, 1)[0])
+        
+        filtered_line = content[start_line]
+        for remove_element in remove_list:
+            filtered_line=filtered_line.replace(remove_element,'')
+        f.write(filtered_line.rsplit(scan_upto, 1)[0])
         f.write('\n')
+        
+    footer = '\n</text> </file>'
+    f.write(footer)
     
     f.close()
 

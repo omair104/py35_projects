@@ -68,6 +68,19 @@ for x in range(0, len(content)):
     pubdate= re.findall('>.*?<',content[x])[0][1:-1]
     break
 
+title_date=pubdate
+for x in range(0, len(content)):
+    while ('<title level="m">' not in content[x]): 
+        x=x+1
+    m = re.search("1", content[x])
+    #print(m.start())
+    
+    if m:
+        start= m.start()
+        title_date= content[x][start:-9]
+    break
+print(title_date)
+    
 opener_exists= False
 for x in range(0, len(content)):
     if ('<opener>' not in content[x]): 
@@ -75,7 +88,6 @@ for x in range(0, len(content)):
     else:
         opener_exists= True
 
-print(opener_exists)
 
 
 file_number=0
@@ -90,12 +102,11 @@ while(x<len(content)-2):
     file_number = file_number+1
 
     written_header = '<file> <no=%s> <corpusnumber=%s> <corpus=helsinki_corpus_xml_edition> <title=%s> <author=%s> \
-<dialect=Early Modern English> <authorage=%s> <pubdate=%s> <genre1=let.non-priv> <genre2=X>  <encoding=utf-8> <text> \n\n' %(file_number,corpus_number, title, author, authorage, pubdate)
+<dialect=Early Modern English> <authorage=%s> <pubdate=%s> <genre1=let.non-priv> <genre2=X>  <encoding=utf-8> <text> \n\n' %(file_number,corpus_number, title, author, authorage, title_date)
 
     f.write(written_header)
     
     if opener_exists:
-        print('Do something here')
         while ('<opener>' not in content[x]): 
             x=x+1
             if x== len(content)-1:
@@ -120,13 +131,12 @@ while(x<len(content)-2):
         os.remove(file)
         break
     
-    print(x)
     while ('</p>' not in content[x]): 
         f.write(content[x][7:])
         x=x+1
     f.write(content[x][7:])
     f.write('\n</text> </file>')
-print(len(content))
+
 #print(written_header)
 
 f.close()

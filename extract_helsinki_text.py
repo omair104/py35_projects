@@ -93,6 +93,7 @@ for file in files:
             title_date= content[x][start:-9]
         break
     print(title_date)
+    re.sub("[^123456789-]", '', title_date)
         
     opener_exists= False
     for x in range(0, len(content)):

@@ -1,6 +1,10 @@
 import os 
 import re
 
+def filter_text(org):
+    result= org
+    return result
+
 path_to_xml=r'H:\circle\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\HC_XML_Master_v2.xml'
 
 '''
@@ -107,7 +111,7 @@ for file in files:
     x=0
     while ('<text' not in content[x]): 
             x=x+1        
-    
+     
     while(x<len(content)-2):
         file_number = file_number+1
         file= os.path.join(path, str(file_number)+'.txt')
@@ -130,9 +134,11 @@ for file in files:
                 file_number = file_number-1
                 break
             while ('</opener>' not in content[x]): 
-                f.write(content[x][7:])
+                res= filter_text(content[x])
+                f.write(res[7:])
                 x=x+1
-            f.write(content[x][7:])
+            res= filter_text(content[x])
+            f.write(res[7:])
             
     
     
@@ -147,12 +153,15 @@ for file in files:
             break
         
         while ('</p>' not in content[x]): 
-            f.write(content[x][7:])
+            res= filter_text(content[x])
+            f.write(res[7:])
             x=x+1
-        f.write(content[x][7:])
+        res= filter_text(content[x])
+        f.write(res[7:])
         f.write('\n</text> </file>')
         x=x+1
     
     #print(written_header)
     
     f.close()
+    

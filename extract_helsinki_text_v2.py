@@ -1,3 +1,5 @@
+# coding=utf-8
+
 import os 
 import re
 import time
@@ -8,7 +10,7 @@ def filter_text(org):
 
 
 def initial():
-    path_to_xml=r'F:\freelance work\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\HC_XML_Master_v2.xml'
+    path_to_xml=r'H:\circle\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\HC_XML_Master_v2.xml'
     
     
     with open(path_to_xml, encoding='utf-8') as f:
@@ -16,7 +18,7 @@ def initial():
         
     
     count = 0
-    path = r'F:\freelance work\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted_tei'
+    path = r'H:\circle\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted_tei'
     
     for x in range(0, len(content)):
     #for a in content:
@@ -33,11 +35,11 @@ def initial():
 
 
 def mid_extracted():
-    path = r'F:\freelance work\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted'
+    path = r'H:\circle\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted'
     file_number=0
     
-    extracted_tei = r'F:\freelance work\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted_tei\428.txt'
-    extracted_tei_dir = r'F:\freelance work\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted_tei'
+    extracted_tei = r'H:\circle\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted_tei\428.txt'
+    extracted_tei_dir = r'H:\circle\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted_tei'
     
     files = os.listdir(extracted_tei_dir)
     for file in files:
@@ -104,7 +106,9 @@ def mid_extracted():
                 title_date= content[x][start:-9]
             break
         print(title_date)
-        title_date = re.sub("[^123456789-]", '', title_date)
+        title_date = title_date.replace('to ', '-')
+        title_date = title_date.replace('–', '-')
+        title_date = re.sub("[^1234567890-]", '', title_date)
         print(title_date)
             
         
@@ -119,7 +123,7 @@ def mid_extracted():
             
         
             written_header = '<file> <no=%s> <corpusnumber=%s> <corpus=helsinki_corpus_xml_edition> <title=%s> <author=%s> \
-    <dialect=Early Modern English> <authorage=%s> <pubdate=%s> <genre1=%s> <genre2=X>  <encoding=utf-8> <text> \n\n' %(file_number,corpus_number, title, author, authorage, title_date, genre1)
+<dialect=Early Modern English> <authorage=%s> <pubdate=%s> <genre1=%s> <genre2=X>  <encoding=utf-8> <text> \n\n' %(file_number,corpus_number, title, author, authorage, title_date, genre1)
         
             f.write(written_header)
             
@@ -161,9 +165,9 @@ def mid_extracted():
 def final_extracted():  
             
     
-    final_dir = r'F:\freelance work\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted_final'
+    final_dir = r'H:\circle\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted_final'
             
-    extracted_dir = r'F:\freelance work\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted'
+    extracted_dir = r'H:\circle\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted'
     files = os.listdir(extracted_dir)
     file_number=0
     for file in files:
@@ -214,6 +218,6 @@ def final_extracted():
                 f.close
             
             
-    
-mid_extracted()
-            
+#initial()
+#mid_extracted()
+final_extracted()    

@@ -36,11 +36,11 @@ def initial():
 
 
 def mid_extracted():
-    path = r'H:\circle\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted'
+    path = r'F:\freelance work\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted'
     file_number=0
     
-    extracted_tei = r'H:\circle\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted_tei\428.txt'
-    extracted_tei_dir = r'H:\circle\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted_tei'
+    extracted_tei = r'F:\freelance work\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted_tei\428.txt'
+    extracted_tei_dir = r'F:\freelance work\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted_tei'
     
     files = os.listdir(extracted_tei_dir)
     for file in files:
@@ -65,9 +65,8 @@ def mid_extracted():
             idno= re.findall('">.*?</idno>',content[x])[0][2:-7]
             break
         
-        print(idno)
         a_flag=0
-        print(file)
+
         for x in range(0, len(content)):
             while ('<title level="m"' not in content[x]): 
                 x=x+1
@@ -131,6 +130,10 @@ def mid_extracted():
         title_date = title_date.replace('to ', '-')
         title_date = title_date.replace('–', '-')
         title_date = re.sub("[^1234567890-]", '', title_date)
+        
+        print(title)
+        print(pubdate)
+        print(title_date)
             
         
         x=0
@@ -187,9 +190,9 @@ def final_extracted():
             
     dict_prose= {}
     data_dict = defaultdict(list)
-    final_dir = r'H:\circle\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted_final_2'
+    final_dir = r'F:\freelance work\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted_final_2'
             
-    extracted_dir = r'H:\circle\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted'
+    extracted_dir = r'F:\freelance work\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted'
     files = os.listdir(extracted_dir)
     file_number=0
     prose_count=0
@@ -212,6 +215,9 @@ def final_extracted():
                     div_exists= True
             
             if div_exists:
+                pass
+                #a=1
+                '''
                 for x in range(0, len(content)):
                     
                     while ('<div type="letter"' not in content[x]):   
@@ -232,8 +238,8 @@ def final_extracted():
                         f.write(content[x])
                         f.write('\n')
                         f.write(footer)
-                
-    
+                    '''    
+
             else:
                 
                 if idno in dict_prose:
@@ -241,6 +247,7 @@ def final_extracted():
                     for x in range(0, len(content)):
                         f.write(content[x])
                     f.write('\n\n')
+                
                 
                 else:
                     file_number = file_number+1
@@ -253,6 +260,7 @@ def final_extracted():
                     f.close
                     data_dict[idno].append(file_new)
                     dict_prose[idno]=file_new
+                
 
     print(data_dict)
 
@@ -267,6 +275,7 @@ def porse_combine():
         for file in files:
             pass
 #initial()
-#mid_extracted()
-final_extracted()  
+print('Start')
+mid_extracted()
+#final_extracted()  
 #porse_combine()  

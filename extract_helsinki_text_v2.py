@@ -89,6 +89,8 @@ def mid_extracted():
         
             author= re.findall('key=".*?"',content[x])[0][5:-1]
             break
+        if author=='X':
+            author= 'Anonymous'
         
         for x in range(0, len(content)):
             while ('author_age' not in content[x]): 
@@ -101,7 +103,14 @@ def mid_extracted():
             while ('<date type="manuscript"' not in content[x]): 
                 x=x+1
         
-            pubdate= re.findall('>.*?<',content[x])[0][1:-1]
+            manuscriptdate= re.findall('>.*?<',content[x])[0][1:-1]
+            break
+        
+        for x in range(0, len(content)):
+            while ('<date type="original"' not in content[x]): 
+                x=x+1
+        
+            originaldate= re.findall('>.*?<',content[x])[0][1:-1]
             break
             
     
@@ -112,7 +121,7 @@ def mid_extracted():
             genre1= re.findall('target="#.*?"',content[x])[0][9:-1]
             break
         
-        
+        '''
         title_date=pubdate
         for x in range(0, len(content)):
             while ('<title level="m"' not in content[x]): 
@@ -130,10 +139,7 @@ def mid_extracted():
         title_date = title_date.replace('to ', '-')
         title_date = title_date.replace('–', '-')
         title_date = re.sub("[^1234567890-]", '', title_date)
-        
-        print(title)
-        print(pubdate)
-        print(title_date)
+        '''
             
         
         x=0
@@ -147,7 +153,7 @@ def mid_extracted():
             
         
             written_header = '%s\n<file> <no=%s> <corpusnumber=%s> <corpus=helsinki_corpus_xml_edition> <title=%s> <author=%s> \
-<dialect=Early Modern English> <authorage=%s> <pubdate=%s> <genre1=%s> <genre2=X>  <encoding=utf-8> <text> \n\n' %(idno, file_number,corpus_number, title, author, authorage, title_date, genre1)
+<dialect=Early Modern English> <authorage=%s> <manusript pubdate=%s> <original pubdate=%s> <genre1=%s> <genre2=X>  <encoding=utf-8> <text> \n\n' %(idno, file_number,corpus_number, title, author, authorage, manuscriptdate, originaldate, genre1)
         
             f.write(written_header)
             
@@ -217,7 +223,7 @@ def final_extracted():
             if div_exists:
                 pass
                 #a=1
-                '''
+                
                 for x in range(0, len(content)):
                     
                     while ('<div type="letter"' not in content[x]):   
@@ -238,15 +244,15 @@ def final_extracted():
                         f.write(content[x])
                         f.write('\n')
                         f.write(footer)
-                    '''    
+                    
 
             else:
                 
                 if idno in dict_prose:
                     f = open(dict_prose[idno], 'a', encoding='utf-8')
-                    for x in range(0, len(content)):
+                    for x in range(2, len(content)):
                         f.write(content[x])
-                    f.write('\n\n')
+                    #f.write('\n\n')
                 
                 
                 else:
@@ -254,9 +260,9 @@ def final_extracted():
                     file_new= os.path.join(final_dir, str(file_number)+'.txt')
                     
                     f= open(file_new, 'w+', encoding='utf-8')
-                    for x in range(0, len(content)):
+                    for x in range(1, len(content)):
                         f.write(content[x])
-                    f.write('\n\n')
+                    #f.write('\n\n')
                     f.close
                     data_dict[idno].append(file_new)
                     dict_prose[idno]=file_new
@@ -274,8 +280,100 @@ def porse_combine():
         files = porsedict[item]
         for file in files:
             pass
+        
+        
+def clean_up():
+    pass
+    final_dir = r'F:\freelance work\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted_final_2'
+    cleaned_dir = r'F:\freelance work\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\cleaned'
+    
+    files = os.listdir(final_dir)
+    for file in files:
+        extracted= os.path.join(final_dir, file)
+        
+        with open(extracted, encoding='utf-8') as f:
+            content = f.readlines()
+            
+        cleaned = os.path.join(cleaned_dir, file)
+        c = open(cleaned, 'w+', encoding='utf-8')
+        for x in range(0, len(content)):
+            
+            line = content[x]
+            if x>5:
+                if x<len(content)-5:
+                    line = re.sub('</text> </file>', '', line) 
+            
+            
+            line = re.sub('<sic resp.+</sic>', '', line)
+            
+            line = re.sub('<supplied resp.+</supplied>', '', line)
+            line = re.sub('<note resp="#xpath1.+</note>', '', line)
+            line = re.sub('<note resp="#HC_.+</note>', '', line)
+            line = re.sub('<note.+/note>', '', line)
+            line = re.sub('&amp;', '&', line)
+            line = re.sub('&amp', '&', line)
+            line = re.sub('<am/>', '~', line)
+            line = re.sub('<cb.+</cb>', '', line)
+            
+            line = re.sub('<hi rend="sup">', '', line)
+            line = re.sub('</hi>', '~', line)
+            
+            
+            line = re.sub('<lb/>', '', line)
+            line = re.sub('<p>', '', line)
+            line = re.sub('</p>', '', line)
+            line = re.sub('<am/>', '', line)
+            line = re.sub('<pb.+/>', '', line)
+            line = re.sub('<foreign>', '', line)
+            line = re.sub('</foreign>', '', line)
+            line = re.sub('<milestone.+/>', '', line)
+            
+            line = re.sub('<div.+>', '', line)
+            line = re.sub('</div>', '', line)
+            line = re.sub('<head.+/head>', '', line)
+            line = re.sub('<head>', '', line)
+            line = re.sub('</head>', '', line)
+            line = re.sub('<opener>', '', line)
+            line = re.sub('</opener>', '', line)
+            
+            line = re.sub('<lg>', '', line)
+            line = re.sub('</lg>', '', line)
+            line = re.sub('<l>', '', line)
+            line = re.sub('</l>', '', line)  
+            
+            line = re.sub('<note type="address">', '', line)
+            line = re.sub('</note>', '', line)  
+            
+            line = re.sub('<choice>', '', line)  
+            line = re.sub('</choice>', '', line)  
+            line = re.sub('<corr resp="#HC_XML_errata_corrections">', '', line) 
+            line = re.sub('</corr>', '', line) 
+            line = re.sub('<sp>', '', line) 
+            line = re.sub('</sp>', '', line) 
+            
+            line = re.sub('<hi rend="type">', '', line) 
+            line = re.sub('<hi rend="sup">', '', line) 
+            line = re.sub('</hi>', '', line) 
+            
+            line = re.sub('<supplied>', '', line) 
+            line = re.sub('</supplied>', '', line) 
+            line = re.sub('<closer>', '', line) 
+            line = re.sub('</closer>', '', line) 
+            line = re.sub('<note>', '', line) 
+            line = re.sub('</note>', '', line)  
+            
+            
+            c.write(line)
+            
+        c.close()
+            
+        
+
+
+
+
 #initial()
 print('Start')
-mid_extracted()
-#final_extracted()  
-#porse_combine()  
+#mid_extracted()
+#final_extracted()   
+clean_up()

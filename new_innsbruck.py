@@ -44,7 +44,7 @@ def extract():
         for x in range(0, len(content)):
             while ('<Exact' not in content[x]): 
                 x=x+1
-            pubdate= content[x][-4:]
+            pubdate= content[x][-5:]
             break
         pubdate = re.sub("[^123456789]", '', pubdate)
 

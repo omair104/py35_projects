@@ -1,68 +1,129 @@
 import os,re
 
-org_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\CEDXML'
-extracted_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
-
-files = os.listdir(org_path)
-#print(files)
-file_number=0
-for file in files:
-    file_number= file_number+1
-    path_org_file= os.path.join(org_path, file)
+def extract():
+    org_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\CEDXML'
+    extracted_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
     
-    print(path_org_file)
-    
-    with open(path_org_file) as f:
-        content = f.readlines()
+    files = os.listdir(org_path)
+    #print(files)
+    file_number=0
+    for file in files:
+        file_number= file_number+1
+        path_org_file= os.path.join(org_path, file)
         
-    for x in range(0, len(content)):
-        while ('<filename>' not in content[x]): 
+        print(path_org_file)
+        
+        with open(path_org_file) as f:
+            content = f.readlines()
+            
+        for x in range(0, len(content)):
+            while ('<filename>' not in content[x]): 
+                x=x+1
+            filename= re.findall('<filename>.*?</filename>',content[x])[0][10:-11]
+            break
+        
+        for x in range(0, len(content)):
+            while ('<title>' not in content[x]): 
+                x=x+1
+            title= re.findall('<title>.*?</title>',content[x])[0][7:-8]
+            break
+        
+        for x in range(0, len(content)):
+            while ('<author>' not in content[x]): 
+                x=x+1
+            author= re.findall('<author>.*?</author>',content[x])[0][8:-9]
+            break
+        
+        for x in range(0, len(content)):
+            while ('<speechPubDate>' not in content[x]): 
+                x=x+1
+            pubdate= re.findall('<speechPubDate>.*?</speechPubDate>',content[x])[0][15:-16][-4:]
+            break
+        
+        for x in range(0, len(content)):
+            while ('<textType' not in content[x]): 
+                x=x+1
+            genre= re.findall('>.*?</textType>',content[x])[0][1:-11]
+            break
+        
+        
+        
+        written_header = '<file> <no=%s> <corpusnumber=%s> <corpus=corpus_of_english_dialogues_XML_edition> <title=%s> <author=%s> \
+<pubdate=%s> <genre=%s> <encoding=utf-8> <text> \n' %(file_number,filename, title, author, pubdate, genre)
+        
+        
+        
+        file= os.path.join(extracted_path, str(filename)+'.txt')
+        f= open(file, 'w+', encoding='utf-8')
+        f.write(written_header)
+        
+        x=0
+        while ('<dialogueText' not in content[x]): 
+            x=x+1    
+        print(x)        
+         
+        while(x<len(content)-1):        
+            f.write(content[x])
             x=x+1
-        filename= re.findall('<filename>.*?</filename>',content[x])[0][10:-11]
-        break
+        f.write('\n</text> </file>')
+        f.close
+
+
+def markup():
+    extracted_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
+    cleaned_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\cleaned'
     
-    for x in range(0, len(content)):
-        while ('<title>' not in content[x]): 
+    files= os.listdir(extracted_path)
+    
+    for file in files:
+        #file= 'D1CCHAPM.txt'
+        path_extracted_file= os.path.join(extracted_path, file)
+        
+        
+        with open(path_extracted_file) as f:
+            content = f.readlines()
+            
+        file= os.path.join(cleaned_path, str(file))
+        f= open(file, 'w+', encoding='utf-8')
+        
+        x=0
+        while x< len(content):
+            
+            if '<comment' in content[x]:
+                while '/comment>' not in content[x]:
+                    x=x+1
+                x=x+1
+            
+            content[x] = re.sub('&amp;', '&', content[x])
+            content[x] = re.sub('&quot;', '', content[x])
+            content[x] = re.sub('_', '', content[x])
+            
+            content[x] = re.sub('a~', 'ā', content[x])
+            content[x] = re.sub('A~', 'Ā', content[x])
+            content[x] = re.sub('e~', 'ē', content[x])
+            content[x] = re.sub('E~', 'Ē', content[x])
+            content[x] = re.sub('i~', 'ī', content[x])
+            content[x] = re.sub('I~', 'Ī', content[x])
+            content[x] = re.sub('o~', 'ō', content[x])
+            content[x] = re.sub('O~', 'Ō', content[x])
+            content[x] = re.sub('u~', 'ū', content[x])
+            content[x] = re.sub('U~', 'Ū', content[x])
+            content[x] = re.sub('v~', 'v̄', content[x])
+            content[x] = re.sub('V~', 'V̄', content[x])
+            content[x] = re.sub('y~', 'ȳ', content[x])
+            content[x] = re.sub('Y~', 'Ȳ', content[x])
+            content[x] = re.sub('m~', 'm̄', content[x])
+            content[x] = re.sub('M~', 'M̄', content[x])
+            content[x] = re.sub('p~', 'p̄', content[x])
+            content[x] = re.sub('P~', 'P̄', content[x])
+            
+            if 'indifferent <' in content [x]:
+                print(file)
+    
+            
+            f.write(content[x])
             x=x+1
-        title= re.findall('<title>.*?</title>',content[x])[0][7:-8]
-        break
+            
     
-    for x in range(0, len(content)):
-        while ('<author>' not in content[x]): 
-            x=x+1
-        author= re.findall('<author>.*?</author>',content[x])[0][8:-9]
-        break
-    
-    for x in range(0, len(content)):
-        while ('<speechPubDate>' not in content[x]): 
-            x=x+1
-        pubdate= re.findall('<speechPubDate>.*?</speechPubDate>',content[x])[0][15:-16][-4:]
-        break
-    
-    for x in range(0, len(content)):
-        while ('<textType' not in content[x]): 
-            x=x+1
-        genre= re.findall('>.*?</textType>',content[x])[0][1:-11]
-        break
-    
-    
-    
-    written_header = '<file> <no=%s> <corpusnumber=%s> <corpus=corpus_of_english_dialogues_XML_edition> <title=%s> <author=%s> \
-    <dialect=Early Modern English> <authorage=X> <pubdate=%s> <genre1=%s> <genre2=X>  <encoding=utf-8> <text> \n' %(file_number,filename, title, author, pubdate, genre)
-    
-    
-    
-    file= os.path.join(extracted_path, str(filename)+'.txt')
-    f= open(file, 'w+', encoding='utf-8')
-    f.write(written_header)
-    
-    x=0
-    while ('<dialogueText' not in content[x]): 
-        x=x+1    
-    print(x)        
-     
-    while(x<len(content)-1):        
-        f.write(content[x])
-        x=x+1
-    f.write('\n</text> </file>')
-    f.close
+extract()
+markup()

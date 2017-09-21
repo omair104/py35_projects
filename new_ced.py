@@ -46,10 +46,16 @@ def extract():
             genre= re.findall('>.*?</textType>',content[x])[0][1:-11]
             break
         
+        for x in range(0, len(content)):
+            while ('<contemporaneity' not in content[x]): 
+                x=x+1
+            cont= re.findall('>.*?</contemporaneity>',content[x])[0][1:-11]
+            break
+        
         
         
         written_header = '<file> <no=%s> <corpusnumber=%s> <corpus=corpus_of_english_dialogues_XML_edition> <title=%s> <author=%s> \
-<pubdate=%s> <genre=%s> <encoding=utf-8> <text> \n' %(file_number,filename, title, author, pubdate, genre)
+<pubdate=%s> <genre=%s> <encoding=utf-8> <notes=%s> <text> \n' %(file_number,filename, title, author, pubdate, genre, cont)
         
         
         
@@ -93,37 +99,71 @@ def markup():
                 while '/comment>' not in content[x]:
                     x=x+1
                 x=x+1
+                
+            elif '<pagebreak' in content[x]:
+                while '/>' not in content[x]:
+                    x=x+1
+                x=x+1
+                
+            elif '<sample' in content[x]:
+                while '>' not in content[x]:
+                    x=x+1
+                x=x+1
+                
+
+                
+            else:
+                content[x] = re.sub('&amp;', '&', content[x])
+                content[x] = re.sub('&quot;', '', content[x])
+                content[x] = re.sub('_', '', content[x])
+                
+                content[x] = re.sub('a~', 'ā', content[x])
+                content[x] = re.sub('A~', 'Ā', content[x])
+                content[x] = re.sub('e~', 'ē', content[x])
+                content[x] = re.sub('E~', 'Ē', content[x])
+                content[x] = re.sub('i~', 'ī', content[x])
+                content[x] = re.sub('I~', 'Ī', content[x])
+                content[x] = re.sub('o~', 'ō', content[x])
+                content[x] = re.sub('O~', 'Ō', content[x])
+                content[x] = re.sub('u~', 'ū', content[x])
+                content[x] = re.sub('U~', 'Ū', content[x])
+                content[x] = re.sub('v~', 'v̄', content[x])
+                content[x] = re.sub('V~', 'V̄', content[x])
+                content[x] = re.sub('y~', 'ȳ', content[x])
+                content[x] = re.sub('Y~', 'Ȳ', content[x])
+                content[x] = re.sub('m~', 'm̄', content[x])
+                content[x] = re.sub('M~', 'M̄', content[x])
+                content[x] = re.sub('p~', 'p̄', content[x])
+                content[x] = re.sub('P~', 'P̄', content[x])
+                
+                content[x] = re.sub('<dialogueText>', '', content[x])
+                content[x] = re.sub('</dialogueText>', '', content[x])
+                content[x] = re.sub('<dialogue>', '', content[x])
+                content[x] = re.sub('</dialogue>', '', content[x])
+                content[x] = re.sub('<nonSpeech>', '', content[x])
+                content[x] = re.sub('</nonSpeech>', '', content[x])
+                content[x] = re.sub('<font>', '', content[x])
+                content[x] = re.sub('</font>', '', content[x])
+                content[x] = re.sub('<head>', '', content[x])
+                content[x] = re.sub('</head>', '', content[x])
+                content[x] = re.sub('<foreign>', '', content[x])
+                content[x] = re.sub('</foreign>', '', content[x])
+                content[x] = re.sub('</sample>', '', content[x])
+                content[x] = re.sub('<emendation>', '', content[x])
+                content[x] = re.sub('</emendation>', '', content[x])
+                
+                content[x] = re.sub('<omission type="line" />', '', content[x])
+                content[x] = re.sub('<omission type="sentence" />', '', content[x])
+                
+                
+                if x>1 and x!= len(content)-1 and '<' in content[x]:
+                    print(content[x])
+                    break
+                
+                f.write(content[x])
+                x=x+1
             
-            content[x] = re.sub('&amp;', '&', content[x])
-            content[x] = re.sub('&quot;', '', content[x])
-            content[x] = re.sub('_', '', content[x])
-            
-            content[x] = re.sub('a~', 'ā', content[x])
-            content[x] = re.sub('A~', 'Ā', content[x])
-            content[x] = re.sub('e~', 'ē', content[x])
-            content[x] = re.sub('E~', 'Ē', content[x])
-            content[x] = re.sub('i~', 'ī', content[x])
-            content[x] = re.sub('I~', 'Ī', content[x])
-            content[x] = re.sub('o~', 'ō', content[x])
-            content[x] = re.sub('O~', 'Ō', content[x])
-            content[x] = re.sub('u~', 'ū', content[x])
-            content[x] = re.sub('U~', 'Ū', content[x])
-            content[x] = re.sub('v~', 'v̄', content[x])
-            content[x] = re.sub('V~', 'V̄', content[x])
-            content[x] = re.sub('y~', 'ȳ', content[x])
-            content[x] = re.sub('Y~', 'Ȳ', content[x])
-            content[x] = re.sub('m~', 'm̄', content[x])
-            content[x] = re.sub('M~', 'M̄', content[x])
-            content[x] = re.sub('p~', 'p̄', content[x])
-            content[x] = re.sub('P~', 'P̄', content[x])
-            
-            if 'indifferent <' in content [x]:
-                print(file)
-    
-            
-            f.write(content[x])
-            x=x+1
             
     
 extract()
-markup()
+#markup()

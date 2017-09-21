@@ -120,38 +120,41 @@ def markup():
                     x=x+1
                 x=x+1
                 
-            if '[/' in content[x]:
+            elif '[/' in content[x]:
                 while '/]' not in content[x]:
                     x=x+1
                 x=x+1
             
-            content[x] = re.sub('&amp;', '&', content[x])
-            content[x] = re.sub('&quot;', '', content[x])
-            content[x] = re.sub('_', '', content[x])
-            content[x] = re.sub('/', '', content[x])
-            
-            content[x] = re.sub('a~', 'ā', content[x])
-            content[x] = re.sub('A~', 'Ā', content[x])
-            content[x] = re.sub('e~', 'ē', content[x])
-            content[x] = re.sub('E~', 'Ē', content[x])
-            content[x] = re.sub('i~', 'ī', content[x])
-            content[x] = re.sub('I~', 'Ī', content[x])
-            content[x] = re.sub('o~', 'ō', content[x])
-            content[x] = re.sub('O~', 'Ō', content[x])
-            content[x] = re.sub('u~', 'ū', content[x])
-            content[x] = re.sub('U~', 'Ū', content[x])
-            content[x] = re.sub('v~', 'v̄', content[x])
-            content[x] = re.sub('V~', 'V̄', content[x])
-            content[x] = re.sub('y~', 'ȳ', content[x])
-            content[x] = re.sub('Y~', 'Ȳ', content[x])
-            content[x] = re.sub('m~', 'm̄', content[x])
-            content[x] = re.sub('M~', 'M̄', content[x])
-            content[x] = re.sub('p~', 'p̄', content[x])
-            content[x] = re.sub('P~', 'P̄', content[x])
-            
-    
-            
-            f.write(content[x])
-            x=x+1
+            else:
+                content[x] = re.sub('&amp;', '&', content[x])
+                content[x] = re.sub('&quot;', '', content[x])
+                content[x] = re.sub('_', '', content[x])
+                content[x] = re.sub('/', '', content[x])
+                content[x] = re.sub('\[}', '', content[x])
+                content[x] = re.sub('}\]', '', content[x])
+                
+                content[x] = re.sub('a~', 'ā', content[x])
+                content[x] = re.sub('A~', 'Ā', content[x])
+                content[x] = re.sub('e~', 'ē', content[x])
+                content[x] = re.sub('E~', 'Ē', content[x])
+                content[x] = re.sub('i~', 'ī', content[x])
+                content[x] = re.sub('I~', 'Ī', content[x])
+                content[x] = re.sub('o~', 'ō', content[x])
+                content[x] = re.sub('O~', 'Ō', content[x])
+                content[x] = re.sub('u~', 'ū', content[x])
+                content[x] = re.sub('U~', 'Ū', content[x])
+                content[x] = re.sub('v~', 'v̄', content[x])
+                content[x] = re.sub('V~', 'V̄', content[x])
+                content[x] = re.sub('y~', 'ȳ', content[x])
+                content[x] = re.sub('Y~', 'Ȳ', content[x])
+                content[x] = re.sub('m~', 'm̄', content[x])
+                content[x] = re.sub('M~', 'M̄', content[x])
+                content[x] = re.sub('p~', 'p̄', content[x])
+                content[x] = re.sub('P~', 'P̄', content[x])
+                
+        
+                
+                f.write(content[x])
+                x=x+1
             
 markup()

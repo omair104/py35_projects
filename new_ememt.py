@@ -152,6 +152,8 @@ def markup():
                 content[x] = re.sub('p~', 'p̄', content[x])
                 content[x] = re.sub('P~', 'P̄', content[x])
                 
+                
+
         
                 
                 f.write(content[x])

@@ -25,6 +25,8 @@ def markup():
 
             
             else:
+                if x>1:
+                    content[x] = re.sub('_', '', content[x])
                 content[x] = re.sub('{', '', content[x])
                 content[x] = re.sub('}', '', content[x])
                 content[x] = re.sub('<S', '', content[x])
@@ -37,7 +39,6 @@ def markup():
                 content[x] = re.sub('#', '', content[x])
                 content[x] = re.sub('%', '-', content[x])
                 content[x] = re.sub('\*', '', content[x])
-                content[x] = re.sub('_', '', content[x])
                 content[x] = re.sub('|', '', content[x])
                 
                 content[x] = re.sub('genre1', 'genre', content[x])

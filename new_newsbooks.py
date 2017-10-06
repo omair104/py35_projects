@@ -72,7 +72,13 @@ def markup():
         x=0
         while x< len(content):
             
-            
+            if '<!' in content[x]:
+                    #print(content[x])
+                    removes= re.findall('<!.*?>', content[x])
+                    for remove in removes:
+                        #print(remove)
+                        #print(content[x])
+                        content[x] = re.sub(re.escape(remove), '', content[x])  
             
             if '<head' in content[x]:
                 while '/head>' not in content[x]:
@@ -195,10 +201,13 @@ def markup():
                 content[x] = re.sub('<td>', '', content[x])
                 content[x] = re.sub('</td>', '', content[x])
                 
+
+                content[x] = re.sub('<note place="side" id="N01">', '', content[x])
+                content[x] = re.sub('</note', '', content[x])
                 content[x] = re.sub('<ptr target="N01"/>', '', content[x])
                 content[x] = re.sub('<td colspan="3" rowspan="3">', '', content[x])
                 
-                if x>1 and x!= len(content)-1 and '<' in content[x] and '<!' not in content[x]:
+                if x>1 and x!= len(content)-1 and '<' in content[x]:
                     print(content[x])
                 
     

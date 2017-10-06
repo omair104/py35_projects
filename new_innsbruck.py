@@ -137,7 +137,7 @@ def extract():
         
         
         written_header = '<file> <no=%s> <corpus=innsbruck_letter_corpus> <title=%s> <author=%s> <authorage=%s> <dialect=%s> <pubdate=%s> <genre=letter> \
-<place of author=%s> <sex of author=%s> <status of author=%s> <recipient=%s> <place of recipient=%s> <sex of recipient=%s> <address of recipient=%s> <relation of correspondents=%s> <ranks of correspondents=%s> <educational background=%s> \
+<place_of_author=%s> <sex_of_author=%s> <status_of_author=%s> <recipient=%s> <place_of_recipient=%s> <sex_of_recipient=%s> <address_of_recipient=%s> <relation_of_correspondents=%s> <ranks_of_correspondents=%s> <educational_background=%s> \
 <encoding=utf-8> <text> \n' %(file_number, title, author, authorage, dialect, pubdate, place_author, sex_author, status_author, recipient, place_recipient, sex_recipient, address_recipient, relation_corr, rank_of, educational)
         
         print(written_header)
@@ -158,7 +158,56 @@ def extract():
         f.write('\n</text> </file>')
         f.close
      
-
+def markup():
+    extracted_path = r'H:\circle\text_extractor\new corpus\Innsbruck\extracted'
+    cleaned_path = r'H:\circle\text_extractor\new corpus\Innsbruck\cleaned'
+    
+    files= os.listdir(extracted_path)
+    
+    for file in files:
+        path_extracted_file= os.path.join(extracted_path, file)
         
+        
+        with open(path_extracted_file) as f:
+            print(path_extracted_file)
+            content = f.readlines()
+            
+        file= os.path.join(cleaned_path, str(file))
+        f= open(file, 'w+', encoding='utf-8')
+        
+        x=0
+        while x< len(content):
+            
+            if '<p.' in content[x]:
+                x=x+1
+      
+            else:
+                content[x] = re.sub(re.escape('$I'),'', content[x])
+                content[x] = re.sub('Written_sideways_along_the_page', '', content[x])
+                content[x] = re.sub(re.escape('*'), '', content[x])
+                
+                content[x] = re.sub('yor ', 'yo=r= ', content[x])
+                content[x] = re.sub('wch ', 'w=ch= ', content[x])
+                content[x] = re.sub(re.escape('('), 'mm', content[x])
+                content[x] = re.sub('|', '', content[x])
+                content[x] = re.sub(re.escape('...'), '', content[x])
+                if x>1:
+                    content[x] = re.sub('_', '', content[x])
+                else:
+                    content[x] = re.sub('unknown', 'X', content[x])
+
+
+                
+                if x>1 and x!= len(content)-1 and '<' in content[x]:
+                    print(content[x])
+                    #break
+                
+                f.write(content[x])
+                x=x+1
+            
+
+
+
 #initial()
-extract()
+#extract()
+markup()

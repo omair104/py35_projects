@@ -159,26 +159,53 @@ def markup():
         f= open(file, 'w+', encoding='utf-8')
         
         x=0
+        add_flag=0
+        corr_flag=0
         while x< len(content):
 
             if x>1 and x<len(content)-1:
-                content[x] = re.sub('<ADD', '', content[x])
-                content[x] = re.sub('<Q', '', content[x])
-                content[x] = re.sub('<PB', '', content[x])
-                content[x] = re.sub('<FOREIGN', '', content[x])
-                content[x] = re.sub('<CORR', '', content[x])
-                content[x] = re.sub('<FW', '', content[x])
-                content[x] = re.sub('<CLOSER', '', content[x])
-                content[x] = re.sub('<NOTE', '', content[x])
-                content[x] = re.sub('<DEL', '', content[x])
-                content[x] = re.sub('<SIGNED', '', content[x])
-                content[x] = re.sub('<LIST', '', content[x])
+                
+                if add_flag==1:
+                    content[x]= '<ADD '+ content[x]
+                    add_flag=0
+                if content[x].endswith('<ADD\n'):
+                    content[x]= content[x][:-5]
+                    add_flag = 1
+                    
+                if corr_flag==1:
+                    content[x]= '<CORR '+ content[x]
+                    corr_flag=0
+                if content[x].endswith('<CORR\n'):
+                    content[x]= content[x][:-6]
+                    corr_flag = 1
+                    
+
+                
+                
+                if 'ADD' in content[x]:
+                    removes= re.findall('<ADD.*?/ADD>', content[x])
+                    for remove in removes:
+                        content[x] = re.sub(re.escape(remove), '', content[x])
+                        
+                if 'CORR' in content[x]:
+                    removes= re.findall('<CORR.*?/CORR>', content[x])
+                    for remove in removes:
+                        #print(remove)
+                        if 'SIC' in remove:
+                            sub = re.findall('SIC=".*?"', remove)[0][5:-1]
+                            content[x] = re.sub(re.escape(remove), sub, content[x])
+                        else:
+                            content[x]= re.sub(re.escape(remove), '', content[x])
+                        
+                        
                 if '<' in content[x]:
                     #print(content[x])
                     removes= re.findall('<.*?>', content[x])
                     for remove in removes:
-                        content[x] = re.sub(remove, '', content[x])  
+                        content[x] = re.sub(re.escape(remove), '', content[x])  
                         y=content[x]
+                        
+                
                         
                 content[x] = re.sub(re.escape('N="(*)" PLACE="foot">'), '', content[x])
                 
@@ -189,6 +216,28 @@ def markup():
                         #print(remove)
                         content[x] = re.sub(remove, '', content[x])  
                         #print(content[x])
+                        
+                content[x] = re.sub('<Q', '', content[x])
+                content[x] = re.sub('<PB', '', content[x])
+                content[x] = re.sub('<FOREIGN', '', content[x])
+                content[x] = re.sub('<FW', '', content[x])
+                content[x] = re.sub('<CLOSER', '', content[x])
+                content[x] = re.sub('<NOTE', '', content[x])
+                content[x] = re.sub('<DEL', '', content[x])
+                content[x] = re.sub('<SIGNED', '', content[x])
+                content[x] = re.sub('<LIST', '', content[x])
+                content[x] = re.sub('<LABEL', '', content[x])
+                content[x] = re.sub('<PTR', '', content[x])
+                content[x] = re.sub('<LG', '', content[x])
+                content[x] = re.sub('<GAP', '', content[x])
+                content[x] = re.sub('<BIBL', '', content[x])
+                content[x] = re.sub('<CELL', '', content[x])
+                content[x] = re.sub('<TRAILER', '', content[x])
+                content[x] = re.sub('<ROW', '', content[x])
+                content[x] = re.sub('<P', '', content[x])
+                content[x] = re.sub('<HEAD', '', content[x])
+                content[x] = re.sub('<L', '', content[x])
+                content[x] = re.sub('<SPEAKER', '', content[x])
 
     
                 
@@ -284,141 +333,19 @@ def markup():
                 content[x] = re.sub('&rsub;', 'r', content[x])
                 content[x] = re.sub('&wynn;', 'ƿ', content[x])
 
-
-                content[x] = re.sub('<p>', '', content[x])
-                content[x] = re.sub('</p>', '', content[x])
-                content[x] = re.sub('<div>', '', content[x])
-                content[x] = re.sub('</div>', '', content[x])
-                content[x] = re.sub('<front>', '', content[x])
-                content[x] = re.sub('</front>', '', content[x])
-                content[x] = re.sub('<head>', '', content[x])
-                content[x] = re.sub('</head>', '', content[x])
-                content[x] = re.sub('<body>', '', content[x])
-                content[x] = re.sub('</body>', '', content[x])
-                content[x] = re.sub('<back>', '', content[x])
-                content[x] = re.sub('</back>', '', content[x])
-                content[x] = re.sub('<trailer>', '', content[x])
-                content[x] = re.sub('</trailer>', '', content[x])
-                content[x] = re.sub('<titlepage>', '', content[x])
-                content[x] = re.sub('</titlepage>', '', content[x])
-                content[x] = re.sub('<titlepart>', '', content[x])
-                content[x] = re.sub('</titlepart>', '', content[x])
-                content[x] = re.sub('<lb>', '', content[x])
-                content[x] = re.sub('</lb>', '', content[x])
-                content[x] = re.sub('<q>', '', content[x])
-                content[x] = re.sub('</q>', '', content[x])
-                content[x] = re.sub('<quote>', '', content[x])
-                content[x] = re.sub('</quote>', '', content[x])
-                content[x] = re.sub('<TITLEPART>', '', content[x])
-                content[x] = re.sub('</TITLEPART>', '', content[x])
-                content[x] = re.sub('<LB>', '', content[x])
-                content[x] = re.sub('</LB>', '', content[x])
-                content[x] = re.sub('<ITEM>', '', content[x])
-                content[x] = re.sub('</ITEM>', '', content[x])
-                content[x] = re.sub('<LABEL>', '', content[x])
-                content[x] = re.sub('</LABEL>', '', content[x])
-                content[x] = re.sub('<BYLINE>', '', content[x])
-                content[x] = re.sub('</BYLINE>', '', content[x])
-                content[x] = re.sub('<DOCIMPRINT>', '', content[x])
-                content[x] = re.sub('</DOCIMPRINT>', '', content[x])
-                content[x] = re.sub('<BYLINE>', '', content[x])
-                content[x] = re.sub('</BYLINE>', '', content[x])
-                content[x] = re.sub('<IT>', '', content[x])
-                content[x] = re.sub('</IT>', '', content[x])
-                content[x] = re.sub('<SC>', '', content[x])
-                content[x] = re.sub('</SC>', '', content[x])
-                content[x] = re.sub('<DOCTITLE>', '', content[x])
-                content[x] = re.sub('</DOCTITLE>', '', content[x])
-                content[x] = re.sub('<figure>', '', content[x])
-                content[x] = re.sub('</figure>', '', content[x])
-                content[x] = re.sub('<EPIGRAPH>', '', content[x])
-                content[x] = re.sub('</EPIGRAPH>', '', content[x])
-                content[x] = re.sub('<docImprint>', '', content[x])
-                content[x] = re.sub('</docImprint>', '', content[x])
-                content[x] = re.sub('<it>', '', content[x])
-                content[x] = re.sub('</it>', '', content[x])
-                content[x] = re.sub('<sc>', '', content[x])
-                content[x] = re.sub('</sc>', '', content[x])
-                content[x] = re.sub('<titlePage>', '', content[x])
-                content[x] = re.sub('</titlePage>', '', content[x])
-                content[x] = re.sub('<epigraph>', '', content[x])
-                content[x] = re.sub('</epigraph>', '', content[x])
-                content[x] = re.sub('<FIGURE>', '', content[x])
-                content[x] = re.sub('</FIGURE>', '', content[x])
-                content[x] = re.sub('<IMPRIMATUR>', '', content[x])
-                content[x] = re.sub('</IMPRIMATUR>', '', content[x])
-                content[x] = re.sub('<TITLEPAGE>', '', content[x])
-                content[x] = re.sub('</TITLEPAGE>', '', content[x])
-                content[x] = re.sub('<P>', '', content[x])
-                content[x] = re.sub('</P>', '', content[x])
-                content[x] = re.sub('<bibl>', '', content[x])
-                content[x] = re.sub('</bibl>', '', content[x])
-                content[x] = re.sub('<FRONT>', '', content[x])
-                content[x] = re.sub('</FRONT>', '', content[x])
-                content[x] = re.sub('<BODY>', '', content[x])
-                content[x] = re.sub('</BODY>', '', content[x])
-                content[x] = re.sub('<HEAD>', '', content[x])
-                content[x] = re.sub('</HEAD>', '', content[x])
-                content[x] = re.sub('<SALUTE>', '', content[x])
-                content[x] = re.sub('</SALUTE>', '', content[x])
-                content[x] = re.sub('<figDESC>', '', content[x])
-                content[x] = re.sub('</figdesc>', '', content[x])
-                content[x] = re.sub('<DIV>', '', content[x])
-                content[x] = re.sub('</DIV>', '', content[x])
-                content[x] = re.sub('<BO>', '', content[x])
-                content[x] = re.sub('</BO>', '', content[x])
-                content[x] = re.sub('<BIBL>', '', content[x])
-                content[x] = re.sub('</BIBL>', '', content[x])
-                content[x] = re.sub('<RO>', '', content[x])
-                content[x] = re.sub('</RO>', '', content[x])
-                content[x] = re.sub('<QUOTE>', '', content[x])
-                content[x] = re.sub('</QUOTE>', '', content[x])
-                content[x] = re.sub('<TEXT>', '', content[x])
-                content[x] = re.sub('</TEXT>', '', content[x])
-                content[x] = re.sub('<HEAD>', '', content[x])
-                content[x] = re.sub('</HEAD>', '', content[x])
-                content[x] = re.sub('<TITLEPART>', '', content[x])
-                content[x] = re.sub('</TITLEPART>', '', content[x])
-                content[x] = re.sub('<BYLINE>', '', content[x])
-                content[x] = re.sub('</BYLINE>', '', content[x])
-                content[x] = re.sub('<LB>', '', content[x])
-                content[x] = re.sub('</LB>', '', content[x])
-                content[x] = re.sub('<IT>', '', content[x])
-                content[x] = re.sub('</IT>', '', content[x])
-                content[x] = re.sub('<P>', '', content[x])
-                content[x] = re.sub('</P>', '', content[x])
-                content[x] = re.sub('<titlePart>', '', content[x])
-                content[x] = re.sub('</titlePart>', '', content[x])
-                content[x] = re.sub('<LIST>', '', content[x])
-                content[x] = re.sub('</LIST>', '', content[x])
-                content[x] = re.sub('<FOREIGN>', '', content[x])
-                content[x] = re.sub('</FOREIGN>', '', content[x])
-                content[x] = re.sub('<Q>', '', content[x])
-                content[x] = re.sub('</Q>', '', content[x])
-                content[x] = re.sub('<CLOSER>', '', content[x])
-                content[x] = re.sub('</CLOSER>', '', content[x])
-                content[x] = re.sub('<L>', '', content[x])
-                content[x] = re.sub('</L>', '', content[x])
-                content[x] = re.sub('<GO>', '', content[x])
-                content[x] = re.sub('</GO>', '', content[x])
-                content[x] = re.sub('<CORR>', '', content[x])
-                content[x] = re.sub('</CORR>', '', content[x])
-                content[x] = re.sub('<PTR', '', content[x])
-                content[x] = re.sub('<LG', '', content[x])
-                content[x] = re.sub('<GAP', '', content[x])
-                content[x] = re.sub('<SPEAKER', '', content[x])
-                content[x] = re.sub('<ROW', '', content[x])
-                content[x] = re.sub('<CELL', '', content[x])
-                content[x] = re.sub('<P', '', content[x])
-                content[x] = re.sub('<TRAILER', '', content[x])
-                content[x] = re.sub('<LABEL', '', content[x])
-                content[x] = re.sub('<BIBL', '', content[x])
-                content[x] = re.sub('<HEAD', '', content[x])
-                content[x] = re.sub('<L', '', content[x])
                 content[x] = re.sub('<q rend=it', '', content[x])
+                content[x] = re.sub('<q rend=it', '', content[x])
+                content[x] = re.sub('>', '', content[x])
                 
-                content[x] = re.sub('<q rend=it', '', content[x])
-                content[x] = re.sub('<q rend=it', '', content[x])
+                content[x] = re.sub('LANG="LAT"', '', content[x])
+                content[x] = re.sub('LANG="FRA"', '', content[x])
+                content[x] = re.sub('LANG="lat"', '', content[x])
+                content[x] = re.sub('REND="it"', '', content[x])
+                content[x] = re.sub('PLACE="margin"', '', content[x])
+                content[x] = re.sub('TYPE="structure"', '', content[x])
+                content[x] = re.sub('TYPE="catch"', '', content[x])
+                content[x] = re.sub('TYPE="marginalia"', '', content[x])
+                '''
                 content[x] = re.sub(re.escape('<pb n="[i]">'), '', content[x])
                 content[x] = re.sub(re.escape('<pb n="[iii]">'), '', content[x])
                 content[x] = re.sub(re.escape('<pb n="[1]">'), '', content[x])
@@ -441,16 +368,18 @@ def markup():
                 content[x] = re.sub('<FOREIGN LANG="GKGK">', '', content[x])
                 content[x] = re.sub('REND="it">', '', content[x])
 
+                '''
                 
-                content[x] = re.sub('<ADD>Of Borrowers.</ADD>', '', content[x])
                 
                 #print(content[x])
             
                 
-                if x>1 and x!= len(content)-1 and '>' in content[x] and '<!' not in content[x]:
+                if x>1 and x!= len(content)-1 and '"' in content[x]:# and 'CORR' not in content[x]:
                     print('CHECK')
                     print(file)
+                    print(content[x-1])
                     print(content[x])
+                    #pass
                 
                 
                 f.write(content[x])

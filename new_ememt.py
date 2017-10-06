@@ -126,12 +126,16 @@ def markup():
                 x=x+1
             
             else:
+                if x>1:
+                    content[x] = re.sub('_', '', content[x])
+                else:
+                    content[x] = re.sub('unknown', 'X', content[x])
                 content[x] = re.sub('&amp;', '&', content[x])
                 content[x] = re.sub('&quot;', '', content[x])
-                content[x] = re.sub('_', '', content[x])
                 content[x] = re.sub('/', '', content[x])
                 content[x] = re.sub('\[}', '', content[x])
                 content[x] = re.sub('}\]', '', content[x])
+                content[x] = re.sub('¦', '', content[x])
                 
                 content[x] = re.sub('a~', 'ā', content[x])
                 content[x] = re.sub('A~', 'Ā', content[x])

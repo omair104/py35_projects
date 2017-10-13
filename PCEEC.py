@@ -9,7 +9,7 @@ def extract():
     
     files = os.listdir(org_file_directory)
     print(files)
-    
+    count = 0
     for file in files:
         data_dict = defaultdict(list)
         file_name = file
@@ -68,7 +68,6 @@ def extract():
                     
                     
             print(data_dict)
-            
             for file_name in data_dict:
                 file = os.path.join(directory_file, file_name+'.txt')
                 
@@ -102,11 +101,24 @@ def extract():
                 print(header_3)
                 letter_name = header_3[1].rstrip()
                 letter_date = header_3[3].rstrip()
+                letter_date = re.sub("[^0-9]", "", letter_date)
                 letter_autograph= header_3[5].rstrip()
                 corpus='parsed_corpus_of_early_english_correspondence'
                 num=letter_name[-1]
                 
-                written_header = '<file> <no=%s> <corpusnumber=%s> <corpus=%s> <author=%s> <authorage=%s> <pubdate=%s> <genre1=letter> <encoding=utf-8> <text> \n' %(num, letter_name, corpus, author_name, author_age, letter_date) 
+                count = count +1
+                author_name= author_name.lower().capitalize()
+                author_name = author_name.replace('_', '')
+                if author_name=='':
+                    author_name='X'
+                if author_age=='':
+                    author_age='X'
+                if author_gender=='':
+                    author_gender='X'
+                if letter_date=='':
+                    letter_date='X'
+                
+                written_header = '<file> <no=%s> <corpusnumber=%s> <corpus=%s> <author=%s> <authorage=%s> <author_gender=%s> <pubdate=%s> <genre1=letter> <encoding=utf-8> <text> \n' %(count, letter_name, corpus, author_name, author_age, author_gender,letter_date) 
                 
                 f.write(written_header+ '\n')
                 
@@ -230,5 +242,5 @@ def markup():
         
         
     
-#extract()
+extract()
 markup()

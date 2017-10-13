@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
+
 import os, re
 
 
 def initial():
-    file = r'H:\circle\text_extractor\new corpus\Innsbruck\org.txt'
-    path = r'H:\circle\text_extractor\new corpus\Innsbruck\extracted'
+    file = r'H:\circle\py\new corpus\Innsbruck\org.txt'
+    path = r'H:\circle\py\new corpus\Innsbruck\extracted'
     
     with open(file) as f:
         content = f.readlines()
@@ -54,8 +56,9 @@ def extract():
                 x=x+1
             author= re.findall(':.*?\n',content[x])[0][2:-1]
             break
-        
-        
+        author = author.replace('mm','')
+        author = author.replace('?','')
+        author = author.replace(')','')
         
         for x in range(0, len(content)):
             while ('<Place of author' not in content[x]): 
@@ -126,14 +129,20 @@ def extract():
             break
         if '(' in authorage:
             authorage= authorage[-3:-1]
-        print(authorage)
-        
+        if authorage =='':
+            authorage='X'
+        if authorage =='x':
+            authorage='X'
+            
         for x in range(0, len(content)):
             while ('<Dialect' not in content[x]): 
                 x=x+1
             dialect= re.findall(':.*?\n',content[x])[0][2:-1]
             break
-        
+        if dialect =='':
+            dialect='X'
+        if dialect =='x':
+            dialect='X'
         
         
         written_header = '<file> <no=%s> <corpus=innsbruck_letter_corpus> <title=%s> <author=%s> <authorage=%s> <dialect=%s> <pubdate=%s> <genre=letter> \
@@ -141,6 +150,7 @@ def extract():
 <encoding=utf-8> <text> \n' %(file_number, title, author, authorage, dialect, pubdate, place_author, sex_author, status_author, recipient, place_recipient, sex_recipient, address_recipient, relation_corr, rank_of, educational)
         
         print(written_header)
+        written_header= written_header.replace('mm','(')
         
         
         
@@ -177,9 +187,21 @@ def markup():
         
         x=0
         while x< len(content):
+            content[x] = re.sub(re.escape('ÃƒÂ¾'), 'þ', content[x])
+            content[x] = re.sub(re.escape('CanterburyÃ¢â‚¬â„¢s'), 'Canterbury’s', content[x])
+            content[x] = re.sub(re.escape('tÃ¢â‚¬â„¢appere'), 't’appere', content[x])
+            content[x] = re.sub(re.escape('Ã¢â‚¬'), '- ', content[x])
+            content[x] = re.sub(re.escape('LapeÃ¢â‚¬â„¢s'), 'La=pe’s=', content[x])
+            content[x] = re.sub(re.escape('Ã¢â‚¬ËœsoÃ¢â‚¬â„¢'), 'so', content[x])
+            content[x] = re.sub(re.escape('abrÃƒÂ:copyright:gÃƒÂ:copyright:Ã¢â‚¬Å'), 'abrégé', content[x])
             
-            if '<p.' in content[x]:
+            
+            if '<' in content[x] and x>1:
                 x=x+1
+            
+            #print(x)
+            #if '<p.' in content[x]:
+            #    x=x+1
       
             else:
                 content[x] = re.sub(re.escape('$I'),'', content[x])
@@ -187,10 +209,20 @@ def markup():
                 content[x] = re.sub(re.escape('*'), '', content[x])
                 
                 content[x] = re.sub('yor ', 'yo=r= ', content[x])
+                content[x] = re.sub('Yor ', 'Yo=r= ', content[x])
                 content[x] = re.sub('wch ', 'w=ch= ', content[x])
                 content[x] = re.sub(re.escape('('), 'mm', content[x])
                 content[x] = re.sub('|', '', content[x])
                 content[x] = re.sub(re.escape('...'), '', content[x])
+                content[x] = re.sub(re.escape('?'), 'ō', content[x])
+                
+                if '{' in content[x]:
+                    removes= re.findall('{.*?}', content[x])
+                    for remove in removes:
+                        content[x] = re.sub(re.escape(remove), '', content[x])
+                
+                
+                
                 if x>1:
                     content[x] = re.sub('_', '', content[x])
                 else:

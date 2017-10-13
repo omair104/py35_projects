@@ -1,7 +1,7 @@
 import os, re
 def markup():
-    extracted_path = r'H:\circle\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted_final_2'
-    cleaned_path = r'H:\circle\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\cleaned'
+    extracted_path = r'H:\circle\py\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted_final_2'
+    cleaned_path = r'H:\circle\py\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\cleaned'
     
     files= os.listdir(extracted_path)
     
@@ -120,8 +120,8 @@ def markup():
             
 def note_extract():
                 
-    extracted_path = r'H:\circle\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\cleaned'
-    cleaned_path = r'H:\circle\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\cleaned2'
+    extracted_path = r'H:\circle\py\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\cleaned'
+    cleaned_path = r'H:\circle\py\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\cleaned2'
     
     files= os.listdir(extracted_path)
     

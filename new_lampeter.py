@@ -1,8 +1,8 @@
 import os,re
 
 def extract():
-    org_path = r'H:\circle\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\Texts'
-    extracted_path = r'H:\circle\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\extracted'
+    org_path = r'H:\circle\py\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\Texts'
+    extracted_path = r'H:\circle\py\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\extracted'
     
     files = os.listdir(org_path)
     #print(files)
@@ -122,7 +122,7 @@ def extract():
         genre2= options2.get(genre2_a, '')
         
         written_header = '<file> <no=%s> <corpusnumber=%s> <corpus=lampeter_corpus> <title=%s> <author=%s> <authorage=X> \
-<pubdate=%s> <genre1=tract, %s> <genre2=tract, %s> <place_of_publication=%s> <publisher=%s> <encoding=utf-8> \
+<pubdate=%s> <genre=tract, %s> <genre1=tract, %s> <place_of_publication=%s> <publisher=%s> <encoding=utf-8> \
 <idno: Wing %s> <idno: Lamp %s> <text> \n' %(file_number,filename, title, author, pubdate, genre1, genre2, pubplace, bookseller, idno_wing, idno_lamp)
         
         print(written_header)
@@ -142,8 +142,8 @@ def extract():
         f.close
     
 def markup():
-    extracted_path = r'H:\circle\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\extracted'
-    cleaned_path = r'H:\circle\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\cleaned'
+    extracted_path = r'H:\circle\py\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\extracted'
+    cleaned_path = r'H:\circle\py\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\cleaned'
     
     files= os.listdir(extracted_path)
     
@@ -197,14 +197,16 @@ def markup():
                         else:
                             content[x]= re.sub(re.escape(remove), '', content[x])
                         
-                        
+                     
                 if '<' in content[x]:
                     #print(content[x])
                     removes= re.findall('<.*?>', content[x])
                     for remove in removes:
                         content[x] = re.sub(re.escape(remove), '', content[x])  
                         y=content[x]
-                        
+                    
+
+
                 
                         
                 content[x] = re.sub(re.escape('N="(*)" PLACE="foot">'), '', content[x])
@@ -329,13 +331,20 @@ def markup():
                 content[x] = re.sub('&prime;', '′', content[x])
                 
                 
+
+                
+                
+            
+
+                
                 content[x] = re.sub('&rsup;', '=r=', content[x])
                 content[x] = re.sub('&rsub;', 'r', content[x])
                 content[x] = re.sub('&wynn;', 'ƿ', content[x])
 
                 content[x] = re.sub('<q rend=it', '', content[x])
                 content[x] = re.sub('<q rend=it', '', content[x])
-                content[x] = re.sub('>', '', content[x])
+                if x>2:
+                    content[x] = re.sub('>', '', content[x])
                 
                 content[x] = re.sub('LANG="LAT"', '', content[x])
                 content[x] = re.sub('LANG="FRA"', '', content[x])
@@ -345,36 +354,16 @@ def markup():
                 content[x] = re.sub('TYPE="structure"', '', content[x])
                 content[x] = re.sub('TYPE="catch"', '', content[x])
                 content[x] = re.sub('TYPE="marginalia"', '', content[x])
-                '''
-                content[x] = re.sub(re.escape('<pb n="[i]">'), '', content[x])
-                content[x] = re.sub(re.escape('<pb n="[iii]">'), '', content[x])
-                content[x] = re.sub(re.escape('<pb n="[1]">'), '', content[x])
-                content[x] = re.sub(re.escape('<pb n="[ii]">'), '', content[x])
-                content[x] = re.sub(re.escape('<pb n="[iv]">'), '', content[x])
-                content[x] = re.sub(re.escape('<note n="*" place="foot">'), '', content[x])
- 
                 
-                
-                content[x] = re.sub('<gap desc="ornament">', '', content[x])
-                content[x] = re.sub('<GAP DESC="ornament">', '', content[x])
-                content[x] = re.sub('<PB N="[i]">', '', content[x])
-                content[x] = re.sub('<DIV TYPE="contents">', '', content[x])
-                content[x] = re.sub('<Q REND="it">', '', content[x])
-                content[x] = re.sub('<DIV TYPE="dedication">', '', content[x])
-                content[x] = re.sub('<P REND="it">', '', content[x])
-                content[x] = re.sub('<IMPRIMATUR LANG="LAT">', '', content[x])
-                content[x] = re.sub('<Q REND="it" LANG="LAT">', '', content[x])
-                content[x] = re.sub('<HEAD rend=RO>', '', content[x])
-                content[x] = re.sub('<FOREIGN LANG="GKGK">', '', content[x])
-                content[x] = re.sub('REND="it">', '', content[x])
-
-                '''
+                content[x] = re.sub('&', '', content[x])
+                content[x] = re.sub('ic;', '', content[x])
+        
                 
                 
                 #print(content[x])
             
                 
-                if x>1 and x!= len(content)-1 and '"' in content[x]:# and 'CORR' not in content[x]:
+                if x>1 and x!= len(content)-1 and 'ANCHORED="NO"' in content[x]:# and 'CORR' not in content[x]:
                     print('CHECK')
                     print(file)
                     print(content[x-1])

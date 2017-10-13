@@ -2,8 +2,8 @@ import os,re
 
 
 def extract():
-    org_path = r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\All'
-    extracted_path = r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\extracted'
+    org_path = r'H:\circle\py\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\All'
+    extracted_path = r'H:\circle\py\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\extracted'
     
     files = os.listdir(org_path)
     #print(files)
@@ -31,6 +31,8 @@ def extract():
                     x=x+1
                 pubdate= re.findall('</strong>.*?</p>',content[x])[0][10:14]
                 break
+            if pubdate== '':
+                pubdate= 'X'
             
             
             
@@ -39,8 +41,12 @@ def extract():
                     x=x+1
                 author= re.findall('</strong>.*?\n',content[x])[0][10:-5]
                 break
+            if author== '':
+                author= 'X'
+            if author[-1]== ' ':
+                author = author[:-1]
             
-            print(author)
+            
             
             for x in range(0, len(content)):
                 while ('<p><strong>Dates of birth and death:</strong>' not in content[x]): 
@@ -57,25 +63,34 @@ def extract():
                     dob3= dob2[0]+'-'+dob2[-1]
                 else: dob3=''
                 break
+            if dob3== '':
+                dob3= 'X'
             
             for x in range(0, len(content)):
                 while ('<p><strong>Publishing information' not in content[x]): 
                     x=x+1
-                pub_info= re.findall('</strong>.*?\n',content[x])[0][10:-5]
+                pub_info= re.findall('</strong>.*?\n',content[x])[0][9:-5]
                 a = pub_info.split(':')
                 break
             if len(a)==2:
                 place_publication= a[0]
                 publisher = a[1]
+                if place_publication== '':
+                    place_publication= 'X'
+                if publisher== '':
+                    publisher= 'X'
+                
             
             for x in range(0, len(content)):
                 while ('<p><strong>Catalogue number:</strong>' not in content[x]): 
                     x=x+1
                 idno= re.findall('</strong>.*?</p>',content[x])[0][10:-5][-5:]
                 break
+            if idno== '':
+                idno= 'X'
             
             written_header = '<file> <no=%s> <corpusnumber=%s> <corpus=early_modern_english_medical_texts> <author=%s> \
-<dialect=Early Modern English> <dates_of_birth_and_death=%s> <pubdate=%s> <place_of_publication=%s> <publisher=%s> <genre=medical> <idno=%s>  <encoding=utf-8> <text> \n' %(file_number,filename, author, dob3, pubdate, place_publication, publisher, idno)
+<dates_of_birth_and_death=%s> <pubdate=%s> <place_of_publication=%s> <publisher=%s> <genre=medical> <idno=%s>  <encoding=utf-8> <text> \n' %(file_number,filename, author, dob3, pubdate, place_publication, publisher, idno)
             
             print(written_header)
         
@@ -96,8 +111,8 @@ def extract():
         
         
 def markup():
-    extracted_path = r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\extracted'
-    cleaned_path = r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\cleaned'
+    extracted_path = r'H:\circle\py\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\extracted'
+    cleaned_path = r'H:\circle\py\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\cleaned'
     
     files= os.listdir(extracted_path)
     
@@ -162,5 +177,5 @@ def markup():
                 
                 f.write(content[x])
                 x=x+1
-            
+extract() 
 markup()

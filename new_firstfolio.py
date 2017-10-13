@@ -1,8 +1,8 @@
 import os,re
 
 def markup():
-    extracted_path = r'H:\circle\text_extractor\new corpus\FirstFolio\Shakespeare First Folio (Machine Readable Text Format)\extracted'
-    cleaned_path = r'H:\circle\text_extractor\new corpus\FirstFolio\Shakespeare First Folio (Machine Readable Text Format)\cleaned'
+    extracted_path = r'H:\circle\py\new corpus\FirstFolio\Shakespeare First Folio (Machine Readable Text Format)\extracted'
+    cleaned_path = r'H:\circle\py\new corpus\FirstFolio\Shakespeare First Folio (Machine Readable Text Format)\cleaned'
     
     files= os.listdir(extracted_path)
     
@@ -40,6 +40,9 @@ def markup():
                 content[x] = re.sub('%', '-', content[x])
                 content[x] = re.sub('\*', '', content[x])
                 content[x] = re.sub('|', '', content[x])
+                
+                content[x] = re.sub('|', '', content[x])
+                content[x] = re.sub(re.escape('('), '', content[x])
                 
                 content[x] = re.sub('genre1', 'genre', content[x])
                 

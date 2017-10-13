@@ -2,8 +2,8 @@ import os,re,time
 from ctypes.test.test_pep3118 import Complete
 
 def extract():
-    org_path = r'H:\circle\text_extractor\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\all'
-    extracted_path = r'H:\circle\text_extractor\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\extracted'
+    org_path = r'H:\circle\py\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\all'
+    extracted_path = r'H:\circle\py\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\extracted'
     
     files = os.listdir(org_path)
     #print(files)
@@ -31,7 +31,7 @@ def extract():
             pubdate='1653-1654'
         
         
-        written_header = '<file> <no=%s> <corpusnumber=%s> <corpus=lancaster_newsbook_corpus> <title=%s> \
+        written_header = '<file> <no=%s> <corpusnumber=%s> <corpus=lancaster_newsbooks_corpus> <title=%s> \
 <pubdate=%s> <genre=newsbook> <encoding=utf-8> <text> \n' %(file_number,filename, title, pubdate)
         
         print(written_header)
@@ -52,8 +52,8 @@ def extract():
         f.close
         
 def markup():
-    extracted_path = r'H:\circle\text_extractor\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\extracted'
-    cleaned_path = r'H:\circle\text_extractor\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\cleaned'
+    extracted_path = r'H:\circle\py\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\extracted'
+    cleaned_path = r'H:\circle\py\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\cleaned'
     
     files= os.listdir(extracted_path)
     
@@ -102,6 +102,11 @@ def markup():
                     completes= re.findall('<reg.*?/reg>',content[x])
 
                     for y in range(len(org_words)):
+                        print(file)
+                        print(content[x])
+                        print(org_words)
+                        print(y)
+                        print(completes)
                         org_word= org_words[y][6:-2]
                         complete = completes[y]
                         #print(org_word)
@@ -215,6 +220,6 @@ def markup():
                 x=x+1
 
 
-
+#extract()
 markup()
     

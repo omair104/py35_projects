@@ -1,8 +1,8 @@
 import os,re
 
 def extract():
-    org_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\CEDXML'
-    extracted_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
+    org_path = r'H:\circle\py\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\CEDXML'
+    extracted_path = r'H:\circle\py\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
     
     files = os.listdir(org_path)
     #print(files)
@@ -26,12 +26,14 @@ def extract():
             while ('<title>' not in content[x]): 
                 x=x+1
             title= re.findall('<title>.*?</title>',content[x])[0][7:-8]
+            title= title.lower().capitalize()
             break
         
         for x in range(0, len(content)):
             while ('<author>' not in content[x]): 
                 x=x+1
             author= re.findall('<author>.*?</author>',content[x])[0][8:-9]
+            author = author.title()
             break
         
         for x in range(0, len(content)):
@@ -49,7 +51,7 @@ def extract():
         for x in range(0, len(content)):
             while ('<contemporaneity' not in content[x]): 
                 x=x+1
-            cont= re.findall('>.*?</contemporaneity>',content[x])[0][1:-11]
+            cont= re.findall('>.*?</contemporaneity>',content[x])[0][1:-18]
             break
         
         
@@ -76,8 +78,8 @@ def extract():
 
 
 def markup():
-    extracted_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
-    cleaned_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\cleaned'
+    extracted_path = r'H:\circle\py\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
+    cleaned_path = r'H:\circle\py\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\cleaned'
     
     files= os.listdir(extracted_path)
     
@@ -96,11 +98,17 @@ def markup():
         while x< len(content):
             
             if '<comment' in content[x]:
-                while '/comment>' not in content[x]:
+                removes= re.findall('<comment.*?/comment>', content[x])
+                for remove in removes:
+                    content[x] = re.sub(re.escape(remove), '', content[x])
+                if removes == []:
+                    while '/comment>' not in content[x]:
+                        x=x+1
                     x=x+1
-                x=x+1
+
+
                 
-            elif '<pagebreak' in content[x]:
+            if '<pagebreak' in content[x]:
                 while '/>' not in content[x]:
                     x=x+1
                 x=x+1
@@ -160,6 +168,7 @@ def markup():
                 
                 
                 if x>1 and x!= len(content)-1 and '<' in content[x]:
+                    print(file)
                     print(content[x])
                     break
                 

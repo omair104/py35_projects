@@ -37,7 +37,7 @@ def extract():
                         if x==len(content):
                             break
                     if x<len(content):
-                        author= re.findall('<AUTHOR>.*?</AUTHOR>',content[x])[0][8:-9]
+                        author= re.findall('<AUTHOR>.*?</AUTHOR>',content[x])[0][8:-10]
                     else: author=''
                     break
                 #print(author)

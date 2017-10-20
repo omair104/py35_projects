@@ -2,17 +2,14 @@ import os,re
 
 
 def extract():
-    org_path = r'H:\circle\py\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\All'
-    extracted_path = r'H:\circle\py\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\extracted'
+    org_path = r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\All'
+    extracted_path = r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\extracted'
     
     files = os.listdir(org_path)
     #print(files)
     file_number=0
     for file in files:
-        
-        
-        
-        
+
         if os.path.splitext(file)[1]=='.html' and 'NORM' not in file and '_pt' not in file:
             print(file)
         
@@ -20,7 +17,7 @@ def extract():
             path_org_file= os.path.join(org_path, file)
             
             
-            with open(path_org_file) as f:
+            with open(path_org_file, encoding='utf-8') as f:
                 content = f.readlines()
                 
             filename= file[:-10]
@@ -111,8 +108,8 @@ def extract():
         
         
 def markup():
-    extracted_path = r'H:\circle\py\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\extracted'
-    cleaned_path = r'H:\circle\py\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\cleaned'
+    extracted_path = r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\extracted'
+    cleaned_path = r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\cleaned'
     
     files= os.listdir(extracted_path)
     
@@ -121,7 +118,7 @@ def markup():
         path_extracted_file= os.path.join(extracted_path, file)
         
         
-        with open(path_extracted_file) as f:
+        with open(path_extracted_file, encoding='utf-8') as f:
             content = f.readlines()
             
         file= os.path.join(cleaned_path, str(file))
@@ -171,10 +168,9 @@ def markup():
                 content[x] = re.sub('p~', 'p̄', content[x])
                 content[x] = re.sub('P~', 'P̄', content[x])
                 
+                content[x] = re.sub('3', 'ȝ', content[x])
                 
 
-        
-                
                 f.write(content[x])
                 x=x+1
 extract() 

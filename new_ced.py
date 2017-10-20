@@ -78,8 +78,8 @@ def extract():
 
 
 def markup():
-    extracted_path = r'H:\circle\py\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
-    cleaned_path = r'H:\circle\py\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\cleaned'
+    extracted_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
+    cleaned_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\cleaned'
     
     files= os.listdir(extracted_path)
     
@@ -146,6 +146,7 @@ def markup():
                 content[x] = re.sub('M~', 'M̄', content[x])
                 content[x] = re.sub('p~', 'p̄', content[x])
                 content[x] = re.sub('P~', 'P̄', content[x])
+
                 
                 content[x] = re.sub('<dialogueText>', '', content[x])
                 content[x] = re.sub('</dialogueText>', '', content[x])
@@ -163,11 +164,14 @@ def markup():
                 content[x] = re.sub('<emendation>', '', content[x])
                 content[x] = re.sub('</emendation>', '', content[x])
                 
+                content[x] = re.sub('~', '', content[x])
+                content[x] = re.sub('è', 'e', content[x])
+                
                 content[x] = re.sub('<omission type="line" />', '', content[x])
                 content[x] = re.sub('<omission type="sentence" />', '', content[x])
                 
                 
-                if x>1 and x!= len(content)-1 and '<' in content[x]:
+                if x>1 and x!= len(content)-1 and '~' in content[x]:
                     print(file)
                     print(content[x])
                     break

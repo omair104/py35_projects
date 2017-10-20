@@ -48,6 +48,7 @@ def extract():
                     place_of_pub= re.findall('<PUBPLACE>.*?</PUBPLACE>',content[x])[0][10:-11]
                     break
                 #print(place_of_pub)
+                place_of_pub = re.sub("[^abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ]", '', place_of_pub)
                 
                 for x in range(10, len(content)):
                     while ('<DATE' not in content[x]): 
@@ -55,6 +56,7 @@ def extract():
                     pubdate= re.findall('<DATE>.*?</DATE>',content[x])[0][6:-7]
                     break
                 #print(pubdate)
+                pubdate = re.sub("[^123456789]", '', pubdate)
                 
                 for x in range(0, len(content)):
                     while ('<IDNO TYPE="DLPS">' not in content[x]): 
@@ -126,7 +128,7 @@ def subcorpus():
                         if x==len(content):
                             break
                     if x<len(content):
-                        author= re.findall('<AUTHOR>.*?</AUTHOR>',content[x])[0][8:-9]
+                        author= re.findall('<AUTHOR>.*?</AUTHOR>',content[x])[0][8:-10]
                     else: author=''
                     break
                 #print(author)
@@ -137,6 +139,7 @@ def subcorpus():
                     place_of_pub= re.findall('<PUBPLACE>.*?</PUBPLACE>',content[x])[0][10:-11]
                     break
                 #print(place_of_pub)
+                place_of_pub = re.sub("[^abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ]", '', place_of_pub)
                 
                 for x in range(10, len(content)):
                     while ('<DATE' not in content[x]): 
@@ -144,6 +147,7 @@ def subcorpus():
                     pubdate= re.findall('<DATE>.*?</DATE>',content[x])[0][6:-7]
                     break
                 #print(pubdate)
+                pubdate = re.sub("[^123456789]", '', pubdate)
                 
                 for x in range(0, len(content)):
                     while ('<IDNO TYPE="DLPS">' not in content[x]): 
@@ -224,7 +228,7 @@ def subcorpus2():
                         if x==len(content):
                             break
                     if x<len(content):
-                        author= re.findall('<AUTHOR>.*?</AUTHOR>',content[x])[0][8:-9]
+                        author= re.findall('<AUTHOR>.*?</AUTHOR>',content[x])[0][8:-10]
                     else: author=''
                     break
                 #print(author)
@@ -235,6 +239,7 @@ def subcorpus2():
                     place_of_pub= re.findall('<PUBPLACE>.*?</PUBPLACE>',content[x])[0][10:-11]
                     break
                 #print(place_of_pub)
+                place_of_pub = re.sub("[^abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ]", '', place_of_pub)
                 
                 for x in range(10, len(content)):
                     while ('<DATE' not in content[x]): 
@@ -242,6 +247,7 @@ def subcorpus2():
                     pubdate= re.findall('<DATE>.*?</DATE>',content[x])[0][6:-7]
                     break
                 #print(pubdate)
+                pubdate = re.sub("[^123456789]", '', pubdate)
                 
                 for x in range(0, len(content)):
                     while ('<IDNO TYPE="DLPS">' not in content[x]): 
@@ -293,13 +299,7 @@ def subcorpus2():
                             
                             all_dates.remove(n)
                             break
-                        
-                    
 
-                    
-
-    
-                
-                
-#extract()
-subcorpus2()
+extract()
+#subcorpus()
+#subcorpus2()

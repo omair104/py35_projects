@@ -5,7 +5,7 @@ def filter_text(org):
     result= org
     return result
 
-path_to_xml=r'H:\circle\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\HC_XML_Master_v2.xml'
+path_to_xml=r'H:\circle\py\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\HC_XML_Master_v2.xml'
 
 '''
 with open(path_to_xml, encoding='utf-8') as f:
@@ -15,7 +15,7 @@ for a in content:
     b= a.encode('utf-8')
     list.append(b)
 count = 0
-path = r'H:\circle\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted_tei'
+path = r'H:\circle\py\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted_tei'
 
 for x in range(0, len(content)):
 #for a in content:
@@ -32,11 +32,11 @@ for x in range(0, len(content)):
 
 '''
 
-path = r'H:\circle\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted'
+path = r'H:\circle\py\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted'
 file_number=0
 
-extracted_tei = r'H:\circle\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted_tei\428.txt'
-extracted_tei_dir = r'H:\circle\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted_tei'
+extracted_tei = r'H:\circle\py\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted_tei\428.txt'
+extracted_tei_dir = r'H:\circle\py\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted_tei'
 
 files = os.listdir(extracted_tei_dir)
 for file in files:

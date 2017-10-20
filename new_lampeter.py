@@ -142,8 +142,8 @@ def extract():
         f.close
     
 def markup():
-    extracted_path = r'H:\circle\py\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\extracted'
-    cleaned_path = r'H:\circle\py\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\cleaned'
+    extracted_path = r'H:\circle\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\extracted'
+    cleaned_path = r'H:\circle\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\cleaned'
     
     files= os.listdir(extracted_path)
     
@@ -154,16 +154,36 @@ def markup():
         
         with open(path_extracted_file) as f:
             content = f.readlines()
-            
+        '''
+        while x<len(content):
+            open_count = content[x].count('<') 
+            close_count = content[x].count('>') 
+            if open_count > close_count:
+                content[x] = content[x]+'>'
+                content[x+1] = '<'+content[x+1]
+            x=x+1
+        ''' 
         file= os.path.join(cleaned_path, str(file))
         f= open(file, 'w+', encoding='utf-8')
         
         x=0
         add_flag=0
         corr_flag=0
+        bracket_flag = 0
         while x< len(content):
+        
+            if bracket_flag==1:
+                content[x] = '<'+content[x]
+                bracket_flag = 0
+            
+            open_count = content[x].count('<') 
+            close_count = content[x].count('>') 
+            if open_count > close_count:
+                content[x] = content[x][:-1]
+                content[x] = content[x]+'>'
+                bracket_flag = 1
 
-            if x>1 and x<len(content)-1:
+            if x>=1 and x<len(content)-1:
                 
                 if add_flag==1:
                     content[x]= '<ADD '+ content[x]
@@ -203,14 +223,10 @@ def markup():
                     removes= re.findall('<.*?>', content[x])
                     for remove in removes:
                         content[x] = re.sub(re.escape(remove), '', content[x])  
-                        y=content[x]
-                    
 
 
-                
-                        
-                content[x] = re.sub(re.escape('N="(*)" PLACE="foot">'), '', content[x])
-                
+                #content[x] = re.sub(re.escape('N="(*)" PLACE="foot">'), '', content[x])
+                '''
                 if 'N=' in content[x]:
                     #print(content[x])
                     removes= re.findall('N=.*?>', content[x])
@@ -218,6 +234,7 @@ def markup():
                         #print(remove)
                         content[x] = re.sub(remove, '', content[x])  
                         #print(content[x])
+                
                         
                 content[x] = re.sub('<Q', '', content[x])
                 content[x] = re.sub('<PB', '', content[x])
@@ -240,15 +257,9 @@ def markup():
                 content[x] = re.sub('<HEAD', '', content[x])
                 content[x] = re.sub('<L', '', content[x])
                 content[x] = re.sub('<SPEAKER', '', content[x])
+                '''
 
-    
-                
-            if '<PB' in content[x]:
-                x=x+1
-                
-
-                
-            else:
+            if 1==1:
                 content[x] = re.sub('&rehy;', '', content[x])
                 content[x] = re.sub('&cross;', '', content[x])
                 content[x] = re.sub('&dagger;', '', content[x])
@@ -279,7 +290,6 @@ def markup():
                 content[x] = re.sub('&horbar;', '–', content[x])
                 content[x] = re.sub('&horfill;', '–', content[x])
                 content[x] = re.sub('&mdash;', '–', content[x])
-
 
                 content[x] = re.sub('&Agrave;', 'À', content[x])
                 content[x] = re.sub('&Aacute;', 'Á', content[x])
@@ -329,21 +339,16 @@ def markup():
                 content[x] = re.sub('&ndash;', '–', content[x])
                 content[x] = re.sub('&rsquo;', '’', content[x])
                 content[x] = re.sub('&prime;', '′', content[x])
-                
-                
 
-                
-                
-            
-
-                
                 content[x] = re.sub('&rsup;', '=r=', content[x])
                 content[x] = re.sub('&rsub;', 'r', content[x])
                 content[x] = re.sub('&wynn;', 'ƿ', content[x])
+                
+                '''
 
                 content[x] = re.sub('<q rend=it', '', content[x])
                 content[x] = re.sub('<q rend=it', '', content[x])
-                if x>2:
+                if x>2 and x< len(content)-1:
                     content[x] = re.sub('>', '', content[x])
                 
                 content[x] = re.sub('LANG="LAT"', '', content[x])
@@ -354,13 +359,11 @@ def markup():
                 content[x] = re.sub('TYPE="structure"', '', content[x])
                 content[x] = re.sub('TYPE="catch"', '', content[x])
                 content[x] = re.sub('TYPE="marginalia"', '', content[x])
-                
+                '''
                 content[x] = re.sub('&', '', content[x])
                 content[x] = re.sub('ic;', '', content[x])
-        
                 
-                
-                #print(content[x])
+
             
                 
                 if x>1 and x!= len(content)-1 and 'ANCHORED="NO"' in content[x]:# and 'CORR' not in content[x]:

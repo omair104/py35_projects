@@ -27,10 +27,6 @@ def extract():
             
             
             remove_list= [ '</paren>' ,'<paren>', 
-                          #'{ED:Englefield}','{ED:Louvain}', '{ED:Owen}', '{ED:Dr._Morys_Clynnog}', '{ED:ADDRESSED_BY_ALLEN:}', '{ED:1593}',
-                          #'{ED:Griffin}', '{ED:Maastricht}', '{ED:Thomas}', '{ED:Richard}', '{ED:Paris}', '{ED:P.S.}', '{ED:ow}', '{ED:SIC}',
-                          #'<P_8>','<P_9>', '<P_10>','<P_11>', '<P_12>', '<P_13>', '<P_14>' ,'<P_14>', '<P_15>','<P_16>','<P_17>','<P_18>','<P_19>','<P_73>', '<P_230', 
-                          #'<P_231>','<P_235>',
                           '<heading>','</heading>']
             
             
@@ -191,6 +187,12 @@ def markup():
                 for remove in removes:
                     content[x] = re.sub(re.escape(remove), '', content[x])   
             
+            if '{' in content[x]:
+                #print(content[x])
+                removes= re.findall('{.*?}', content[x])
+                #print(removes)
+                for remove in removes:
+                    content[x] = re.sub(re.escape(remove), '', content[x])   
 
 
             if x>1:
@@ -209,12 +211,6 @@ def markup():
             content[x] = re.sub('<font>', '', content[x])
             content[x] = re.sub('<font>', '', content[x])
 
-            
-            
-            
-
-
-            
             content[x] = re.sub('<font>', '', content[x])
             content[x] = re.sub('</font>', '', content[x])
             content[x] = re.sub('<dialogue>', '', content[x])
@@ -230,10 +226,40 @@ def markup():
             content[x] = re.sub('</sample>', '', content[x])
             content[x] = re.sub('<emendation>', '', content[x])
             content[x] = re.sub('</emendation>', '', content[x])
+            
+            
+            
+            content[x] = re.sub('a~', 'ā', content[x])
+            content[x] = re.sub('A~', 'Ā', content[x])
+            content[x] = re.sub('e~', 'ē', content[x])
+            content[x] = re.sub('E~', 'Ē', content[x])
+            content[x] = re.sub('i~', 'ī', content[x])
+            content[x] = re.sub('I~', 'Ī', content[x])
+            content[x] = re.sub('o~', 'ō', content[x])
+            content[x] = re.sub('O~', 'Ō', content[x])
+            content[x] = re.sub('u~', 'ū', content[x])
+            content[x] = re.sub('U~', 'Ū', content[x])
+            content[x] = re.sub('v~', 'v̄', content[x])
+            content[x] = re.sub('V~', 'V̄', content[x])
+            content[x] = re.sub('y~', 'ȳ', content[x])
+            content[x] = re.sub('Y~', 'Ȳ', content[x])
+            content[x] = re.sub('m~', 'm̄', content[x])
+            content[x] = re.sub('M~', 'M̄', content[x])
+            content[x] = re.sub('p~', 'p̄', content[x])
+            content[x] = re.sub('P~', 'P̄', content[x])
+            
+            content[x] = re.sub('-2', 'r', content[x])
+            content[x] = re.sub('-4', '', content[x])
+            content[x] = re.sub(re.escape('+L'), '$', content[x])
+            
+            content[x] = re.sub(re.escape('/'), '$', content[x])
+            
+            if ' W' not in content[x]:
+                content[x] = re.sub('W', 'w', content[x])
 
             
             
-            if x>1 and x!= len(content)-1 and '$' in content[x]:
+            if x>1 and x!= len(content)-1 and '_' in content[x]:
                 print(content[x])
                 #break
                 #pass
@@ -242,5 +268,5 @@ def markup():
         
         
     
-extract()
+#extract()
 markup()

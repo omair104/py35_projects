@@ -4,13 +4,13 @@ import os, re
 
 
 def initial():
-    file = r'H:\circle\py\new corpus\Innsbruck\org.txt'
-    path = r'H:\circle\py\new corpus\Innsbruck\extracted'
+    file = r'H:\circle\text_extractor\new corpus\Innsbruck\org3.txt'
+    path = r'H:\circle\text_extractor\new corpus\Innsbruck\initial'
     
-    with open(file) as f:
+    with open(file, encoding='utf-8') as f:
         content = f.readlines()
         
-    print(content)
+    #print(content)
     count = 0
     
     for x in range(0, len(content)):
@@ -36,7 +36,7 @@ def extract():
         
         print(path_org_file)
         
-        with open(path_org_file) as f:
+        with open(path_org_file, encoding='utf-8') as f:
             content = f.readlines()
             
         title1= content[18][1:-1]
@@ -178,7 +178,7 @@ def markup():
         path_extracted_file= os.path.join(extracted_path, file)
         
         
-        with open(path_extracted_file) as f:
+        with open(path_extracted_file, encoding='utf-8') as f:
             print(path_extracted_file)
             content = f.readlines()
             
@@ -187,6 +187,7 @@ def markup():
         
         x=0
         while x< len(content):
+            '''
             content[x] = re.sub(re.escape('ÃƒÂ¾'), 'þ', content[x])
             content[x] = re.sub(re.escape('CanterburyÃ¢â‚¬â„¢s'), 'Canterbury’s', content[x])
             content[x] = re.sub(re.escape('tÃ¢â‚¬â„¢appere'), 't’appere', content[x])
@@ -194,9 +195,9 @@ def markup():
             content[x] = re.sub(re.escape('LapeÃ¢â‚¬â„¢s'), 'La=pe’s=', content[x])
             content[x] = re.sub(re.escape('Ã¢â‚¬ËœsoÃ¢â‚¬â„¢'), 'so', content[x])
             content[x] = re.sub(re.escape('abrÃƒÂ:copyright:gÃƒÂ:copyright:Ã¢â‚¬Å'), 'abrégé', content[x])
+            '''
             
-            
-            if '<' in content[x] and x>1:
+            if '<' in content[x] and x>1 and x<len(content)-1:
                 x=x+1
             
             #print(x)
@@ -211,7 +212,7 @@ def markup():
                 content[x] = re.sub('yor ', 'yo=r= ', content[x])
                 content[x] = re.sub('Yor ', 'Yo=r= ', content[x])
                 content[x] = re.sub('wch ', 'w=ch= ', content[x])
-                content[x] = re.sub(re.escape('('), 'mm', content[x])
+                #content[x] = re.sub(re.escape('('), 'mm', content[x])
                 content[x] = re.sub('|', '', content[x])
                 content[x] = re.sub(re.escape('...'), '', content[x])
                 content[x] = re.sub(re.escape('?'), 'ō', content[x])

@@ -22,10 +22,7 @@ def extract():
             #scan_upto = 'ALLEN'
             name = os.path.splitext(file_name)[0]
             scan_upto = name.upper()+','
-            
-            
-            
-            
+
             remove_list= [ '</paren>' ,'<paren>', 
                           '<heading>','</heading>']
             
@@ -187,6 +184,10 @@ def markup():
                 for remove in removes:
                     content[x] = re.sub(re.escape(remove), '', content[x])   
             
+            content[x] = re.sub(re.escape('{to}P'), '', content[x])
+            content[x] = re.sub(re.escape('_P'), '', content[x])
+            content[x] = re.sub(re.escape('_MD'), '', content[x])
+            content[x] = re.sub(re.escape('<em>'), '', content[x])
             if '{' in content[x]:
                 #print(content[x])
                 removes= re.findall('{.*?}', content[x])
@@ -254,12 +255,40 @@ def markup():
             
             content[x] = re.sub(re.escape('/'), '$', content[x])
             
+            content[x] = re.sub(re.escape('+g'), 'ƿ', content[x])
+            content[x] = re.sub(re.escape('+G'), 'Ƿ', content[x])
+            content[x] = re.sub(re.escape('+t'), 'þ', content[x])
+            content[x] = re.sub(re.escape('+T'), 'Þ', content[x])
+            content[x] = re.sub(re.escape('+d'), 'ð', content[x])
+            content[x] = re.sub(re.escape('+D'), 'Ð', content[x])
+            content[x] = re.sub(re.escape('+o'), 'œ', content[x])
+            content[x] = re.sub(re.escape('+O'), 'Œ', content[x])
+            content[x] = re.sub(re.escape('+a'), 'æ', content[x])
+            content[x] = re.sub(re.escape('+A'), 'Æ', content[x])
+            
+            content[x] = re.sub('yoW', 'yow', content[x])
+            content[x] = re.sub('-SBJ', 'yow', content[x])
+            content[x] = re.sub(re.escape('{COM:SIC?'), '', content[x])
+            content[x] = re.sub(re.escape('{COM:??'), '', content[x])
+            content[x] = re.sub(re.escape('{COM:?'), '', content[x])
+            content[x] = re.sub(re.escape('COMMENCESISMARKEDBYAOINTINGHANDDRAwNINTHEMARGIN}'), '', content[x])
+            content[x] = re.sub(re.escape('{COM:THEBEGINNINGIhaveascrupleENDINGbythenextpostwRI'), '', content[x])
+            content[x] = re.sub(re.escape('{COM:THEBEGINNINGIhaveascrupleENDINGbythenextpostwRI'), '', content[x])
+            content[x] = re.sub(re.escape('{COM:THEBEGINNINGOffHughesENDINGtheytermeitwRITTENINT'), '', content[x])
+            content[x] = re.sub(re.escape('{COM:forwrite?'), '', content[x])
+            content[x] = re.sub(re.escape('{COM:PASSAGEiijpeereANDENDINGthyngesAlsoscheREPEATE'), '', content[x])
+            content[x] = re.sub(re.escape('{COM:thoughnotCANCELLED'), '', content[x])
+            content[x] = re.sub(re.escape('{COM:soesooneasperhapsyoudidexpectsentyou'), '', content[x])
+            content[x] = re.sub(re.escape('{COM:myCANCELLED'), '', content[x])
+            
+            
             if ' W' not in content[x]:
                 content[x] = re.sub('W', 'w', content[x])
 
             
             
-            if x>1 and x!= len(content)-1 and '_' in content[x]:
+            if x>1 and x!= len(content)-1 and ('COM' in content[x] or '_' in content[x]):
+                print(file)
                 print(content[x])
                 #break
                 #pass

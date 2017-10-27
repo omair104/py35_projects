@@ -10,7 +10,7 @@ def extract():
     file_number=0
     for file in files:
 
-        if os.path.splitext(file)[1]=='.html' and 'NORM' not in file and '_pt' not in file:
+        if os.path.splitext(file)[1]=='.html' and 'NORM' not in file:# and '_pt' not in file:
             print(file)
         
             file_number= file_number+1
@@ -36,8 +36,13 @@ def extract():
             for x in range(0, len(content)):
                 while ('<p><strong>Author:</strong>' not in content[x]): 
                     x=x+1
-                author= re.findall('</strong>.*?\n',content[x])[0][10:-5]
-                break
+                    if x == len(content):
+                        break
+                if x == len(content):
+                    author= ''
+                else:
+                    author= re.findall('</strong>.*?\n',content[x])[0][10:-5]
+                    break
             if author== '':
                 author= 'X'
             if author[-1]== ' ':
@@ -81,8 +86,13 @@ def extract():
             for x in range(0, len(content)):
                 while ('<p><strong>Catalogue number:</strong>' not in content[x]): 
                     x=x+1
-                idno= re.findall('</strong>.*?</p>',content[x])[0][10:-5][-5:]
-                break
+                    if x == len(content):
+                        break
+                if x == len(content):
+                    idno=''
+                else:
+                    idno= re.findall('</strong>.*?</p>',content[x])[0][10:-5][-5:]
+                    break
             if idno== '':
                 idno= 'X'
             

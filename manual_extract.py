@@ -4,7 +4,7 @@ data_dict = defaultdict(list)
 
 
 path_to_manual = r'C:\Users\omair\Downloads\hmanual2.1477'
-extracted_dir = r'H:\circle\text_extractor\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted'
+extracted_dir = r'H:\circle\py\XML Helsinki Corpus Browser\XML Helsinki Corpus Browser\hcbrow\corpus\extracted'
 
 files = os.listdir(extracted_dir)
 for file in files:

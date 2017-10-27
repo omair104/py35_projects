@@ -1,8 +1,8 @@
 import os,re
 
 def extract():
-    org_path = r'H:\circle\py\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\CEDXML'
-    extracted_path = r'H:\circle\py\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
+    org_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\CEDXML'
+    extracted_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
     
     files = os.listdir(org_path)
     #print(files)
@@ -88,7 +88,7 @@ def markup():
         path_extracted_file= os.path.join(extracted_path, file)
         
         
-        with open(path_extracted_file) as f:
+        with open(path_extracted_file, encoding='utf-8') as f:
             content = f.readlines()
             
         file= os.path.join(cleaned_path, str(file))
@@ -181,5 +181,5 @@ def markup():
             
             
     
-#extract()
+extract()
 markup()

@@ -52,8 +52,8 @@ def extract():
         f.close
         
 def markup():
-    extracted_path = r'H:\circle\py\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\extracted'
-    cleaned_path = r'H:\circle\py\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\cleaned'
+    extracted_path = r'H:\circle\text_extractor\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\extracted'
+    cleaned_path = r'H:\circle\text_extractor\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\cleaned'
     
     files= os.listdir(extracted_path)
     
@@ -121,8 +121,9 @@ def markup():
                 content[x] = re.sub('&Aacute;', 'Á', content[x])
                 content[x] = re.sub('&Acirc;', 'Â', content[x])
                 content[x] = re.sub('&Atilde;', 'Ā', content[x])
+                content[x] = re.sub('&aring;', 'å', content[x])
                 content[x] = re.sub('&Aring;', 'Â', content[x])
-                content[x] = re.sub('&AElig;', 'AE', content[x])
+                content[x] = re.sub('&AElig;', 'Æ', content[x])
                 content[x] = re.sub('&Egrave;', 'È', content[x])
                 content[x] = re.sub('&Eacute;', 'É', content[x])
                 content[x] = re.sub('&Ecirc;', 'Ê', content[x])
@@ -143,7 +144,7 @@ def markup():
                 content[x] = re.sub('&aacute;', 'á', content[x])
                 content[x] = re.sub('&acirc;', 'â', content[x])
                 content[x] = re.sub('&atilde;', 'ā', content[x])
-                content[x] = re.sub('&Aelig;', 'ae', content[x])
+                content[x] = re.sub('&Aelig;', 'æ', content[x])
                 content[x] = re.sub('&egrave;', 'è', content[x])
                 content[x] = re.sub('&eacute;', 'é', content[x])
                 content[x] = re.sub('&ecirc;', 'ê', content[x])
@@ -159,12 +160,37 @@ def markup():
                 content[x] = re.sub('&uacute;', 'ú', content[x])
                 content[x] = re.sub('&ucirc;', 'û', content[x])
                 content[x] = re.sub('&thorn;', 'þ', content[x])
-                content[x] = re.sub('&OElig;', 'OE', content[x])
-                content[x] = re.sub('&oelig;', 'oe', content[x])
+                content[x] = re.sub('&OElig;', 'Œ', content[x])
+                content[x] = re.sub('&oelig;', 'œ', content[x])
                 content[x] = re.sub('&mdash;', '–', content[x])
                 content[x] = re.sub('&ndash;', '–', content[x])
                 content[x] = re.sub('&rsquo;', '’', content[x])
                 content[x] = re.sub('&prime;', '′', content[x])
+                
+                content[x] = re.sub('&auml;', 'ä', content[x])
+                content[x] = re.sub('&Auml;', 'Ä', content[x])
+                content[x] = re.sub('&ccedil;', 'ç', content[x])
+                content[x] = re.sub('&Ccedil;', 'Ç', content[x])
+                content[x] = re.sub('&euml;', 'ë', content[x])
+                content[x] = re.sub('&Euml;', 'Ë', content[x])
+                content[x] = re.sub('&iuml;', 'ï', content[x])
+                content[x] = re.sub('&Iuml;', 'Ï', content[x])
+                content[x] = re.sub('&ntilde;', 'ñ', content[x])
+                content[x] = re.sub('&Ntilde;', 'Ñ', content[x])
+                content[x] = re.sub('&oslash;', 'ǿ', content[x])
+                content[x] = re.sub('&Oslash;', 'Ø', content[x])
+                content[x] = re.sub('&ouml;', 'ö', content[x])
+                content[x] = re.sub('&Ouml;', 'Ö', content[x])
+                content[x] = re.sub('&uuml;', 'ü', content[x])
+                content[x] = re.sub('&Uuml;', 'Ü', content[x])
+                content[x] = re.sub('&yacute;', 'ý', content[x])
+                content[x] = re.sub('&Yacute;', 'Ý', content[x])
+                content[x] = re.sub('&yuml;', 'ÿ', content[x])
+                content[x] = re.sub('&scaron;', 'š', content[x])
+                content[x] = re.sub('&Scaron;', 'Š', content[x])
+                content[x] = re.sub('&szlig;', 'ß', content[x])
+                content[x] = re.sub('&Yuml;', 'Ÿ', content[x])
+
                 
                 content[x] = re.sub('&ldquo;', '', content[x])
                 content[x] = re.sub('&rdquo;', '', content[x])
@@ -211,6 +237,60 @@ def markup():
                 content[x] = re.sub('</note', '', content[x])
                 content[x] = re.sub('<ptr target="N01"/>', '', content[x])
                 content[x] = re.sub('<td colspan="3" rowspan="3">', '', content[x])
+                
+                
+                content[x] = re.sub('&pound;','£', content[x])
+                content[x] = re.sub('&euro;' , '', content[x])
+                content[x] = re.sub('&permil;', '', content[x])
+                content[x] = re.sub('&bdquo;' , '', content[x])
+                content[x] = re.sub('&quot;' , '', content[x])
+                content[x] = re.sub('&rdquo;' , '', content[x])
+                content[x] = re.sub('&middot;' , '', content[x])
+                content[x] = re.sub('&micro;' , '', content[x])
+                content[x] = re.sub('&gt;' , '', content[x])
+                content[x] = re.sub('&ldquo;' , '', content[x])
+                content[x] = re.sub('&lrm;' , '', content[x])
+                content[x] = re.sub('&lsaquo;' , '', content[x])
+                content[x] = re.sub('&lsquo;' , '', content[x])
+                content[x] = re.sub('&lt;' , '', content[x])
+                content[x] = re.sub('&rlm;' , '', content[x])
+                content[x] = re.sub('&rsaquo;' , '', content[x])
+                content[x] = re.sub('&rsquo;' , '', content[x])
+                content[x] = re.sub('&rsquo;' , '', content[x])
+                content[x] = re.sub('&sbquo;' , '', content[x])
+                content[x] = re.sub('&zwj;' , '', content[x])
+                content[x] = re.sub('&zwnj;' , '', content[x])
+                content[x] = re.sub('&raquo;' , '', content[x])
+                content[x] = re.sub('&uml;' , 'u"\u0308"', content[x])
+                content[x] = re.sub('&macr;' , 'u"\u0304"', content[x])
+                content[x] = re.sub('&tilde;' , 'u"\u0303"', content[x])
+                content[x] = re.sub('&circ;' , 'u"\u0302"', content[x])
+                content[x] = re.sub('&dagger;' , '', content[x])
+                content[x] = re.sub('&reg;' , '', content[x])
+                content[x] = re.sub('&sect;' , '', content[x])
+                content[x] = re.sub('&#x000AE;' , '', content[x])
+                content[x] = re.sub('&Dagger;' , '', content[x])
+                content[x] = re.sub('&ensp;' , ' ', content[x])
+                content[x] = re.sub('&emsp;' , ' ', content[x])
+                content[x] = re.sub('&micro;' , '', content[x])
+                content[x] = re.sub('&#x000B5;' , '', content[x])
+                content[x] = re.sub('&sect;' , '', content[x])
+                content[x] = re.sub('&thinsp;' , ' ', content[x])
+                content[x] = re.sub('&shy;' , '-', content[x]) 
+                content[x] = re.sub('&mdash;', '-', content[x])
+                content[x] = re.sub('&ndash;' , '-', content[x])
+                content[x] = re.sub('&#x2014;' , '-', content[x])
+                
+                
+                content[x] = re.sub('&sup1;' , '=', content[x])
+                content[x] = re.sub('&sup2;' , '=', content[x])
+                content[x] = re.sub('&sup3;' , '=', content[x])
+                content[x] = re.sub('&#x000B9;' , '=', content[x])
+                content[x] = re.sub('&#x000B2;' , '=', content[x])
+                content[x] = re.sub('&#x000B3;' , '=', content[x])
+
+                
+                
                 
                 if x>1 and x!= len(content)-1 and '<' in content[x]:
                     print(content[x])

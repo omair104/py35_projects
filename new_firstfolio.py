@@ -44,7 +44,7 @@ def markup():
                 content[x] = re.sub('|', '', content[x])
                 
                 content[x] = re.sub('|', '', content[x])
-                content[x] = re.sub(re.escape('('), '', content[x])
+                #content[x] = re.sub(re.escape('('), '', content[x])
                 
                 content[x] = re.sub('genre1', 'genre', content[x])
                 

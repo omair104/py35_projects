@@ -35,12 +35,16 @@ def extract():
             author= re.findall('<author>.*?</author>',content[x])[0][8:-9]
             author = author.title()
             break
+        if author == 'Unknown' or author == '':
+            author = 'X'
         
         for x in range(0, len(content)):
             while ('<speechPubDate>' not in content[x]): 
                 x=x+1
-            pubdate= re.findall('<speechPubDate>.*?</speechPubDate>',content[x])[0][15:-16][-4:]
+            pubdate= re.findall('<speechPubDate>.*?</speechPubDate>',content[x])[0][15:-16]#[-4:]
             break
+        pubdate = re.sub("[^0123456789]", '', pubdate)
+        pubdate = pubdate[-4:]
         
         for x in range(0, len(content)):
             while ('<textType' not in content[x]): 
@@ -56,7 +60,7 @@ def extract():
         
         
         
-        written_header = '<file> <no=%s> <corpusnumber=%s> <corpus=corpus_of_english_dialogues_XML_edition> <title=%s> <author=%s> \
+        written_header = '<file> <no=%s> <filename=%s> <corpus=corpus_of_english_dialogues_XML_edition> <title=%s> <author=%s> \
 <pubdate=%s> <genre=%s> <encoding=utf-8> <notes=%s> <text> \n' %(file_number,filename, title, author, pubdate, genre, cont)
         
         
@@ -64,9 +68,10 @@ def extract():
         file= os.path.join(extracted_path, str(filename)+'.txt')
         f= open(file, 'w+', encoding='utf-8')
         f.write(written_header)
+        f.write('\n')
         
         x=0
-        while ('<dialogueText' not in content[x]): 
+        while ('<frontMatter' not in content[x]): 
             x=x+1    
         print(x)        
          
@@ -97,6 +102,33 @@ def markup():
         x=0
         while x< len(content):
             
+            
+            if '<comment type="compiler">SOURCE' in content[x]:
+                comments = re.findall('<comment type="compiler">SOURCE TEXT:.*?/comment>', content[x])
+                for a in comments:
+                    comment = a 
+                    #print('SOURCE:'+comment)
+                    
+                words = re.findall('SOURCE TEXT:.*?/comment>', content[x])
+                for a in words:
+                    word = a [12:-10]
+                    #print('WORD:'+word)
+                    
+                previous = re.findall(' .*?<comment', content[x])
+                #p = previous.split(' ')
+                for p in previous:
+                    list= p.split()
+                    if len(list)>1:
+                        last = list[-2]
+                        #print('PREVIOUS: '+last)
+                        
+                #print('BEFORE: '+ content[x])
+                content[x] = re.sub(re.escape(comment), '', content[x])
+                content[x] = re.sub(re.escape(last), word, content[x])
+                #print('AFTER: '+ content[x])
+            
+
+                    
             if '<comment' in content[x]:
                 removes= re.findall('<comment.*?/comment>', content[x])
                 for remove in removes:
@@ -105,6 +137,7 @@ def markup():
                     while '/comment>' not in content[x]:
                         x=x+1
                     x=x+1
+            
 
 
                 
@@ -164,6 +197,11 @@ def markup():
                 content[x] = re.sub('<emendation>', '', content[x])
                 content[x] = re.sub('</emendation>', '', content[x])
                 
+                content[x] = re.sub('<frontMatter>', '', content[x])
+                content[x] = re.sub('</frontMatter>', '', content[x])
+                content[x] = re.sub('</textBibliography>', '', content[x])
+                content[x] = re.sub('</dialogueHeader>', '', content[x])
+                
                 content[x] = re.sub('~', '', content[x])
                 content[x] = re.sub('è', 'e', content[x])
                 
@@ -171,10 +209,10 @@ def markup():
                 content[x] = re.sub('<omission type="sentence" />', '', content[x])
                 
                 
-                if x>1 and x!= len(content)-1 and '~' in content[x]:
+                if x>1 and x!= len(content)-1 and '<comment' in content[x]:
                     print(file)
                     print(content[x])
-                    break
+                    #break
                 
                 f.write(content[x])
                 x=x+1

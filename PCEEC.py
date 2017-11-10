@@ -101,9 +101,11 @@ def extract():
                 
                 count = count +1
                 author_name= author_name.lower().capitalize()
-                author_name = author_name.replace('_', '')
+                author_name = author_name.replace('_', ' ')
                 if author_name=='':
                     author_name='X'
+                    
+                author_age = re.sub("[^0123456789]", '', author_age)
                 if author_age=='':
                     author_age='X'
                 if author_gender=='':
@@ -201,7 +203,7 @@ def markup():
             else:
                 content[x] = re.sub('unknown', 'X', content[x])
                 
-            content[x] = re.sub(re.escape('/'), '', content[x])
+            
             content[x] = re.sub('    <dialect=Early Modern English>', '', content[x])
             content[x] = re.sub('<genre2=X>', '', content[x])
             content[x] = re.sub('<genre1', '<genre', content[x])
@@ -249,11 +251,15 @@ def markup():
             content[x] = re.sub('p~', 'p̄', content[x])
             content[x] = re.sub('P~', 'P̄', content[x])
             
+            content[x] = re.sub('~', 'ō', content[x])
+            content[x] = re.sub(' \'s', '\'s', content[x])
+            
+            content[x] = re.sub('`', '', content[x])
+            
             content[x] = re.sub('-2', 'r', content[x])
             content[x] = re.sub('-4', '', content[x])
             content[x] = re.sub(re.escape('+L'), '$', content[x])
             
-            content[x] = re.sub(re.escape('/'), '$', content[x])
             
             content[x] = re.sub(re.escape('+g'), 'ƿ', content[x])
             content[x] = re.sub(re.escape('+G'), 'Ƿ', content[x])
@@ -281,6 +287,9 @@ def markup():
             content[x] = re.sub(re.escape('{COM:soesooneasperhapsyoudidexpectsentyou'), '', content[x])
             content[x] = re.sub(re.escape('{COM:myCANCELLED'), '', content[x])
             
+            if x<len(content)-1:
+                content[x] = re.sub(re.escape('/'), '$', content[x])
+                
             
             if ' W' not in content[x]:
                 content[x] = re.sub('W', 'w', content[x])
@@ -297,5 +306,5 @@ def markup():
         
         
     
-#extract()
+extract()
 markup()

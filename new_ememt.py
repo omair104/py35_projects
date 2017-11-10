@@ -43,10 +43,14 @@ def extract():
                 else:
                     author= re.findall('</strong>.*?\n',content[x])[0][10:-5]
                     break
-            if author== '':
+            if author== '' or author == 'unknown':
                 author= 'X'
             if author[-1]== ' ':
                 author = author[:-1]
+            author = re.sub('Attributed to', '', author)
+            author = re.sub(re.escape('['), '', author)
+            author = re.sub(re.escape(']'), '', author)
+            author = re.sub(re.escape('.'), '', author)
             
             
             
@@ -81,6 +85,13 @@ def extract():
                     place_publication= 'X'
                 if publisher== '':
                     publisher= 'X'
+                    
+            place_publication = re.sub(re.escape('['), '', place_publication)
+            place_publication = re.sub(re.escape(']'), '', place_publication)
+            publisher = re.sub(re.escape('['), '', publisher)
+            publisher = re.sub(re.escape(']'), '', publisher)
+            if publisher[-1] == ' ':
+                publisher = publisher[:-1]
                 
             
             for x in range(0, len(content)):
@@ -97,7 +108,7 @@ def extract():
                 idno= 'X'
             
             written_header = '<file> <no=%s> <corpusnumber=%s> <corpus=early_modern_english_medical_texts> <author=%s> \
-<dates_of_birth_and_death=%s> <pubdate=%s> <place_of_publication=%s> <publisher=%s> <genre=medical> <idno=%s>  <encoding=utf-8> <text> \n' %(file_number,filename, author, dob3, pubdate, place_publication, publisher, idno)
+<dates_of_birth_and_death=%s> <pubdate=%s> <place_of_publication=%s> <publisher=%s> <genre=medical> <idno=%s> <encoding=utf-8> <text> \n' %(file_number,filename, author, dob3, pubdate, place_publication, publisher, idno)
             
             print(written_header)
         
@@ -152,9 +163,13 @@ def markup():
                     content[x] = re.sub('_', '', content[x])
                 else:
                     content[x] = re.sub('unknown', 'X', content[x])
+                    content[x] = re.sub('anonymous', 'X', content[x])
+                    content[x] = re.sub('Anonymous', 'X', content[x])
+                    content[x] = re.sub('ȝ', '3', content[x])
+                    
                 content[x] = re.sub('&amp;', '&', content[x])
                 content[x] = re.sub('&quot;', '', content[x])
-                content[x] = re.sub('/', '', content[x])
+                
                 content[x] = re.sub('\[}', '', content[x])
                 content[x] = re.sub('}\]', '', content[x])
                 content[x] = re.sub('¦', '', content[x])
@@ -178,10 +193,15 @@ def markup():
                 content[x] = re.sub('p~', 'p̄', content[x])
                 content[x] = re.sub('P~', 'P̄', content[x])
                 
-                content[x] = re.sub('3', 'ȝ', content[x])
+                content[x] = re.sub('w~', 'w\'', content[x])
+                content[x] = re.sub('k~', 'k\'', content[x])
+                
+                if x<len(content)-1:
+                    content[x] = re.sub('/', '', content[x])
+                
                 
 
                 f.write(content[x])
                 x=x+1
-extract() 
+#extract() 
 markup()

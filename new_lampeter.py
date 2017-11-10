@@ -222,7 +222,7 @@ def markup():
                     #print(content[x])
                     removes= re.findall('<.*?>', content[x])
                     for remove in removes:
-                        content[x] = re.sub(re.escape(remove), '', content[x])  
+                        content[x] = re.sub(re.escape(remove), ' ', content[x])  
 
 
                 #content[x] = re.sub(re.escape('N="(*)" PLACE="foot">'), '', content[x])
@@ -289,7 +289,7 @@ def markup():
                 content[x] = re.sub('&therefore;', '...', content[x])
                 content[x] = re.sub('&horbar;', '-', content[x])
                 content[x] = re.sub('&horfill;', '-', content[x])
-                content[x] = re.sub('&mdash;', '-', content[x])
+                content[x] = re.sub('&mdash;', '–', content[x])
 
                 content[x] = re.sub('&Agrave;', 'À', content[x])
                 content[x] = re.sub('&Aacute;', 'Á', content[x])
@@ -319,7 +319,7 @@ def markup():
                 content[x] = re.sub('&auml;', 'ä', content[x])
                 content[x] = re.sub('&ccedil;', 'ç', content[x])
                 content[x] = re.sub('&atilde;', 'ā', content[x])
-                content[x] = re.sub('&Aelig;', 'æ', content[x])
+                content[x] = re.sub('&aelig;', 'æ', content[x])
                 content[x] = re.sub('&egrave;', 'è', content[x])
                 content[x] = re.sub('&eacute;', 'é', content[x])
                 content[x] = re.sub('&ecirc;', 'ê', content[x])
@@ -390,11 +390,10 @@ def markup():
                 '''
                 content[x] = re.sub('&', '', content[x])
                 content[x] = re.sub('ic;', '', content[x])
+                content[x] = re.sub('-->', '', content[x])
                 
 
-            
-                
-                if x>1 and x!= len(content)-1 and 'ANCHORED="NO"' in content[x]:# and 'CORR' not in content[x]:
+                if x>0 and x!= len(content)-1 and '>' in content[x]:# and 'CORR' not in content[x]:
                     print('CHECK')
                     print(file)
                     print(content[x-1])

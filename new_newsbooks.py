@@ -2,8 +2,8 @@ import os,re,time
 from ctypes.test.test_pep3118 import Complete
 
 def extract():
-    org_path = r'H:\circle\py\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\all'
-    extracted_path = r'H:\circle\py\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\extracted'
+    org_path = r'H:\circle\text_extractor\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\all'
+    extracted_path = r'H:\circle\text_extractor\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\extracted'
     
     files = os.listdir(org_path)
     #print(files)
@@ -31,7 +31,7 @@ def extract():
             pubdate='1653-1654'
         
         
-        written_header = '<file> <no=%s> <corpusnumber=%s> <corpus=lancaster_newsbooks_corpus> <title=%s> \
+        written_header = '<file> <no=%s> <filename=%s> <corpus=lancaster_newsbooks_corpus> <title=%s> \
 <pubdate=%s> <genre=newsbook> <encoding=utf-8> <text> \n' %(file_number,filename, title, pubdate)
         
         print(written_header)
@@ -40,6 +40,7 @@ def extract():
         file= os.path.join(extracted_path, str(filename)+'.txt')
         f= open(file, 'w+', encoding='utf-8')
         f.write(written_header)
+        f.write('\n')
         
         x=0
         while ('<p>' not in content[x]): 
@@ -102,15 +103,11 @@ def markup():
                     completes= re.findall('<reg.*?/reg>',content[x])
 
                     for y in range(len(org_words)):
-                        print(file)
-                        print(content[x])
-                        print(org_words)
-                        print(y)
-                        print(completes)
+                        #print(file)
+                        #print(content[x])
+  
                         org_word= org_words[y][6:-2]
                         complete = completes[y]
-                        #print(org_word)
-                        #print(complete)
                         content[x] = re.sub(complete, org_word, content[x])
                         
                 content[x] = re.sub('&amp;', '&', content[x])
@@ -144,7 +141,7 @@ def markup():
                 content[x] = re.sub('&aacute;', 'á', content[x])
                 content[x] = re.sub('&acirc;', 'â', content[x])
                 content[x] = re.sub('&atilde;', 'ā', content[x])
-                content[x] = re.sub('&Aelig;', 'æ', content[x])
+                content[x] = re.sub('&aelig;', 'æ', content[x])
                 content[x] = re.sub('&egrave;', 'è', content[x])
                 content[x] = re.sub('&eacute;', 'é', content[x])
                 content[x] = re.sub('&ecirc;', 'ê', content[x])
@@ -195,6 +192,7 @@ def markup():
                 content[x] = re.sub('&ldquo;', '', content[x])
                 content[x] = re.sub('&rdquo;', '', content[x])
                 content[x] = re.sub('&#x261e;', '', content[x])
+                content[x] = re.sub('&#x261c;', '', content[x])
                 content[x] = re.sub('&#x2014;', '', content[x])
                 content[x] = re.sub('&#x2648;', '', content[x])
                 content[x] = re.sub('&#x2720;', '', content[x])
@@ -288,11 +286,16 @@ def markup():
                 content[x] = re.sub('&#x000B9;' , '=', content[x])
                 content[x] = re.sub('&#x000B2;' , '=', content[x])
                 content[x] = re.sub('&#x000B3;' , '=', content[x])
+                
+                if x>1 and x< len(content)-1:
+                    content[x] = re.sub('>' , '', content[x])
+                
 
                 
                 
                 
-                if x>1 and x!= len(content)-1 and '<' in content[x]:
+                if x>1 and x!= len(content)-1 and ('>' in content[x] or '<' in content[x]):
+                    print(file)
                     print(content[x])
                 
     

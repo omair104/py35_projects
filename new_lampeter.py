@@ -1,8 +1,8 @@
 import os,re
 
 def extract():
-    org_path = r'H:\circle\py\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\Texts'
-    extracted_path = r'H:\circle\py\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\extracted'
+    org_path = r'H:\circle\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\Texts'
+    extracted_path = r'H:\circle\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\extracted'
     
     files = os.listdir(org_path)
     #print(files)
@@ -11,7 +11,7 @@ def extract():
         file_number= file_number+1
         path_org_file= os.path.join(org_path, file)
         
-        print(path_org_file)
+        #print(path_org_file)
         
         with open(path_org_file) as f:
             content = f.readlines()
@@ -26,6 +26,9 @@ def extract():
             break
         title=re.sub('\[','', title)
         title=re.sub('\]','', title)
+        if title[-1] == '.' and title[-2] != '.':
+            title = title[:-1]
+        title=re.sub(re.escape(' ...'),'...', title)
         
         for x in range(0, len(content)):
             while ('<PERSNAME>' not in content[x]): 
@@ -89,6 +92,16 @@ def extract():
             break
         
         for x in range(0, len(content)):
+            while ('<PUBFORMAT>' not in content[x]): 
+                x=x+1
+                if x  == len(content): 
+                    break
+            if x<len(content):
+                pubformat= re.findall('<PUBFORMAT>.*?</PUBFORMAT>',content[x])[0][11:-12]
+            else: pubformat= 'X'
+            break
+        
+        for x in range(0, len(content)):
             while ('<CATREF' not in content[x]): 
                 x=x+1
             genre= re.findall('TARGET=.*?">',content[x])[0][8:-1]
@@ -121,23 +134,27 @@ def extract():
         }
         genre2= options2.get(genre2_a, '')
         
-        written_header = '<file> <no=%s> <corpusnumber=%s> <corpus=lampeter_corpus> <title=%s> <author=%s> <authorage=X> \
-<pubdate=%s> <genre=tract, %s> <genre1=tract, %s> <place_of_publication=%s> <publisher=%s> <encoding=utf-8> \
-<idno: Wing %s> <idno: Lamp %s> <text> \n' %(file_number,filename, title, author, pubdate, genre1, genre2, pubplace, bookseller, idno_wing, idno_lamp)
+        written_header = '<file> <no=%s> <filename=%s> <corpus=lampeter_corpus> <title=%s> <author=%s> <authorage=X> \
+<pubdate=%s> <genre=tract, %s> <genre1=tract, %s> <pubformat=%s> <place_of_publication=%s> <publisher=%s> <encoding=utf-8> \
+<idno=Wing %s> <idno=Lamp %s> <text> \n' %(file_number,filename, title, author, pubdate, genre1, genre2, pubformat, pubplace, bookseller, idno_wing, idno_lamp)
         
-        print(written_header)
+        #print(written_header)
         
         file= os.path.join(extracted_path, str(filename)+'.txt')
         f= open(file, 'w+', encoding='utf-8')
         f.write(written_header)
-        
+        f.write('\n')
         x=0
         while ('</TEIHEADER' not in content[x]): 
             x=x+1        
         x=x+1
-        while(x<len(content)-1):  
-            x=x+1      
+        
+        while(x<len(content)-1):   
+
+            
             f.write(content[x])
+            x=x+1
+            
         f.write('\n</text> </file>')
         f.close
     
@@ -148,7 +165,7 @@ def markup():
     files= os.listdir(extracted_path)
     
     for file in files:
-        #file= 'lawb1715.txt'
+        #file= 'eca1681.txt'
         path_extracted_file= os.path.join(extracted_path, file)
         
         
@@ -170,8 +187,14 @@ def markup():
         add_flag=0
         corr_flag=0
         bracket_flag = 0
-        while x< len(content):
-        
+        while x< len(content)-1:
+            content[x] = re.sub('tract, >', 'X>', content[x])
+            
+            content[x] = re.sub('<FIGDESC>astronomical scheme referred to in the text</figdesc>', '...', content[x])
+            content[x] = re.sub('<FIGDESC>Figure of the houses of heaven</FIGDESC>', '...', content[x])
+            content[x] = re.sub('<figDESC>Fullpage astrological figure</figdesc>', '...', content[x])
+            content[x] = re.sub('<FIGDESC>Mt. Etna erupting and the surrounding area</FIGDESC>', '...', content[x])
+
             if bracket_flag==1:
                 content[x] = '<'+content[x]
                 bracket_flag = 0
@@ -197,7 +220,46 @@ def markup():
                     corr_flag=0
                 if content[x].endswith('<CORR\n'):
                     content[x]= content[x][:-6]
-                    corr_flag = 1
+                    corr_flag=1
+                
+                content[x] = re.sub('<foreign', '<FOREIGN', content[x])
+                content[x] = re.sub('/foreign', '/FOREIGN', content[x])
+                if 'FOREIGN' in content[x]:
+                    if content[x].endswith('<FOREIGN>'):
+                        content[x]= re.sub('<FOREIGN>', '...', content[x])
+                        dd = re.findall('.*?/FOREIGN>', content[x+1])
+                        for d in dd:
+                            content[x+1]= re.sub(re.escape(d), '', content[x+1])
+                            if 'per annum' in d:
+                                content[x+1]= 'per annum' + content[x+1]
+                                break
+                            if 'per Annum' in d:
+                                content[x+1]= 'per Annum' + content[x+1]
+                                break
+                            if 'per Ann' in d:
+                                content[x+1]= 'per Ann' + content[x+1]
+                                break
+                            if 'per A' in d:
+                                content[x+1]= 'per A' + content[x+1]
+                                break
+                            if 'per a' in d:
+                                content[x+1]= 'per a' + content[x+1]
+                                break
+                            if 'per centum' in d:
+                                content[x+1]= 'per centum' + content[x+1]
+                                break
+                            if 'per Centum' in d:
+                                content[x+1]= 'per Centum' + content[x+1]
+                                break
+                            if 'per c' in d:
+                                content[x+1]= 'per c' + content[x+1]
+                                break
+                        bracket_flag = 0
+                        
+                        
+                    foreign = re.findall('<FOREIGN.*?FOREIGN>', content[x])
+                    for fo in foreign:
+                        content[x] = re.sub(re.escape(fo), '...', content[x])
                     
 
                 
@@ -206,24 +268,38 @@ def markup():
                     removes= re.findall('<ADD.*?/ADD>', content[x])
                     for remove in removes:
                         content[x] = re.sub(re.escape(remove), '', content[x])
-                        
+                
+                if content[x].endswith('<CORR>'):
+                    content[x]= content[x][:-7]
+                    content[x+1]= '<CORR>' + content[x+1]
+                    bracket_flag=0
+                
+                
                 if 'CORR' in content[x]:
                     removes= re.findall('<CORR.*?/CORR>', content[x])
                     for remove in removes:
                         #print(remove)
                         if 'SIC' in remove:
-                            sub = re.findall('SIC=".*?"', remove)[0][5:-1]
+                            sub = ' ' + re.findall('SIC=".*?"', remove)[0][5:-1] 
                             content[x] = re.sub(re.escape(remove), sub, content[x])
                         else:
                             content[x]= re.sub(re.escape(remove), '', content[x])
-                        
+                    
+                    if content[x].endswith('<PB\n'):
+                        content[x] = content[x][:-1]
+                        content[x] = content[x]+'>'
+                        bracket_flag = 1
+                
+                
+                
+                
                      
                 if '<' in content[x]:
                     #print(content[x])
                     removes= re.findall('<.*?>', content[x])
                     for remove in removes:
-                        content[x] = re.sub(re.escape(remove), ' ', content[x])  
-
+                        content[x] = re.sub(re.escape(remove), '', content[x])  
+                
 
                 #content[x] = re.sub(re.escape('N="(*)" PLACE="foot">'), '', content[x])
                 '''
@@ -368,32 +444,46 @@ def markup():
                 
                 content[x] = re.sub('&verbar;', '', content[x])
                 content[x] = re.sub('&rsub;', '%r%', content[x])
+                
+                content[x] = re.sub('errata amended in the text', '', content[x])
 
 
-                
-                
-                '''
-
-                content[x] = re.sub('<q rend=it', '', content[x])
-                content[x] = re.sub('<q rend=it', '', content[x])
-                if x>2 and x< len(content)-1:
-                    content[x] = re.sub('>', '', content[x])
-                
-                content[x] = re.sub('LANG="LAT"', '', content[x])
-                content[x] = re.sub('LANG="FRA"', '', content[x])
-                content[x] = re.sub('LANG="lat"', '', content[x])
-                content[x] = re.sub('REND="it"', '', content[x])
-                content[x] = re.sub('PLACE="margin"', '', content[x])
-                content[x] = re.sub('TYPE="structure"', '', content[x])
-                content[x] = re.sub('TYPE="catch"', '', content[x])
-                content[x] = re.sub('TYPE="marginalia"', '', content[x])
-                '''
-                content[x] = re.sub('&', '', content[x])
+                #content[x] = re.sub('&', '', content[x])
                 content[x] = re.sub('ic;', '', content[x])
                 content[x] = re.sub('-->', '', content[x])
                 
+                content[x] = re.sub('&A', 'A', content[x])
+                content[x] = re.sub('&B', 'B', content[x])
+                content[x] = re.sub('&C', 'C', content[x])
+                content[x] = re.sub('&D', 'D', content[x])
+                content[x] = re.sub('&E', 'E', content[x])
+                content[x] = re.sub('&F', 'F', content[x])
+                content[x] = re.sub('&G', 'G', content[x])
+                content[x] = re.sub('&H', 'H', content[x])
+                content[x] = re.sub('&I', 'I', content[x])
+                content[x] = re.sub('&J', 'J', content[x])
+                content[x] = re.sub('&K', 'K', content[x])
+                content[x] = re.sub('&L', 'L', content[x])
+                content[x] = re.sub('&M', 'M', content[x])
+                content[x] = re.sub('&N', 'N', content[x])
+                content[x] = re.sub('&O', 'O', content[x])
+                content[x] = re.sub('&P', 'P', content[x])
+                content[x] = re.sub('&Q', 'Q', content[x])
+                content[x] = re.sub('&R', 'R', content[x])
+                content[x] = re.sub('&S', 'S', content[x])
+                content[x] = re.sub('&T', 'T', content[x])
+                content[x] = re.sub('&U', 'U', content[x])
+                content[x] = re.sub('&V', 'V', content[x])
+                content[x] = re.sub('&W', 'W', content[x])
+                content[x] = re.sub('&X', 'X', content[x])
+                content[x] = re.sub('&Y', 'Y', content[x])
+                content[x] = re.sub('&Z', 'Z', content[x])
+                
+                if x>1 and x<len(content)-1:
+                    content[x] = re.sub('>', '', content[x])
+                
 
-                if x>0 and x!= len(content)-1 and '>' in content[x]:# and 'CORR' not in content[x]:
+                if x>0 and x!= len(content)-1 and 'Mercurij' in content[x]:# and 'CORR' not in content[x]:
                     print('CHECK')
                     print(file)
                     print(content[x-1])
@@ -403,6 +493,8 @@ def markup():
                 
                 f.write(content[x])
                 x=x+1
+        f.write('\n</text> </file>')
+        
 
 #extract()
 markup()

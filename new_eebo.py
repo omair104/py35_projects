@@ -2,8 +2,8 @@
 import os,re
 
 def extract():
-    org_path = r'C:\data\EEBO Phase 2\EEBO_Phase 2\New folder2'
-    extracted_path = r'C:\data\EEBO Phase 2\EEBO_Phase 2\extracted'
+    org_path = r'C:\data\EEBO Phase 2\New folder2'
+    extracted_path = r'C:\data\EEBO Phase 2\EEBO TCP Phase 2'
     #org_path = r'C:\data\EEBO_new\New folder2'
     #extracted_path = r'C:\data\EEBO_new\extracted'
     file_number=0
@@ -14,7 +14,7 @@ def extract():
                 file = os.path.join(path, filename)
                 #print(file)
                 
-                print(file_number)
+                #print(file_number)
                 file_number= file_number+1
                 path_org_file= file
                 
@@ -24,7 +24,7 @@ def extract():
                     content = f.readlines()
                     
                 filename= filename[:-11]
-                print(filename)
+                #print(filename)
                 
                 for x in range(0, len(content)):
                     while ('<TITLESTMT><TITLE TYPE="' not in content[x]): 
@@ -32,6 +32,8 @@ def extract():
                     title= re.findall('">.*?</TITLE>',content[x])[0][2:-8]
                     break
                 #print(title)
+                if title[-1]=='.':
+                    title = title[:-1]
                 
                 for x in range(0, len(content)):
                     while ('<AUTHOR>' not in content[x]): 
@@ -40,9 +42,11 @@ def extract():
                             break
                     if x<len(content):
                         author= re.findall('<AUTHOR>.*?</AUTHOR>',content[x])[0][8:-10]
-                    else: author=''
+                    else: author='X'
                     break
                 #print(author)
+                if author == '':
+                    author = 'X'
                 
                 for x in range(10, len(content)):
                     while ('<PUBPLACE>' not in content[x]): 
@@ -58,12 +62,14 @@ def extract():
                 #print(place_of_pub)
                 place_of_pub = re.sub("[^abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ]", '', place_of_pub)
                 
-                if place_of_pub in ['ImprintedatLondon', 'PrintedatLondon', 'Londini', 'AtLondon', 'ImpryntedatLondon', 'EnpryntedatLondon']:
+                if place_of_pub in ['ImprintedatLondon', 'PrintedatLondon', 'Londini', 'AtLondon', 'ImpryntedatLondon', 'EnpryntedatLondon', 'Londonprinted']:
                     place_of_pub = 'London'
-                if place_of_pub =='PrintedatOxfordieLondon':
+                if place_of_pub in ['PrintedatOxfordieLondon', 'OxfordieLondon']:
                     place_of_pub= 'Oxford and London'
                 if place_of_pub =='FrancofortiadMoenum':
                     place_of_pub= 'Frankfurt am Main'
+                if place_of_pub =='ImprentitatEdinburgh':
+                    place_of_pub= 'Edinburgh'
                 
                 for x in range(10, len(content)):
                     while ('<DATE>' not in content[x]): 
@@ -72,7 +78,7 @@ def extract():
                             pubdate= ''
                             break
                     if x!= len(content)-1:
-                        print(content[x])
+                        #print(content[x])
                         pubdate= re.findall('<DATE>.*?</DATE>',content[x])[0][6:-7]
                         break
                     else:
@@ -82,15 +88,21 @@ def extract():
                 pubdate = pubdate[-4:]
                 
                 for x in range(0, len(content)):
-                    while ('<IDNO TYPE="DLPS">' not in content[x]): 
+                    while ('<IDNO TYPE="stc">' not in content[x]): 
                         x=x+1
-                    idno= re.findall('<IDNO TYPE="DLPS">.*?</IDNO>',content[x])[0][18:-7]
-                    break
+                        if x==len(content):
+                            break
+                    if x<len(content):
+                        idno= re.findall('<IDNO TYPE="stc">.*?</IDNO>',content[x])[0][17:-7]
+                        break
+                    else: 
+                        idno = 'X'
+                        break
                 #print(idno)
                 
                 
                 
-                written_header = '<file> <no=%s> <filename=%s> <corpus=early_english_books_online> <title=%s> <author=%s> <place_of_publication= %s> \
+                written_header = '<file> <no=%s> <filename=%s> <corpus=early_english_books_online> <title=%s> <author=%s> <place_of_publication=%s> \
 <pubdate=%s> <idno=%s> <encoding=utf-8> <text> \n' %(file_number,filename, title, author, place_of_pub, pubdate, idno)
                 
                 
@@ -111,14 +123,14 @@ def extract():
                 f.close
                 
 def subcorpus():
-    org_path = r'C:\data\EEBO_new\New folder2'
-    extracted_path = r'C:\data\EEBO_new\extracted2'
+    org_path = r'C:\data\EEBO Phase 2\New folder2'
+    extracted_path = r'C:\data\EEBO Phase 2\EEBO Phase 2 samples'
     file_number=0
     #files = os.listdir(org_path)
     all_dates= list(range(1500,1701))
     all_dates.extend(list(range(1500,1701)))
     #all_dates.extend(list(range(1500,1701)))
-    print(all_dates)
+    #print(all_dates)
 
     for path, subdirs, files in os.walk(org_path):
         for filename in files:
@@ -144,6 +156,8 @@ def subcorpus():
                     title= re.findall('">.*?</TITLE>',content[x])[0][2:-8]
                     break
                 #print(title)
+                if title[-1]=='.':
+                    title = title[:-1]
                 
                 for x in range(0, len(content)):
                     while ('<AUTHOR>' not in content[x]): 
@@ -152,9 +166,11 @@ def subcorpus():
                             break
                     if x<len(content):
                         author= re.findall('<AUTHOR>.*?</AUTHOR>',content[x])[0][8:-10]
-                    else: author=''
+                    else: author='X'
                     break
                 #print(author)
+                if author == '':
+                    author = 'X'
                 
                 for x in range(10, len(content)):
                     while ('<PUBPLACE>' not in content[x]): 
@@ -169,12 +185,14 @@ def subcorpus():
                         break
                 #print(place_of_pub)
                 place_of_pub = re.sub("[^abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ]", '', place_of_pub)
-                if place_of_pub in ['ImprintedatLondon', 'PrintedatLondon', 'Londini', 'AtLondon', 'ImpryntedatLondon', 'EnpryntedatLondon']:
+                if place_of_pub in ['ImprintedatLondon', 'PrintedatLondon', 'Londini', 'AtLondon', 'ImpryntedatLondon', 'EnpryntedatLondon', 'Londonprinted']:
                     place_of_pub = 'London'
-                if place_of_pub =='PrintedatOxfordieLondon':
+                if place_of_pub in ['PrintedatOxfordieLondon', 'OxfordieLondon']:
                     place_of_pub= 'Oxford and London'
                 if place_of_pub =='FrancofortiadMoenum':
                     place_of_pub= 'Frankfurt am Main'
+                if place_of_pub =='ImprentitatEdinburgh':
+                    place_of_pub= 'Edinburgh'
                     
                 for x in range(10, len(content)):
                     while ('<DATE>' not in content[x]): 
@@ -183,7 +201,7 @@ def subcorpus():
                             pubdate= ''
                             break
                     if x!= len(content)-1:
-                        print(content[x])
+                        #print(content[x])
                         pubdate= re.findall('<DATE>.*?</DATE>',content[x])[0][6:-7]
                         break
                     else:
@@ -193,15 +211,21 @@ def subcorpus():
                 pubdate = pubdate[-4:]
                 
                 for x in range(0, len(content)):
-                    while ('<IDNO TYPE="DLPS">' not in content[x]): 
+                    while ('<IDNO TYPE="stc">' not in content[x]): 
                         x=x+1
-                    idno= re.findall('<IDNO TYPE="DLPS">.*?</IDNO>',content[x])[0][18:-7]
-                    break
+                        if x==len(content):
+                            break
+                    if x<len(content):
+                        idno= re.findall('<IDNO TYPE="stc">.*?</IDNO>',content[x])[0][17:-7]
+                        break
+                    else: 
+                        idno = 'X'
+                        break
                 #print(idno)
                 
                 
                 
-                written_header = '<file> <no=%s> <filename=%s> <corpus=early_english_books_online> <title=%s> <author=%s> <place_of_publication= %s> \
+                written_header = '<file> <no=%s> <filename=%s> <corpus=early_english_books_online> <title=%s> <author=%s> <place_of_publication=%s> \
 <pubdate=%s> <idno=%s> <encoding=utf-8> <text> \n' %(file_number,filename, title, author, place_of_pub, pubdate, idno)
                 
                 for n in all_dates:
@@ -229,8 +253,8 @@ def subcorpus():
                     
                 
 def subcorpus2():
-    org_path = r'C:\data\EEBO_new\New folder2'
-    extracted_path = r'C:\data\EEBO_new\extracted3'
+    org_path = r'C:\data\EEBO Phase 2\New folder2'
+    extracted_path = r'C:\data\EEBO Phase 2\EEBO Phase 2 letters'
     file_number=0
     #files = os.listdir(org_path)
     all_dates= list(range(1500,1599))
@@ -238,7 +262,7 @@ def subcorpus2():
     all_dates.extend(list(range(1500,1701)))
     #all_dates.extend(list(range(1500,1701)))
     #all_dates.extend(list(range(1500,1701)))
-    print(all_dates)
+    #print(all_dates)
 
     for path, subdirs, files in os.walk(org_path):
         for filename in files:
@@ -264,6 +288,8 @@ def subcorpus2():
                     title= re.findall('">.*?</TITLE>',content[x])[0][2:-8]
                     break
                 #print(title)
+                if title[-1]=='.':
+                    title = title[:-1]
                 
                 for x in range(0, len(content)):
                     while ('<AUTHOR>' not in content[x]): 
@@ -272,9 +298,11 @@ def subcorpus2():
                             break
                     if x<len(content):
                         author= re.findall('<AUTHOR>.*?</AUTHOR>',content[x])[0][8:-10]
-                    else: author=''
+                    else: author='X'
                     break
                 #print(author)
+                if author == '':
+                    author = 'X'
                 
                 for x in range(10, len(content)):
                     while ('<PUBPLACE>' not in content[x]): 
@@ -289,12 +317,14 @@ def subcorpus2():
                         break
                 #print(place_of_pub)
                 place_of_pub = re.sub("[^abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ]", '', place_of_pub)
-                if place_of_pub in ['ImprintedatLondon', 'PrintedatLondon', 'Londini', 'AtLondon', 'ImpryntedatLondon', 'EnpryntedatLondon']:
+                if place_of_pub in ['ImprintedatLondon', 'PrintedatLondon', 'Londini', 'AtLondon', 'ImpryntedatLondon', 'EnpryntedatLondon', 'Londonprinted']:
                     place_of_pub = 'London'
-                if place_of_pub =='PrintedatOxfordieLondon':
+                if place_of_pub in ['PrintedatOxfordieLondon', 'OxfordieLondon']:
                     place_of_pub= 'Oxford and London'
                 if place_of_pub =='FrancofortiadMoenum':
                     place_of_pub= 'Frankfurt am Main'
+                if place_of_pub =='ImprentitatEdinburgh':
+                    place_of_pub= 'Edinburgh'
                 
                 for x in range(10, len(content)):
                     while ('<DATE>' not in content[x]): 
@@ -303,7 +333,7 @@ def subcorpus2():
                             pubdate= ''
                             break
                     if x!= len(content)-1:
-                        print(content[x])
+                        #print(content[x])
                         pubdate= re.findall('<DATE>.*?</DATE>',content[x])[0][6:-7]
                         break
                     else:
@@ -313,15 +343,21 @@ def subcorpus2():
                 pubdate = pubdate[-4:]
                 
                 for x in range(0, len(content)):
-                    while ('<IDNO TYPE="DLPS">' not in content[x]): 
+                    while ('<IDNO TYPE="stc">' not in content[x]): 
                         x=x+1
-                    idno= re.findall('<IDNO TYPE="DLPS">.*?</IDNO>',content[x])[0][18:-7]
-                    break
+                        if x==len(content):
+                            break
+                    if x<len(content):
+                        idno= re.findall('<IDNO TYPE="stc">.*?</IDNO>',content[x])[0][17:-7]
+                        break
+                    else: 
+                        idno = 'X'
+                        break
                 #print(idno)
                 
                 
                 
-                written_header = '<file> <no=%s> <filename=%s> <corpus=early_english_books_online> <title=%s> <author=%s> <place_of_publication= %s> \
+                written_header = '<file> <no=%s> <filename=%s> <corpus=early_english_books_online> <title=%s> <author=%s> <place_of_publication=%s> \
 <pubdate=%s> <idno=%s> <encoding=utf-8> <text> \n' %(file_number,filename, title, author, place_of_pub, pubdate, idno)
                 
                 div_flag=0
@@ -334,8 +370,8 @@ def subcorpus2():
                         div_flag=1
                     else: div_flag=0
                     break
-                print(filename)
-                print(div_flag)
+                #print(filename)
+                #print(div_flag)
                 if div_flag:
                     for n in all_dates:
                         if str(n) in pubdate:

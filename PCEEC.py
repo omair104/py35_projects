@@ -8,12 +8,11 @@ def extract():
     org_file_directory=r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\txt'
     
     files = os.listdir(org_file_directory)
-    print(files)
     count = 0
     for file in files:
         data_dict = defaultdict(list)
         file_name = file
-        print(file_name)
+        #print(file_name)
         #file_name = 'arundel.txt'
         path_org_file= os.path.join(org_file_directory, file_name)
         if os.path.isfile(path_org_file):
@@ -32,6 +31,10 @@ def extract():
             
             
             for x in content:
+                if '}_' in x and '_P' not in x: #and 'CO' not in x and '@' not in x and '_C' not in x:
+                    print(file)
+                    print(x)
+                
                 a = re.findall('\{ED:.*?\}',x)
                 if a != []:
                     for element in a:
@@ -46,9 +49,9 @@ def extract():
                         if element not in remove_list:
                             remove_list.append(element)
                         
-            print(remove_list)
+            #print(remove_list)
                 
-            print(len(content))
+            #print(len(content))
             for x in range(0, len(content)):
                 header = (content[x])
                 if header.startswith('AUTHOR'):
@@ -60,27 +63,28 @@ def extract():
                     data_dict[letter_name].append(text_start_line)
                     
                     
-            print(data_dict)
+            #print(data_dict)
             for file_name in data_dict:
                 file = os.path.join(directory_file, file_name+'.txt')
                 
                 f =open(file, 'w+')
                 
                 header_start = data_dict[file_name][0]-3
-                print(header_start)
+                #print(header_start)
                 header = content[header_start]
-                print(header)
+                #print(header)
                 header_1 = header.split(':')
-                print(header_1)
+                #print(header_1)
                 author_name = header_1[1].rstrip()
                 author_gender= header_1[2].rstrip()
+                author_gender=author_gender.lower()
                 author_dob= header_1[4].rstrip()
                 author_age= header_1[5].rstrip()
                 
                 
                 header_recipient= content[header_start+1]
                 header_2 = header_recipient.split(':')
-                print(header_2)
+                #print(header_2)
                 recipient_name = header_2[1].rstrip()
                 recipient_gender= header_2[2].rstrip()
                 recipient_dob= header_2[4].rstrip()
@@ -91,8 +95,9 @@ def extract():
                 
                 header_letter= content[header_start+2]
                 header_3 = header_letter.split(':')
-                print(header_3)
+                #print(header_3)
                 letter_name = header_3[1].rstrip()
+                letter_name= letter_name.upper()
                 letter_date = header_3[3].rstrip()
                 letter_date = re.sub("[^0-9]", "", letter_date)
                 letter_autograph= header_3[5].rstrip()
@@ -100,7 +105,14 @@ def extract():
                 num=letter_name[-1]
                 
                 count = count +1
-                author_name= author_name.lower().capitalize()
+                author_name= author_name.lower().title()
+                author_name= author_name.replace('Iii','III')
+                author_name= author_name.replace('Ii','II')
+                author_name= author_name.replace('Viii','VIII')
+                author_name= author_name.replace('Vii','VII')
+                author_name= author_name.replace('Vi','VI')
+                author_name= author_name.replace('Iv','IV')
+                
                 author_name = author_name.replace('_', ' ')
                 if author_name=='':
                     author_name='X'
@@ -113,7 +125,7 @@ def extract():
                 if letter_date=='':
                     letter_date='X'
                 
-                written_header = '<file> <no=%s> <corpusnumber=%s> <corpus=%s> <author=%s> <authorage=%s> <author_gender=%s> <pubdate=%s> <genre1=letter> <encoding=utf-8> <text> \n' %(count, letter_name, corpus, author_name, author_age, author_gender,letter_date) 
+                written_header = '<file> <no=%s> <filename=%s> <corpus=%s> <author=%s> <authorage=%s> <author_gender=%s> <pubdate=%s> <genre1=letter> <encoding=utf-8> <text> \n' %(count, letter_name, corpus, author_name, author_age, author_gender,letter_date) 
                 
                 f.write(written_header+ '\n')
                 
@@ -287,11 +299,13 @@ def markup():
             content[x] = re.sub(re.escape('{COM:soesooneasperhapsyoudidexpectsentyou'), '', content[x])
             content[x] = re.sub(re.escape('{COM:myCANCELLED'), '', content[x])
             
-            if x<len(content)-1:
-                content[x] = re.sub(re.escape('/'), '$', content[x])
+            if x<len(content)-1 and x>1:
+                content[x] = re.sub(re.escape('/'), '', content[x])
+                content[x] = re.sub(re.escape('<'), '', content[x])
+                content[x] = re.sub(re.escape('>'), '', content[x])
                 
             
-            if ' W' not in content[x]:
+            if ' W' not in content[x] and x>2:
                 content[x] = re.sub('W', 'w', content[x])
 
             
@@ -307,4 +321,4 @@ def markup():
         
     
 extract()
-markup()
+#markup()

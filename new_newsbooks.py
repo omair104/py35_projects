@@ -43,7 +43,7 @@ def extract():
         f.write('\n')
         
         x=0
-        while ('<p>' not in content[x]): 
+        while ('<head' not in content[x]): 
             x=x+1         
          
         while(x<len(content)-1):        
@@ -80,35 +80,41 @@ def markup():
                         #print(remove)
                         #print(content[x])
                         content[x] = re.sub(re.escape(remove), '', content[x])  
-            
-            if '<head' in content[x]:
-                while '/head>' not in content[x]:
-                    x=x+1
-                x=x+1
-                
-            elif '<pb' in content[x]:
-                x=x+1
-                
-            elif '<img' in content[x]:
-                x=x+1
-                
-            elif '<poem' in content[x]:
-                x=x+1
-                
-                
+   
             else:
                 if '<reg' in content[x]:
                     #org_word= re.findall('orig=".*?">',content[x])[0][6:-2]
                     org_words= re.findall('orig=".*?">',content[x])
                     completes= re.findall('<reg.*?/reg>',content[x])
 
-                    for y in range(len(org_words)):
+                    for y in range(len(completes)):
                         #print(file)
                         #print(content[x])
+                        #print(completes)
   
                         org_word= org_words[y][6:-2]
                         complete = completes[y]
                         content[x] = re.sub(complete, org_word, content[x])
+                        
+                if '<pb' in content[x]:
+                    removes = re.findall('<pb.*?>', content[x])
+                    for remove in removes:
+                        content[x] = re.sub(re.escape(remove), '', content[x])
+                        
+                if '<img' in content[x]:
+                    removes = re.findall('<img.*?>', content[x])
+                    for remove in removes:
+                        content[x] = re.sub(re.escape(remove), '', content[x])
+                        
+                if '<poem' in content[x]:
+                    removes = re.findall('<poem.*?>', content[x])
+                    for remove in removes:
+                        content[x] = re.sub(re.escape(remove), '', content[x])
+                        
+                if '<head' in content[x]:
+                    removes = re.findall('<head.*?>', content[x])
+                    for remove in removes:
+                        content[x] = re.sub(re.escape(remove), '', content[x])
                         
                 content[x] = re.sub('&amp;', '&', content[x])
                 content[x] = re.sub('&apos;', '\'', content[x])
@@ -211,6 +217,7 @@ def markup():
                 content[x] = re.sub('<hr />', '', content[x])
                 content[x] = re.sub('<em>', '', content[x])
                 content[x] = re.sub('</em>', '', content[x])
+                content[x] = re.sub('</em >', '', content[x])
                 content[x] = re.sub('<unclear>', '', content[x])
                 content[x] = re.sub('</unclear>', '', content[x])
                 content[x] = re.sub('<line>', '', content[x])
@@ -229,9 +236,13 @@ def markup():
                 content[x] = re.sub('</reg>', '', content[x])
                 content[x] = re.sub('<td>', '', content[x])
                 content[x] = re.sub('</td>', '', content[x])
+                content[x] = re.sub('</head>', '', content[x])
+                content[x] = re.sub('!-- approx. 10 characters -->', '', content[x])
+                
                 
 
                 content[x] = re.sub('<note place="side" id="N01">', '', content[x])
+                content[x] = re.sub('</note>', '', content[x])
                 content[x] = re.sub('</note', '', content[x])
                 content[x] = re.sub('<ptr target="N01"/>', '', content[x])
                 content[x] = re.sub('<td colspan="3" rowspan="3">', '', content[x])
@@ -287,9 +298,10 @@ def markup():
                 content[x] = re.sub('&#x000B2;' , '=', content[x])
                 content[x] = re.sub('&#x000B3;' , '=', content[x])
                 
+                '''
                 if x>1 and x< len(content)-1:
                     content[x] = re.sub('>' , '', content[x])
-                
+                '''
 
                 
                 

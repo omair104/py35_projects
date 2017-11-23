@@ -103,7 +103,7 @@ def markup():
         while x< len(content):
             
             
-            if '<comment type="compiler">SOURCE' in content[x]:
+            if '<comment type="compiler">SOURCE' in content[x] and '/comment>' in content[x]:
                 comments = re.findall('<comment type="compiler">SOURCE TEXT:.*?/comment>', content[x])
                 for a in comments:
                     comment = a 
@@ -128,19 +128,65 @@ def markup():
                 #print('AFTER: '+ content[x])
             
 
-                    
+            
             if '<comment' in content[x]:
+                #print('ORIGINAL:'+content[x])
                 removes= re.findall('<comment.*?/comment>', content[x])
                 for remove in removes:
                     content[x] = re.sub(re.escape(remove), '', content[x])
                 if removes == []:
+                    result = ''
                     while '/comment>' not in content[x]:
+                        #print(content[x][:-2])
+                        content[x]= content[x][:-2]
+                        result = result+content[x]
                         x=x+1
-                    x=x+1
-            
+                    result = result+content[x]
+                    if not result.startswith('<comment'):
+                        #print(file)
+                        #print(result)
+                        pass
+                    c = re.findall('<comment.*?comment>', result)
 
-
+                    content[x]= re.sub(re.escape(c[0]),'', result)
+                    
                 
+            
+            if '<foreign' in content[x]:
+                    
+                foreign = re.findall('<foreign.*?foreign>', content[x])
+                for fo in foreign:
+                    content[x] = re.sub(re.escape(fo), '...', content[x])
+                    
+                if foreign== []:
+                    foreign_start = re.findall('<foreign.*?\n', content[x])
+                    for fo in foreign_start:
+                        content[x] = re.sub(re.escape(fo), '...', content[x])
+                    
+                    while 'foreign' not in content[x]:
+                        x=x+1
+                    #print(file)
+                    #print(content[x])
+                    content[x] = content[x].split('</foreign>')[1]
+                    
+                    '''
+                    if 'FOREIGN' in content[x+1]:
+                        content[x+1] = content[x+1].split('</FOREIGN>')[1]
+                    else:
+
+                        content[x+1] = re.sub('<foreign', '<FOREIGN', content[x+1])
+                        content[x+1] = re.sub('/foreign', '/FOREIGN', content[x+1])
+                        x=x+1
+                        content[x+1] = re.sub('<foreign', '<FOREIGN', content[x+1])
+                        content[x+1] = re.sub('/foreign', '/FOREIGN', content[x+1])
+                    
+                        print(file)
+                        print(content[x])
+                        print(content[x+1])
+                        content[x+1] = content[x+1].split('</FOREIGN>')[1]
+                    '''
+                
+
             if '<pagebreak' in content[x]:
                 while '/>' not in content[x]:
                     x=x+1
@@ -191,8 +237,8 @@ def markup():
                 content[x] = re.sub('</font>', '', content[x])
                 content[x] = re.sub('<head>', '', content[x])
                 content[x] = re.sub('</head>', '', content[x])
-                content[x] = re.sub('<foreign>', '', content[x])
-                content[x] = re.sub('</foreign>', '', content[x])
+                #content[x] = re.sub('<foreign>', '', content[x])
+                #content[x] = re.sub('</foreign>', '', content[x])
                 content[x] = re.sub('</sample>', '', content[x])
                 content[x] = re.sub('<emendation>', '', content[x])
                 content[x] = re.sub('</emendation>', '', content[x])
@@ -209,7 +255,7 @@ def markup():
                 content[x] = re.sub('<omission type="sentence" />', '', content[x])
                 
                 
-                if x>1 and x!= len(content)-1 and '<comment' in content[x]:
+                if x>1 and x!= len(content)-1 and '<foreign' in content[x]:
                     print(file)
                     print(content[x])
                     #break
@@ -219,5 +265,5 @@ def markup():
             
             
     
-extract()
+#extract()
 markup()

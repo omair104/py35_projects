@@ -1,8 +1,8 @@
 import os, re
 
 def subcorpus_markup():
-    extracted_path = r'C:\data\EEBO Phase 2\EEBO_phase 2\extracted'
-    cleaned_path = r'C:\data\EEBO Phase 2\EEBO_phase 2\test'
+    extracted_path = r'C:\data\EEBO Phase 2\EEBO TCP Phase 2'
+    cleaned_path =   r'C:\data\EEBO Phase 2\EEBO TCP Phase 2_cleaned'
     
     files= os.listdir(extracted_path)
     
@@ -40,13 +40,19 @@ def subcorpus_markup():
                     content[x] = re.sub(re.escape(s), '&', content[x])
                     
                     
+                if 'FIGDESC' in content[x]:
+                    figdesc= re.findall('<FIGDESC.*?FIGDESC>',content[x])
+                    for fig in figdesc:
+                        content[x] = re.sub(re.escape(fig), '', content[x])
+                    
+                    
                     
             content[x] = re.sub('&amp;', '&', content[x])
-            if x>0 and x!= len(content)-1 and '<TEXT L' not in content[x]:
+            if x>0 and x!= len(content)-1:# and '<TEXT L' not in content[x]:
                 
                 in_brackets= re.findall('<.*?>',content[x])
                 for element in in_brackets:
-                    content[x] = re.sub(re.escape(element), '', content[x])
+                    content[x] = re.sub(re.escape(element), ' ', content[x])
                     
                 content[x] = re.sub('∣', '', content[x])
                 content[x] = re.sub('¦', '', content[x])

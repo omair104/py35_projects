@@ -2,8 +2,8 @@ import os,re
 
 
 def extract():
-    org_path = r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\All'
-    extracted_path = r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\extracted'
+    org_path = r'F:\freelance work\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\All'
+    extracted_path = r'F:\freelance work\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\extracted'
     
     files = os.listdir(org_path)
     #print(files)
@@ -31,7 +31,33 @@ def extract():
             if pubdate== '':
                 pubdate= 'X'
             
-            
+            title = ''
+            for x in range(0, len(content)):
+                while ('<strong>Full title of text:</strong>' not in content[x] and '<strong>Full name of text:</strong>' not in content[x]): 
+                    x=x+1
+                    if x==len(content):
+                        title='X'
+                        break
+                if x<len(content):
+                    while '/em>' not in content[x] and '/p>' not in content[x]:
+                        content[x]= re.sub('<em>', '', content[x])
+                        content[x]= re.sub('</em>', '', content[x])
+                        content[x]= re.sub('<p>', '', content[x])
+                        content[x]= re.sub('</p>', '', content[x])
+                        content[x]= re.sub('<strong>Full title of text:</strong>', '', content[x])
+                        content[x]= re.sub('<strong>Full name of text:</strong>', '', content[x])
+                        content[x]= re.sub('              ', '', content[x])
+                        content[x]= re.sub('                ', '', content[x])
+                        content[x] = content[x][:-1]
+                        title = title+content[x]   
+                        x=x+1 
+                    content[x]= re.sub('</em>', '', content[x])   
+                    content[x]= re.sub('</p>', '', content[x])   
+                    content[x]= re.sub('              ', '', content[x])
+                    content[x]= re.sub('                ', '', content[x])      
+                    content[x] = content[x][:-1]
+                    title = title+content[x] 
+                    break
             
             for x in range(0, len(content)):
                 while ('<p><strong>Author:</strong>' not in content[x]): 
@@ -52,6 +78,21 @@ def extract():
             author = re.sub(re.escape(']'), '', author)
             author = re.sub(re.escape('.'), '', author)
             
+            for x in range(0, len(content)):
+                while ('<p><strong>Translator:</strong>' not in content[x]): 
+                    x=x+1
+                    if x == len(content):
+                        break
+                if x == len(content):
+                    translator= 'X'
+                else:
+                    translator = re.findall('</strong>.*?\n',content[x])[0][10:-5]
+                    break
+            if translator== '' or translator == 'unknown':
+                translator= 'X'
+            if translator[-1]== ' ':
+                translator = translator[:-1]
+            
             
             
             for x in range(0, len(content)):
@@ -60,6 +101,7 @@ def extract():
                     if x  == len(content): 
                         break
                 if x<len(content):
+                    #print(content[x])
                     dob= re.findall('</strong>.*?\n',content[x])[0]
                 else: dob=''
                 #dob.replace('-', ' ')
@@ -75,6 +117,7 @@ def extract():
             for x in range(0, len(content)):
                 while ('<p><strong>Publishing information' not in content[x]): 
                     x=x+1
+                #print(content[x])
                 pub_info= re.findall('</strong>.*?\n',content[x])[0][9:-5]
                 a = pub_info.split(':')
                 break
@@ -100,15 +143,31 @@ def extract():
                     if x == len(content):
                         break
                 if x == len(content):
-                    idno=''
+                    idno='X'
                 else:
-                    idno= re.findall('</strong>.*?</p>',content[x])[0][10:-5][-5:]
+                    idno= re.findall('</strong>.*?</p>',content[x])[0][10:-5]#[-5:]
                     break
             if idno== '':
                 idno= 'X'
+                
+            for x in range(0, len(content)):
+                while ('<p><strong>Physical description:</strong>' not in content[x]): 
+                    x=x+1
+                    if x == len(content):
+                        break
+                if x == len(content):
+                    physical_description='X'
+                else:
+                    content[x] = content[x] + content[x+1]
+                    content[x] = re.sub('\n','', content[x])
+                    content[x] = re.sub('             ','', content[x])
+                    physical_description= re.findall('</strong>.*?</p>',content[x])[0][10:-5]#[-5:]
+                    break
+            if physical_description== '':
+                physical_description= 'X'
             
-            written_header = '<file> <no=%s> <corpusnumber=%s> <corpus=early_modern_english_medical_texts> <author=%s> \
-<dates_of_birth_and_death=%s> <pubdate=%s> <place_of_publication=%s> <publisher=%s> <genre=medical> <idno=%s> <encoding=utf-8> <text> \n' %(file_number,filename, author, dob3, pubdate, place_publication, publisher, idno)
+            written_header = '<file> <no=%s> <filename=%s> <corpus=early_modern_english_medical_texts> <title=%s> <author=%s> \
+<dates_of_birth_and_death=%s> <translator=%s> <pubdate=%s> <genre=medical> <pubformat=%s> <place_of_publication=%s> <publisher=%s> <idno=%s> <encoding=utf-8> <text> \n' %(file_number,filename, title, author, dob3, translator, pubdate, physical_description, place_publication, publisher, idno)
             
             print(written_header)
         
@@ -129,8 +188,8 @@ def extract():
         
         
 def markup():
-    extracted_path = r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\extracted'
-    cleaned_path = r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\cleaned'
+    extracted_path = r'F:\freelance work\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\extracted'
+    cleaned_path = r'F:\freelance work\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\cleaned'
     
     files= os.listdir(extracted_path)
     
@@ -166,6 +225,11 @@ def markup():
                     content[x] = re.sub('anonymous', 'X', content[x])
                     content[x] = re.sub('Anonymous', 'X', content[x])
                     content[x] = re.sub('ȝ', '3', content[x])
+                    content[x] = re.sub('= ', '=', content[x])
+                    content[x] = re.sub(' >', '>', content[x])
+                    
+                content[x] = re.sub('<sup>', '', content[x])
+                content[x] = re.sub('</sup>', '', content[x])
                     
                 content[x] = re.sub('&amp;', '&', content[x])
                 content[x] = re.sub('&quot;', '', content[x])

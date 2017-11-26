@@ -1,8 +1,8 @@
 import os,re
 
 def extract():
-    org_path = r'H:\circle\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\Texts'
-    extracted_path = r'H:\circle\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\extracted'
+    org_path = r'F:\freelance work\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\Texts'
+    extracted_path = r'F:\freelance work\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\extracted'
     
     files = os.listdir(org_path)
     #print(files)
@@ -20,6 +20,7 @@ def extract():
         filename= file[:-4]
         
         for x in range(0, len(content)):
+            print(file)
             while ('<TITLESTMT>' not in content[x]): 
                 x=x+1
             title= re.findall(':.*?</TITLE>',content[x])[0][1:-8]
@@ -159,8 +160,8 @@ def extract():
         f.close
     
 def markup():
-    extracted_path = r'H:\circle\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\extracted'
-    cleaned_path = r'H:\circle\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\cleaned'
+    extracted_path = r'F:\freelance work\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\extracted'
+    cleaned_path = r'F:\freelance work\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\cleaned'
     
     files= os.listdir(extracted_path)
     
@@ -226,34 +227,45 @@ def markup():
                 content[x] = re.sub('/foreign', '/FOREIGN', content[x])
                 if 'FOREIGN' in content[x]:
                     if content[x].endswith('<FOREIGN>'):
-                        content[x]= re.sub('<FOREIGN>', '...', content[x])
+                        
                         dd = re.findall('.*?/FOREIGN>', content[x+1])
+                        #content[x]= re.sub('<FOREIGN>', '...', content[x])
+                        
                         for d in dd:
                             content[x+1]= re.sub(re.escape(d), '', content[x+1])
                             if 'per annum' in d:
+                                content[x]= re.sub('<FOREIGN>', '', content[x])
                                 content[x+1]= 'per annum' + content[x+1]
                                 break
                             if 'per Annum' in d:
+                                content[x]= re.sub('<FOREIGN>', '', content[x])
                                 content[x+1]= 'per Annum' + content[x+1]
                                 break
                             if 'per Ann' in d:
+                                content[x]= re.sub('<FOREIGN>', '', content[x])
                                 content[x+1]= 'per Ann' + content[x+1]
                                 break
                             if 'per A' in d:
+                                content[x]= re.sub('<FOREIGN>', '', content[x])
                                 content[x+1]= 'per A' + content[x+1]
                                 break
                             if 'per a' in d:
+                                content[x]= re.sub('<FOREIGN>', '', content[x])
                                 content[x+1]= 'per a' + content[x+1]
                                 break
                             if 'per centum' in d:
+                                content[x]= re.sub('<FOREIGN>', '', content[x])
                                 content[x+1]= 'per centum' + content[x+1]
                                 break
                             if 'per Centum' in d:
+                                content[x]= re.sub('<FOREIGN>', '', content[x])
                                 content[x+1]= 'per Centum' + content[x+1]
                                 break
                             if 'per c' in d:
+                                content[x]= re.sub('<FOREIGN>', '', content[x])
                                 content[x+1]= 'per c' + content[x+1]
                                 break
+                            content[x]= re.sub('<FOREIGN>', '...', content[x])
                         bracket_flag = 0
                         
                         

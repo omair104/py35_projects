@@ -1,8 +1,8 @@
 import os,re
 
 def extract():
-    org_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\CEDXML'
-    extracted_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
+    org_path = r'F:\freelance work\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\CEDXML'
+    extracted_path = r'F:\freelance work\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
     
     files = os.listdir(org_path)
     #print(files)
@@ -83,8 +83,8 @@ def extract():
 
 
 def markup():
-    extracted_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
-    cleaned_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\cleaned'
+    extracted_path = r'F:\freelance work\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
+    cleaned_path = r'F:\freelance work\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\cleaned'
     
     files= os.listdir(extracted_path)
     
@@ -100,10 +100,48 @@ def markup():
         f= open(file, 'w+', encoding='utf-8')
         
         x=0
-        while x< len(content):
+        while x< len(content)-1:
+            
+            if content[x].startswith('PP.'):
+                x=x+1
+                continue
+                
+            if '</frontMatter>' in content[x]:
+                while '<dialogueText>' not in content[x]:
+                    x=x+1
+                x=x+1
+                continue
+                
+            content[x] = re.sub('<dialogueText>', '', content[x])
+            content[x] = re.sub('</dialogueText>', '', content[x])
+            content[x] = re.sub('<dialogue>', '', content[x])
+            content[x] = re.sub('</dialogue>', '', content[x])
+            content[x] = re.sub('<nonSpeech>', '', content[x])
+            content[x] = re.sub('</nonSpeech>', '', content[x])
+            content[x] = re.sub('<font>', '', content[x])
+            content[x] = re.sub('</font>', '', content[x])
+            content[x] = re.sub('<head>', '', content[x])
+            content[x] = re.sub('</head>', '', content[x])
+            content[x] = re.sub('</sample>', '', content[x])
+            content[x] = re.sub('<emendation>', '', content[x])
+            content[x] = re.sub('</emendation>', '', content[x])
+            content[x] = re.sub('<frontMatter>', '', content[x])
+            content[x] = re.sub('</frontMatter>', '', content[x])
+            content[x] = re.sub('</textBibliography>', '', content[x])
+            content[x] = re.sub('</dialogueHeader>', '', content[x])
+            
+            if '<comment' in content[x] and 'comment>' not in content[x]:
+                content[x+1]= content[x][:-1]+content[x+1]
+                content[x+1]= re.sub('         ', '', content[x+1])
+                x=x+1
+                continue
+            
+            if content[x+1].startswith('<comment type="compiler">SOURCE TEXT:'):
+                prev_word = content[x].split()[-1]
+                content[x] = re.sub(re.escape(prev_word), '', content[x])
             
             
-            if '<comment type="compiler">SOURCE' in content[x] and '/comment>' in content[x]:
+            if '<comment type="compiler">SOURCE TEXT:' in content[x] and '/comment>' in content[x]:
                 comments = re.findall('<comment type="compiler">SOURCE TEXT:.*?/comment>', content[x])
                 for a in comments:
                     comment = a 
@@ -114,20 +152,26 @@ def markup():
                     word = a [12:-10]
                     #print('WORD:'+word)
                     
-                previous = re.findall(' .*?<comment', content[x])
+                previous = re.findall('^.*?<comment', content[x])
                 #p = previous.split(' ')
                 for p in previous:
                     list= p.split()
                     if len(list)>1:
                         last = list[-2]
                         #print('PREVIOUS: '+last)
+                if previous == [] or previous == ['<comment']:
+                    #last = content[x-1].split()[-1]
+                    
+                    content[x] = re.sub(re.escape(comment), '', content[x])
+                    content[x] = word + content[x]
+                    
+                    
                         
-                #print('BEFORE: '+ content[x])
-                content[x] = re.sub(re.escape(comment), '', content[x])
-                content[x] = re.sub(re.escape(last), word, content[x])
+                else:
+                    content[x] = re.sub(re.escape(comment), '', content[x])
+                    content[x] = re.sub(re.escape(last), word, content[x])
                 #print('AFTER: '+ content[x])
             
-
             
             if '<comment' in content[x]:
                 #print('ORIGINAL:'+content[x])
@@ -173,7 +217,6 @@ def markup():
                     if 'FOREIGN' in content[x+1]:
                         content[x+1] = content[x+1].split('</FOREIGN>')[1]
                     else:
-
                         content[x+1] = re.sub('<foreign', '<FOREIGN', content[x+1])
                         content[x+1] = re.sub('/foreign', '/FOREIGN', content[x+1])
                         x=x+1
@@ -227,26 +270,6 @@ def markup():
                 content[x] = re.sub('P~', 'P̄', content[x])
 
                 
-                content[x] = re.sub('<dialogueText>', '', content[x])
-                content[x] = re.sub('</dialogueText>', '', content[x])
-                content[x] = re.sub('<dialogue>', '', content[x])
-                content[x] = re.sub('</dialogue>', '', content[x])
-                content[x] = re.sub('<nonSpeech>', '', content[x])
-                content[x] = re.sub('</nonSpeech>', '', content[x])
-                content[x] = re.sub('<font>', '', content[x])
-                content[x] = re.sub('</font>', '', content[x])
-                content[x] = re.sub('<head>', '', content[x])
-                content[x] = re.sub('</head>', '', content[x])
-                #content[x] = re.sub('<foreign>', '', content[x])
-                #content[x] = re.sub('</foreign>', '', content[x])
-                content[x] = re.sub('</sample>', '', content[x])
-                content[x] = re.sub('<emendation>', '', content[x])
-                content[x] = re.sub('</emendation>', '', content[x])
-                
-                content[x] = re.sub('<frontMatter>', '', content[x])
-                content[x] = re.sub('</frontMatter>', '', content[x])
-                content[x] = re.sub('</textBibliography>', '', content[x])
-                content[x] = re.sub('</dialogueHeader>', '', content[x])
                 
                 content[x] = re.sub('~', '', content[x])
                 content[x] = re.sub('è', 'e', content[x])
@@ -262,6 +285,9 @@ def markup():
                 
                 f.write(content[x])
                 x=x+1
+
+                
+        f.write('\n</text> </file>')
             
             
     

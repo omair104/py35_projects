@@ -51,6 +51,10 @@ def extract():
                         content[x] = content[x][:-1]
                         title = title+content[x]   
                         x=x+1 
+                    content[x]= re.sub('<em>', '', content[x])
+                    content[x]= re.sub('<p>', '', content[x])
+                    content[x]= re.sub('<strong>Full title of text:</strong>', '', content[x])
+                    content[x]= re.sub('<strong>Full name of text:</strong>', '', content[x])
                     content[x]= re.sub('</em>', '', content[x])   
                     content[x]= re.sub('</p>', '', content[x])   
                     content[x]= re.sub('              ', '', content[x])
@@ -67,6 +71,9 @@ def extract():
                 if x == len(content):
                     author= ''
                 else:
+                    if '/p>' not in content[x]:
+                        content[x]= content[x][:-1]+content[x+1]
+                        content[x] = re.sub('              ', ' ', content[x])
                     author= re.findall('</strong>.*?\n',content[x])[0][10:-5]
                     break
             if author== '' or author == 'unknown':
@@ -118,6 +125,9 @@ def extract():
                 while ('<p><strong>Publishing information' not in content[x]): 
                     x=x+1
                 #print(content[x])
+                if '/p>' not in content[x]:
+                    content[x]= content[x][:-1]+content[x+1]
+                    content[x] = re.sub('              ', ' ', content[x])
                 pub_info= re.findall('</strong>.*?\n',content[x])[0][9:-5]
                 a = pub_info.split(':')
                 break
@@ -267,5 +277,5 @@ def markup():
 
                 f.write(content[x])
                 x=x+1
-#extract() 
+extract() 
 markup()

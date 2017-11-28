@@ -2,8 +2,8 @@ import os,re
 
 
 def extract():
-    org_path = r'F:\freelance work\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\All'
-    extracted_path = r'F:\freelance work\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\extracted'
+    org_path = r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\All'
+    extracted_path = r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\extracted'
     
     files = os.listdir(org_path)
     #print(files)
@@ -40,23 +40,31 @@ def extract():
                         break
                 if x<len(content):
                     while '/em>' not in content[x] and '/p>' not in content[x]:
+                        content[x]= re.sub('              ', '', content[x]) 
+                        content[x]= re.sub('           ', '', content[x])
                         content[x]= re.sub('<em>', '', content[x])
                         content[x]= re.sub('</em>', '', content[x])
                         content[x]= re.sub('<p>', '', content[x])
                         content[x]= re.sub('</p>', '', content[x])
                         content[x]= re.sub('<strong>Full title of text:</strong>', '', content[x])
                         content[x]= re.sub('<strong>Full name of text:</strong>', '', content[x])
+                        content[x]= re.sub('           ', '', content[x])
                         content[x]= re.sub('              ', '', content[x])
                         content[x]= re.sub('                ', '', content[x])
+                        content[x]= re.sub('', '', content[x])
                         content[x] = content[x][:-1]
                         title = title+content[x]   
                         x=x+1 
+                    content[x]= re.sub('              ', '', content[x]) 
+                    content[x]= re.sub('           ', '', content[x])
                     content[x]= re.sub('<em>', '', content[x])
                     content[x]= re.sub('<p>', '', content[x])
                     content[x]= re.sub('<strong>Full title of text:</strong>', '', content[x])
                     content[x]= re.sub('<strong>Full name of text:</strong>', '', content[x])
                     content[x]= re.sub('</em>', '', content[x])   
                     content[x]= re.sub('</p>', '', content[x])   
+                    content[x]= re.sub('           ', '', content[x])
+                    content[x]= re.sub('              ', '', content[x])  
                     content[x]= re.sub('              ', '', content[x])
                     content[x]= re.sub('                ', '', content[x])      
                     content[x] = content[x][:-1]
@@ -97,6 +105,8 @@ def extract():
                     break
             if translator== '' or translator == 'unknown':
                 translator= 'X'
+            if 'Unknown' in translator:
+                translator = re.sub('Unknown','X', translator)
             if translator[-1]== ' ':
                 translator = translator[:-1]
             
@@ -136,6 +146,8 @@ def extract():
                 publisher = a[1]
                 if place_publication== '':
                     place_publication= 'X'
+                if place_publication == 'Londini':
+                    place_publication = 'London'
                 if publisher== '':
                     publisher= 'X'
                     
@@ -157,7 +169,7 @@ def extract():
                 else:
                     idno= re.findall('</strong>.*?</p>',content[x])[0][10:-5]#[-5:]
                     break
-            if idno== '':
+            if idno== '' or idno == 'Not listed in STC':
                 idno= 'X'
                 
             for x in range(0, len(content)):
@@ -198,8 +210,8 @@ def extract():
         
         
 def markup():
-    extracted_path = r'F:\freelance work\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\extracted'
-    cleaned_path = r'F:\freelance work\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\cleaned'
+    extracted_path = r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\extracted'
+    cleaned_path = r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\cleaned'
     
     files= os.listdir(extracted_path)
     

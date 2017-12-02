@@ -175,6 +175,23 @@ def extract():
                     break
             if physical_description== '':
                 physical_description= 'X'
+                
+            if title[-1]=='.':
+                title = title[:-1]
+            if author[-1]=='.':
+                author = author[:-1]
+            if dob3[-1]=='.':
+                dob3= dob3[:-1]
+            if translator[-1]=='.':
+                translator= translator[:-1]
+            if pubdate[-1]=='.':
+                pubdate= pubdate[:-1]
+            if place_publication[-1]=='.':
+                place_publication = place_publication[:-1]
+            if publisher[-1]=='.':
+                publisher= publisher[:-1]
+            if idno[-1]=='.':
+                idno= idno[:-1]
             
             written_header = '<file> <no=%s> <filename=%s> <corpus=early_modern_english_medical_texts> <title=%s> <author=%s> \
 <dates_of_birth_and_death=%s> <translator=%s> <pubdate=%s> <genre=medical> <pubformat=%s> <place_of_publication=%s> <publisher=%s> <idno=%s> <encoding=utf-8> <text> \n' %(file_number,filename, title, author, dob3, translator, pubdate, physical_description, place_publication, publisher, idno)

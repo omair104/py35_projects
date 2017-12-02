@@ -140,6 +140,7 @@ def extract():
 <idno=Wing %s> <idno=Lamp %s> <text> \n' %(file_number,filename, title, author, pubdate, genre1, genre2, pubformat, pubplace, bookseller, idno_wing, idno_lamp)
         
         #print(written_header)
+        written_header = re.sub('= ', '=', written_header)
         
         file= os.path.join(extracted_path, str(filename)+'.txt')
         f= open(file, 'w+', encoding='utf-8')
@@ -508,5 +509,5 @@ def markup():
         f.write('\n</text> </file>')
         
 
-#extract()
+extract()
 markup()

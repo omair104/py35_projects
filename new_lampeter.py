@@ -189,6 +189,7 @@ def markup():
         add_flag=0
         corr_flag=0
         bracket_flag = 0
+        bracket_flag2 = 0
         while x< len(content)-1:
             content[x] = re.sub('tract, >', 'X>', content[x])
             
@@ -197,6 +198,7 @@ def markup():
             content[x] = re.sub('<figDESC>Fullpage astrological figure</figdesc>', '...', content[x])
             content[x] = re.sub('<FIGDESC>Mt. Etna erupting and the surrounding area</FIGDESC>', '...', content[x])
 
+            '''
             if bracket_flag==1:
                 content[x] = '<'+content[x]
                 bracket_flag = 0
@@ -207,6 +209,7 @@ def markup():
                 content[x] = content[x][:-1]
                 content[x] = content[x]+'>'
                 bracket_flag = 1
+            '''
 
             if x>=1 and x<len(content)-1:
                 
@@ -273,7 +276,19 @@ def markup():
                     foreign = re.findall('<FOREIGN.*?FOREIGN>', content[x])
                     for fo in foreign:
                         content[x] = re.sub(re.escape(fo), '...', content[x])
-                    
+                        
+                        
+                        
+                if bracket_flag2==1:
+                    content[x] = '<'+content[x]
+                    bracket_flag2 = 0
+            
+                open_count = content[x].count('<') 
+                close_count = content[x].count('>') 
+                if open_count > close_count:
+                    content[x] = content[x][:-1]
+                    content[x] = content[x]+'>'
+                    bracket_flag2 = 1
 
                 
                 
@@ -509,5 +524,5 @@ def markup():
         f.write('\n</text> </file>')
         
 
-extract()
+#extract()
 markup()

@@ -1,8 +1,8 @@
 import os,re
 
 def extract():
-    org_path = r'F:\freelance work\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\Texts'
-    extracted_path = r'F:\freelance work\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\extracted'
+    org_path = r'H:\circle\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\Texts'
+    extracted_path = r'H:\circle\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\extracted'
     
     files = os.listdir(org_path)
     #print(files)
@@ -136,8 +136,8 @@ def extract():
         genre2= options2.get(genre2_a, '')
         
         written_header = '<file> <no=%s> <filename=%s> <corpus=lampeter_corpus> <title=%s> <author=%s> <authorage=X> \
-<pubdate=%s> <genre=tract, %s> <genre1=tract, %s> <pubformat=%s> <place_of_publication=%s> <publisher=%s> <encoding=utf-8> \
-<idno=Wing %s> <idno=Lamp %s> <text> \n' %(file_number,filename, title, author, pubdate, genre1, genre2, pubformat, pubplace, bookseller, idno_wing, idno_lamp)
+<pubdate=%s> <genre=tract, %s> <genre1=tract, %s> <pubformat=%s> <place_of_publication=%s> <publisher=%s> \
+<idno=Wing %s> <idno=Lamp %s> <encoding=utf-8> <text> \n' %(file_number,filename, title, author, pubdate, genre1, genre2, pubformat, pubplace, bookseller, idno_wing, idno_lamp)
         
         #print(written_header)
         
@@ -160,8 +160,8 @@ def extract():
         f.close
     
 def markup():
-    extracted_path = r'F:\freelance work\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\extracted'
-    cleaned_path = r'F:\freelance work\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\cleaned'
+    extracted_path = r'H:\circle\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\extracted'
+    cleaned_path = r'H:\circle\text_extractor\new corpus\Lampeter\The Lampeter Corpus of Early Modern Tracts original\2400\cleaned'
     
     files= os.listdir(extracted_path)
     

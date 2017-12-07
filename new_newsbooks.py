@@ -2,11 +2,11 @@ import os,re,time
 from ctypes.test.test_pep3118 import Complete
 
 def extract():
-    org_path = r'F:\freelance work\text_extractor\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\all'
-    extracted_path = r'F:\freelance work\text_extractor\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\extracted'
+    org_path = r'H:\circle\text_extractor\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\all'
+    extracted_path = r'H:\circle\text_extractor\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\extracted'
     
-    file_i= os.path.join(extracted_path, 'meta'+'.txt')
-    g= open(file_i, 'w+', encoding='utf-8')
+    #file_i= os.path.join(extracted_path, 'meta'+'.txt')
+    #g= open(file_i, 'w+', encoding='utf-8')
     
     files = os.listdir(org_path)
     #print(files)
@@ -23,7 +23,7 @@ def extract():
         filename= file[:-4]
         
         for x in range(0, len(content)):
-            '''
+            
             while ('<title>' not in content[x]): 
                 x=x+1
             title= re.findall('<title>.*?</title>',content[x])[0][7:-8]
@@ -39,18 +39,63 @@ def extract():
 <pubdate=%s> <genre=newsbook> <encoding=utf-8> <text> \n' %(file_number,filename, title, pubdate)
         
         print(written_header)
-        '''
+        
         
         file= os.path.join(extracted_path, str(filename)+'.txt')
         f= open(file, 'w+', encoding='utf-8')
-        #f.write(written_header)
+        f.write(written_header)
         f.write('\n')
         
         x=0
         while ('<head' not in content[x]): 
             x=x+1         
          
+        
+        content[x] = re.sub('<i>avec toute la <unclear>francoise</unclear> et rondeur, et non pas comme un <unclear>Marchaud</unclear></i>', '...', content[x])
+        content[x] = re.sub('<em>Vive le Roy</em>.', '...', content[x])
+        content[x] = re.sub('<i>avec toute la franchise es rondour, et non pas comme un Marchand</i>', '...', content[x])
+        content[x] = re.sub('<i>Avec tout la franchise &amp; rondeur, &amp; non pas comme un. Marchand</i>', '...', content[x])
+        content[x] = re.sub('<i>Avec tout a la franchise &amp; rondeur, &amp; non pas comme un. Marchand</i>', '...', content[x])
+        content[x] = re.sub('<i>Surge <unclear>miser</unclear>, &amp; veni ad judicium</i>', '...', content[x])
+        content[x] = re.sub('<i>Deus nobis <unclear>h&oelig;cotia</unclear> fecit.</i>', '...', content[x])
+        content[x] = re.sub('<i>Clavis ad apriendum Carieris astia</i>', '...', content[x])
+        content[x] = re.sub('<i>Summus <unclear>locus bene regitur, quum is, qui pr&oelig;est, Vitius, potius, quam fratribus</unclear> dominatur.</i>', '...', content[x])
+        content[x] = re.sub('<i>stantibus m&oelig;nibus, <unclear>ruentibus moribus</unclear></i><i>O! Vtinam virtutis adversarij, non alin <unclear>ratione punerentur, quam ut ipsam virtutem videant, cademq;</unclear> relicti, intabetcant.</i>', '...', content[x])
+        content[x] = re.sub('<i>Vera Copia Ex.</i>', '...', content[x])
+        content[x] = re.sub('<i>Summus locus bene regitur, quum is, qui pr&oelig;est, <unclear>Vitiis</unclear>, potius, quam <unclear>fi atribus</unclear> dominatur.</i>', '...', content[x])
+        content[x] = re.sub('<i>Si ingratum dixeris, omnia dixisti</i>', '...', content[x])
+        content[x] = re.sub('Quid est', '...', content[x])
+        content[x] = re.sub('nisi domoram emunctio? Quid commendationis allusio, nisi pr&oelig;latorum delusie? Quid laudis arriso, nisi eorundum derisio?', '...', content[x])
+        content[x] = re.sub('Oss inferni', '...', content[x])
+        content[x] = re.sub('<i>Hinc lachryme.</i>', '...', content[x])
+        content[x] = re.sub('<i>Paran am Salma mem.</i>', '...', content[x])
+        content[x] = re.sub('<i>Falere ta lem non est Fraus</i>', '...', content[x])
+        content[x] = re.sub('<i>&mdash; Os homini sublime dedit c&oelig;lumque iueri.</i>', '...', content[x])
+        content[x] = re.sub('<i>Sic subscribitur Glencarne.</i>', '...', content[x])
+        content[x] = re.sub('<i>ab officio, &amp; beneficio</i>', '...', content[x])
+        content[x] = re.sub('<i>It&agrave; vertere Seria</i>', '...', content[x])
+        content[x] = re.sub('<i>stilo novo.</i>', '...', content[x])
+        content[x] = re.sub('<i>In Augustalia Serenissimi Domini &amp; Principis, OLIVARII D. Protectoris Reipub. <em>Angli&aelig;, Scoti&aelig;, &amp; Hiberni&aelig;, &amp;c.</em> Summ acum magnificentis celebrata <em>Londini</em>; Auspiciis Dom. Pr&aelig;toris, Senatus, &amp; totius Civitatis Londinensis, Februarii 8 1654.</i>', '...', content[x])
+        content[x] = re.sub('Sic subscribitur Glencarne.</em></i>', '...', content[x])
+        content[x] = re.sub('<i>Sed verbum sat.</i>', '...', content[x])
+        content[x] = re.sub('<i>Sic subsciribitur', '...', content[x])
+        content[x] = re.sub('Sic Subscribitur,', '...', content[x])
+        content[x] = re.sub('<i>Nangas haadam betrolmenu.', '...', content[x])
+        content[x] = re.sub('<i>ex opere operato</i>', '...', content[x])
+        content[x] = re.sub('<i><unclear>Baruch Adonay lengoham vanged</unclear> Amen ve Amen,</i>', '...', content[x])
+        content[x] = re.sub('<i>Scripsit propria manu. <em>B. Josephus B. Israel</em>, <unclear>Heb. Mant.</unclear></i>', '...', content[x])
+        content[x] = re.sub('Sufficit unus, sufficit nullus', '...', content[x])
+        content[x] = re.sub('<i>Sum f&aelig;lix tamen Osuperi, nullique potestas hoc auferre Deo.</i><i>Omnia sunt propitia</i>', '...', content[x])
+        content[x] = re.sub('<i>Sic subsciribitur', '...', content[x])
+        content[x] = re.sub('<i>Subscribiter', '...', content[x])
+        content[x] = re.sub('<i>Occissis omnibus quicunque Regem etiam longingua consanguinitate contigerant</i>', '...', content[x])
+        content[x] = re.sub('<i>Sic subscribitur', '...', content[x])
+        content[x] = re.sub('<i>stantibus <unclear>manibus, ruentibus</unclear> moribus</i><i>O! <unclear>Vtinam vertulis adversarii, non alia ratione punerant ut, quod <!--approx. 10 characters--> virtulem videant, <!--approx 26 characters more than one word, possibly some punctuation--></unclear></i>', '...', content[x])
+        content[x] = re.sub('<i>Avec tout a la franchise &amp; rondeur, &amp; non pas comme un Marchand</i>', '...', content[x])
+            
+        
         while(x<len(content)-1):    
+            '''
             if '<i>' in content[x]:
                 a = re.findall('<i>.*?</i>', content[x])  
                 g.write(filename)
@@ -58,8 +103,11 @@ def extract():
                 for b in a:
                     g.write(b)
                 g.write('\n')  
+            '''
             f.write(content[x])
             x=x+1
+        
+            
         f.write('\n</text> </file>')
         f.close
         
@@ -327,5 +375,5 @@ def markup():
 
 
 extract()
-#markup()
+markup()
     

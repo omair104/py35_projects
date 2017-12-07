@@ -31,10 +31,11 @@ def extract():
             
             
             for x in content:
+                '''
                 if '}_' in x and '_P' not in x: #and 'CO' not in x and '@' not in x and '_C' not in x:
                     print(file)
                     print(x)
-                
+                '''
                 a = re.findall('\{ED:.*?\}',x)
                 if a != []:
                     for element in a:
@@ -197,6 +198,39 @@ def markup():
                 #print(removes)
                 for remove in removes:
                     content[x] = re.sub(re.escape(remove), '', content[x])   
+                    
+            if '{COM:' in content[x] and'}' not in content[x]:
+                content[x] = content[x][:-1] + content[x+1]
+                content[x+1]=''
+            if '{ED:' in content[x] and'}' not in content[x]:
+                content[x] = content[x][:-1] + content[x+1]
+                content[x+1]=''
+            if '{REMOVE:' in content[x] and'}' not in content[x]:
+                content[x] = content[x][:-1] + content[x+1]
+                content[x+1]=''
+                    
+            if 'ED:' in content[x]:
+                #print(content[x])
+                removes= re.findall('{ED:.*?}', content[x])
+                #print(removes)
+                for remove in removes:
+                    content[x] = re.sub(re.escape(remove), '', content[x])  
+                    
+            if '{COM:' in content[x]:
+                #print(content[x])
+                removes= re.findall('{COM:.*?}', content[x])
+                #print(removes)
+                for remove in removes:
+                    content[x] = re.sub(re.escape(remove), '', content[x]) 
+                    
+            if '{REMOVE:' in content[x]:
+                #print(content[x])
+                removes= re.findall('{REMOVE:.*?}', content[x])
+                #print(removes)
+                for remove in removes:
+                    content[x] = re.sub(re.escape(remove), '', content[x])  
+                    
+            
             
             content[x] = re.sub(re.escape('{to}P'), '', content[x])
             content[x] = re.sub(re.escape('_P'), '', content[x])
@@ -210,10 +244,6 @@ def markup():
                     content[x] = re.sub(re.escape(remove), '', content[x])   
 
 
-            if x>1:
-                content[x] = re.sub('_', '', content[x])
-            else:
-                content[x] = re.sub('unknown', 'X', content[x])
                 
             
             content[x] = re.sub('    <dialect=Early Modern English>', '', content[x])
@@ -286,6 +316,51 @@ def markup():
             
             content[x] = re.sub('yoW', 'yow', content[x])
             content[x] = re.sub('-SBJ', 'yow', content[x])
+            
+            content[x] = re.sub('_ @', '', content[x])
+            content[x] = re.sub('_C ODE', '', content[x])
+            content[x] = re.sub('_CO DE', '', content[x])
+            content[x] = re.sub('_COD E', '', content[x])
+            content[x] = re.sub('_C', '', content[x])
+            content[x] = re.sub('_CO', '', content[x])
+            content[x] = re.sub('_COD', '', content[x])
+            content[x] = re.sub('_CODE_X', '', content[x])
+            content[x] = re.sub('_CODE_VB', '', content[x])
+            content[x] = re.sub('_MD', '', content[x])
+            content[x] = re.sub('_CODE_NP', '', content[x])
+            content[x] = re.sub('_CODE_NP-OB1', '', content[x])
+            content[x] = re.sub('_NP', '', content[x])
+            content[x] = re.sub('_NP-SBJ', '', content[x])
+            content[x] = re.sub('_NP-OB1', '', content[x])
+            content[x] = re.sub('_NP-OB2', '', content[x])
+            content[x] = re.sub('_BED', '', content[x])
+            content[x] = re.sub('_BE', '', content[x])
+            content[x] = re.sub('_BEN', '', content[x])
+            content[x] = re.sub('_BEP', '', content[x])
+            content[x] = re.sub('_VBD', '', content[x])
+            content[x] = re.sub('_NX', '', content[x])
+            content[x] = re.sub('_VB', '', content[x])
+            content[x] = re.sub('_NEG', '', content[x])
+            content[x] = re.sub('_VAN', '', content[x])
+            content[x] = re.sub('_CONJ', '', content[x])
+            content[x] = re.sub('_ADVP', '', content[x])
+            content[x] = re.sub('_HV', '', content[x])
+            content[x] = re.sub('{TEXT:cannot}', '', content[x])
+            content[x] = re.sub('_VBP', '', content[x])
+            content[x] = re.sub('_ADJP', '', content[x])
+            content[x] = re.sub('_WNP-3', '', content[x])
+            content[x] = re.sub('_EX', '', content[x])
+            content[x] = re.sub('_TO', '', content[x])
+            content[x] = re.sub('_CODE_NP-POS', '', content[x])
+            content[x] = re.sub('_CODE_HVD', '', content[x])
+            content[x] = re.sub('_VAG', '', content[x])
+            
+            if x>1:
+                content[x] = re.sub('_', '', content[x])
+            else:
+                content[x] = re.sub('unknown', 'X', content[x])
+                
+                
             content[x] = re.sub(re.escape('{COM:SIC?'), '', content[x])
             content[x] = re.sub(re.escape('{COM:??'), '', content[x])
             content[x] = re.sub(re.escape('{COM:?'), '', content[x])
@@ -299,6 +374,9 @@ def markup():
             content[x] = re.sub(re.escape('{COM:soesooneasperhapsyoudidexpectsentyou'), '', content[x])
             content[x] = re.sub(re.escape('{COM:myCANCELLED'), '', content[x])
             
+            
+            
+            
             if x<len(content)-1 and x>1:
                 content[x] = re.sub(re.escape('/'), '', content[x])
                 content[x] = re.sub(re.escape('<'), '', content[x])
@@ -310,7 +388,7 @@ def markup():
 
             
             
-            if x>1 and x!= len(content)-1 and ('COM' in content[x] or '_' in content[x]):
+            if x>1 and x!= len(content)-1 and ('COM:' in content[x] or '_' in content[x] or 'ED:' in content[x] or 'REMOVE:' in content[x]):
                 print(file)
                 print(content[x])
                 #break
@@ -321,4 +399,4 @@ def markup():
         
     
 extract()
-#markup()
+markup()

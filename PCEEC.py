@@ -9,7 +9,7 @@ def extract():
     
     files = os.listdir(org_file_directory)
     count = 0
-    g=open(r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\com_comments.txt', 'w')
+    g=open(r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\ed_comments.txt', 'w')
     for file in files:
         data_dict = defaultdict(list)
         file_name = file
@@ -34,7 +34,7 @@ def extract():
             x=0
             while x<len(content):
             #for x in content:
-                if '{COM' in content[x]:# and '{' not in x: #and 'CO' not in x and '@' not in x and '_C' not in x:
+                if '{ED' in content[x]:# and '{' not in x: #and 'CO' not in x and '@' not in x and '_C' not in x:
                     if '}' in content[x]:
                         #print(file)
                         #print(content[x])

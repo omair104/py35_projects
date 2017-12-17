@@ -3,12 +3,13 @@ from collections import defaultdict
 import re
 
 def extract():
-    directory_file = r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\extracted_new'
+    directory_file = r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\extracted_new'
     
-    org_file_directory=r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\txt'
+    org_file_directory=r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\txt'
     
     files = os.listdir(org_file_directory)
     count = 0
+    g=open(r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\com_comments.txt', 'w')
     for file in files:
         data_dict = defaultdict(list)
         file_name = file
@@ -25,23 +26,36 @@ def extract():
             remove_list= [ '</paren>' ,'<paren>', 
                           '<heading>','</heading>']
             
-            
+            #print(path_org_file)
             with open(path_org_file) as f:
                 content = f.readlines()
             
             
-            for x in content:
-                if '}_' in x and '_P' not in x: #and 'CO' not in x and '@' not in x and '_C' not in x:
-                    print(file)
-                    print(x)
-                
+            x=0
+            while x<len(content):
+            #for x in content:
+                if '{COM' in content[x]:# and '{' not in x: #and 'CO' not in x and '@' not in x and '_C' not in x:
+                    if '}' in content[x]:
+                        #print(file)
+                        #print(content[x])
+                        g.write(file)
+                        g.write('\n')
+                        g.write(content[x])
+                    else:
+                        g.write(file)
+                        g.write('\n')
+                        g.write(content[x])
+                        g.write(content[x+1])
+                x=x+1
+
+                '''
                 a = re.findall('\{ED:.*?\}',x)
                 if a != []:
                     for element in a:
                         if element not in remove_list:
                             remove_list.append(element)
+                '''
                             
-            
             for x in content:
                 a = re.findall('\<P_.*?\>',x)
                 if a != []:
@@ -159,8 +173,8 @@ def extract():
                 
 
 def markup():
-    extracted_path = r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\extracted_new'
-    cleaned_path = r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\cleaned'
+    extracted_path = r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\extracted_new'
+    cleaned_path = r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\cleaned'
     
     files= os.listdir(extracted_path)
     
@@ -199,21 +213,29 @@ def markup():
                     content[x] = re.sub(re.escape(remove), '', content[x])   
             
             content[x] = re.sub(re.escape('{to}P'), '', content[x])
-            content[x] = re.sub(re.escape('_P'), '', content[x])
+            #content[x] = re.sub(re.escape('_P'), '', content[x])
             content[x] = re.sub(re.escape('_MD'), '', content[x])
             content[x] = re.sub(re.escape('<em>'), '', content[x])
+            '''
             if '{' in content[x]:
-                #print(content[x])
                 removes= re.findall('{.*?}', content[x])
-                #print(removes)
                 for remove in removes:
-                    content[x] = re.sub(re.escape(remove), '', content[x])   
+                    content[x] = re.sub(re.escape(remove), '', content[x]) 
+            '''  
+            if '{COM' in content[x]:
+                removes= re.findall('{COM:.*?}', content[x])
+                for remove in removes:
+                    content[x] = re.sub(re.escape(remove), '', content[x]) 
+                    
+            
+            
+            content[x] = re.sub('out_of', 'out of', content[x])
+            content[x] = re.sub('{in}_P {her_to_be}', 'in', content[x])
+            content[x] = re.sub('{in}_P {that_I_am}', 'in', content[x])
+            content[x] = re.sub('{TEXT:through}_P', 'through', content[x])
 
-
-            if x>1:
-                content[x] = re.sub('_', '', content[x])
-            else:
-                content[x] = re.sub('unknown', 'X', content[x])
+            content[x] = re.sub(re.escape('_P'), '', content[x])
+            
                 
             
             content[x] = re.sub('    <dialect=Early Modern English>', '', content[x])
@@ -263,6 +285,48 @@ def markup():
             content[x] = re.sub('p~', 'p̄', content[x])
             content[x] = re.sub('P~', 'P̄', content[x])
             
+            
+            content[x] = re.sub('Æ~', 'Ǣ', content[x])
+            content[x] = re.sub('æ~', 'ǣ', content[x])
+            content[x] = re.sub('B~', 'B̄', content[x])
+            content[x] = re.sub('b~', 'b̄', content[x])
+            content[x] = re.sub('C~', 'C̄', content[x])
+            content[x] = re.sub('c~', 'c̄', content[x])
+            content[x] = re.sub('D~', 'D̄', content[x])
+            content[x] = re.sub('d~', 'd̄', content[x])
+            content[x] = re.sub('G~', 'Ḡ', content[x])
+            content[x] = re.sub('g~', 'ḡ', content[x])
+            content[x] = re.sub('J~', 'J̄', content[x])
+            content[x] = re.sub('j~', 'j̄', content[x])
+            content[x] = re.sub('K~', 'K̄', content[x])
+            content[x] = re.sub('k~', 'k̄', content[x])
+            content[x] = re.sub('M~', 'M̄', content[x])
+            
+            content[x] = re.sub('m~', 'm̄', content[x])
+            content[x] = re.sub('N~', 'N̄', content[x])
+            
+            content[x] = re.sub('n~', 'n̄', content[x])
+            
+            content[x] = re.sub('P~', 'P̄', content[x])
+            content[x] = re.sub('p~', 'p̄', content[x])
+            content[x] = re.sub('Q~', 'Q̄', content[x])
+            content[x] = re.sub('q~', 'q̄', content[x])
+            
+            content[x] = re.sub('R~', 'R̄', content[x])
+            content[x] = re.sub('r~', 'r̄', content[x])
+            content[x] = re.sub('S~', 'S̄', content[x])
+            content[x] = re.sub('s~', 's̄', content[x])
+            content[x] = re.sub('T~', 'T̄', content[x])
+            content[x] = re.sub('t~', 't̄', content[x])
+            content[x] = re.sub('W~', 'W̄', content[x])
+            content[x] = re.sub('w~', 'w̄', content[x])
+            content[x] = re.sub('X~', 'X̄', content[x])
+            content[x] = re.sub('x~', 'x̄', content[x])
+            content[x] = re.sub('Z~', 'Z̄', content[x])
+            content[x] = re.sub('z~', 'z̄', content[x])
+
+            
+            
             content[x] = re.sub('~', 'ō', content[x])
             content[x] = re.sub(' \'s', '\'s', content[x])
             
@@ -286,6 +350,52 @@ def markup():
             
             content[x] = re.sub('yoW', 'yow', content[x])
             content[x] = re.sub('-SBJ', 'yow', content[x])
+            
+            content[x] = re.sub('{him}', 'him', content[x])
+            content[x] = re.sub('{TEXT:ore}', 'ore', content[x])
+            content[x] = re.sub('{it}', 'it', content[x])
+            content[x] = re.sub('{TEXT:tis}', 'tis', content[x])
+            content[x] = re.sub('{TEXT:cannot}', 'cannot', content[x])
+
+            content[x] = re.sub('_ @', '', content[x])
+            content[x] = re.sub('_C ODE', '', content[x])
+            content[x] = re.sub('_CO DE', '', content[x])
+            content[x] = re.sub('_COD E', '', content[x])
+            content[x] = re.sub('_C', '', content[x])
+            content[x] = re.sub('_CO', '', content[x])
+            content[x] = re.sub('_COD', '', content[x])
+            content[x] = re.sub('_CODE_X', '', content[x])
+            content[x] = re.sub('_CODE_VB', '', content[x])
+            content[x] = re.sub('_MD', '', content[x])
+            content[x] = re.sub('_CODE_NP', '', content[x])
+            content[x] = re.sub('_CODE_NP-OB1', '', content[x])
+            content[x] = re.sub('_NP', '', content[x])
+            content[x] = re.sub('_NP-SBJ', '', content[x])
+            content[x] = re.sub('_NP-OB1', '', content[x])
+            content[x] = re.sub('_NP-OB2', '', content[x])
+            content[x] = re.sub('_BED', '', content[x])
+            content[x] = re.sub('_BE', '', content[x])
+            content[x] = re.sub('_BEN', '', content[x])
+            content[x] = re.sub('_BEP', '', content[x])
+            content[x] = re.sub('_VBD', '', content[x])
+            content[x] = re.sub('_NX', '', content[x])
+            content[x] = re.sub('_VB', '', content[x])
+            content[x] = re.sub('_NEG', '', content[x])
+            content[x] = re.sub('_VAN', '', content[x])
+            content[x] = re.sub('_CONJ', '', content[x])
+            content[x] = re.sub('_ADVP', '', content[x])
+            content[x] = re.sub('_HV', '', content[x])
+            content[x] = re.sub('{TEXT:cannot}', '', content[x])
+            content[x] = re.sub('_VBP', '', content[x])
+            content[x] = re.sub('_ADJP', '', content[x])
+            content[x] = re.sub('_WNP-3', '', content[x])
+            content[x] = re.sub('_EX', '', content[x])
+            content[x] = re.sub('_TO', '', content[x])
+            content[x] = re.sub('_CODE_NP-POS', '', content[x])
+            content[x] = re.sub('_CODE_HVD', '', content[x])
+            content[x] = re.sub('_VAG', '', content[x])
+            
+            
             content[x] = re.sub(re.escape('{COM:SIC?'), '', content[x])
             content[x] = re.sub(re.escape('{COM:??'), '', content[x])
             content[x] = re.sub(re.escape('{COM:?'), '', content[x])
@@ -299,18 +409,28 @@ def markup():
             content[x] = re.sub(re.escape('{COM:soesooneasperhapsyoudidexpectsentyou'), '', content[x])
             content[x] = re.sub(re.escape('{COM:myCANCELLED'), '', content[x])
             
+            if x>1:
+                content[x] = re.sub('_', '', content[x])
+            else:
+                content[x] = re.sub('unknown', 'X', content[x])
+            
             if x<len(content)-1 and x>1:
                 content[x] = re.sub(re.escape('/'), '', content[x])
                 content[x] = re.sub(re.escape('<'), '', content[x])
                 content[x] = re.sub(re.escape('>'), '', content[x])
                 
+            content[x] = re.sub(re.escape('{'), '', content[x])
+            content[x] = re.sub(re.escape('}'), '', content[x])
+                
             
             if ' W' not in content[x] and x>2:
                 content[x] = re.sub('W', 'w', content[x])
-
-            
-            
-            if x>1 and x!= len(content)-1 and ('COM' in content[x] or '_' in content[x]):
+            '''
+            if '{' in content[x]:
+                print('HERE')
+                print(content[x])
+            '''
+            if x>1 and x!= len(content)-1 and ( '{' in content[x] ):
                 print(file)
                 print(content[x])
                 #break

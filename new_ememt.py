@@ -251,12 +251,26 @@ def markup():
                     x=x+1
                 x=x+1
                 
-            elif '[/' in content[x]:
-                while '/]' not in content[x]:
+            if '[/' in content[x]:
+                if '/]' in content[x]:
+                    removes = re.findall('\[.*?\]', content[x])
+                    for remove in removes:
+                        content[x] = re.sub(re.escape(remove), '', content[x])
+                else:
+                    while '/]' not in content[x]:
+                        x=x+1
                     x=x+1
-                x=x+1
             
             else:
+                if '[/' in content[x]:
+                    if '/]' in content[x]:
+                        removes = re.findall('[.*?]', content[x])
+                        for remove in removes:
+                            content[x] = re.sub(remove, '', content[x])
+                    else:
+                        while '/]' not in content[x]:
+                            x=x+1
+                        x=x+1
                 if x>1:
                     content[x] = re.sub('_', '', content[x])
                 else:
@@ -306,5 +320,5 @@ def markup():
 
                 f.write(content[x])
                 x=x+1
-extract() 
+#extract() 
 markup()

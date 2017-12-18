@@ -3,13 +3,13 @@ from collections import defaultdict
 import re
 
 def extract():
-    directory_file = r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\extracted_new'
+    directory_file = r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\extracted_new'
     
-    org_file_directory=r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\txt'
+    org_file_directory=r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\txt'
     
     files = os.listdir(org_file_directory)
     count = 0
-    g=open(r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\ed_comments.txt', 'w')
+    g=open(r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\ed_comments.txt', 'w')
     for file in files:
         data_dict = defaultdict(list)
         file_name = file
@@ -191,6 +191,18 @@ def markup():
         
         x=0
         while x< len(content):
+            
+            if '{COM:' in content[x] and'}' not in content[x]:
+                content[x] = content[x][:-1] + content[x+1]
+                content[x+1]=''
+            if '{ED:' in content[x] and'}' not in content[x]:
+                content[x] = content[x][:-1] + content[x+1]
+                content[x+1]=''
+            if '{REMOVE:' in content[x] and'}' not in content[x]:
+                content[x] = content[x][:-1] + content[x+1]
+                content[x+1]=''
+                
+                
             
             if '{TEXT:' in content[x]:
                 removes= re.findall('{TEXT:.*?}', content[x])

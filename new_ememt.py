@@ -247,9 +247,15 @@ def markup():
         while x< len(content):
             
             if '[^' in content[x]:
-                while '^]' not in content[x]:
+                if '^]' in content[x]:
+                    removes = re.findall('\[.*?\]', content[x])
+                    for remove in removes:
+                        content[x] = re.sub(re.escape(remove), '', content[x])
+                else:
+                    while '^]' not in content[x]:
+                        x=x+1
                     x=x+1
-                x=x+1
+                    continue
                 
             if '[/' in content[x]:
                 if '/]' in content[x]:
@@ -260,65 +266,57 @@ def markup():
                     while '/]' not in content[x]:
                         x=x+1
                     x=x+1
+                    continue
             
-            else:
-                if '[/' in content[x]:
-                    if '/]' in content[x]:
-                        removes = re.findall('[.*?]', content[x])
-                        for remove in removes:
-                            content[x] = re.sub(remove, '', content[x])
-                    else:
-                        while '/]' not in content[x]:
-                            x=x+1
-                        x=x+1
-                if x>1:
-                    content[x] = re.sub('_', '', content[x])
-                else:
-                    content[x] = re.sub('unknown', 'X', content[x])
-                    content[x] = re.sub('anonymous', 'X', content[x])
-                    content[x] = re.sub('Anonymous', 'X', content[x])
-                    content[x] = re.sub('ȝ', '3', content[x])
-                    content[x] = re.sub('= ', '=', content[x])
-                    content[x] = re.sub(' >', '>', content[x])
-                    
-                content[x] = re.sub('<sup>', '', content[x])
-                content[x] = re.sub('</sup>', '', content[x])
-                    
-                content[x] = re.sub('&amp;', '&', content[x])
-                content[x] = re.sub('&quot;', '', content[x])
-                
-                content[x] = re.sub('\[}', '', content[x])
-                content[x] = re.sub('}\]', '', content[x])
-                content[x] = re.sub('¦', '', content[x])
-                
-                content[x] = re.sub('a~', 'ā', content[x])
-                content[x] = re.sub('A~', 'Ā', content[x])
-                content[x] = re.sub('e~', 'ē', content[x])
-                content[x] = re.sub('E~', 'Ē', content[x])
-                content[x] = re.sub('i~', 'ī', content[x])
-                content[x] = re.sub('I~', 'Ī', content[x])
-                content[x] = re.sub('o~', 'ō', content[x])
-                content[x] = re.sub('O~', 'Ō', content[x])
-                content[x] = re.sub('u~', 'ū', content[x])
-                content[x] = re.sub('U~', 'Ū', content[x])
-                content[x] = re.sub('v~', 'v̄', content[x])
-                content[x] = re.sub('V~', 'V̄', content[x])
-                content[x] = re.sub('y~', 'ȳ', content[x])
-                content[x] = re.sub('Y~', 'Ȳ', content[x])
-                content[x] = re.sub('m~', 'm̄', content[x])
-                content[x] = re.sub('M~', 'M̄', content[x])
-                content[x] = re.sub('p~', 'p̄', content[x])
-                content[x] = re.sub('P~', 'P̄', content[x])
-                
-                content[x] = re.sub('w~', 'w\'', content[x])
-                content[x] = re.sub('k~', 'k\'', content[x])
-                
-                if x<len(content)-1:
-                    content[x] = re.sub('/', '', content[x])
-                
-                
 
-                f.write(content[x])
-                x=x+1
+            if x>1:
+                content[x] = re.sub('_', '', content[x])
+            else:
+                content[x] = re.sub('unknown', 'X', content[x])
+                content[x] = re.sub('anonymous', 'X', content[x])
+                content[x] = re.sub('Anonymous', 'X', content[x])
+                content[x] = re.sub('ȝ', '3', content[x])
+                content[x] = re.sub('= ', '=', content[x])
+                content[x] = re.sub(' >', '>', content[x])
+                
+            content[x] = re.sub('<sup>', '', content[x])
+            content[x] = re.sub('</sup>', '', content[x])
+                
+            content[x] = re.sub('&amp;', '&', content[x])
+            content[x] = re.sub('&quot;', '', content[x])
+            
+            content[x] = re.sub('\[}', '', content[x])
+            content[x] = re.sub('}\]', '', content[x])
+            content[x] = re.sub('¦', '', content[x])
+            
+            content[x] = re.sub('a~', 'ā', content[x])
+            content[x] = re.sub('A~', 'Ā', content[x])
+            content[x] = re.sub('e~', 'ē', content[x])
+            content[x] = re.sub('E~', 'Ē', content[x])
+            content[x] = re.sub('i~', 'ī', content[x])
+            content[x] = re.sub('I~', 'Ī', content[x])
+            content[x] = re.sub('o~', 'ō', content[x])
+            content[x] = re.sub('O~', 'Ō', content[x])
+            content[x] = re.sub('u~', 'ū', content[x])
+            content[x] = re.sub('U~', 'Ū', content[x])
+            content[x] = re.sub('v~', 'v̄', content[x])
+            content[x] = re.sub('V~', 'V̄', content[x])
+            content[x] = re.sub('y~', 'ȳ', content[x])
+            content[x] = re.sub('Y~', 'Ȳ', content[x])
+            content[x] = re.sub('m~', 'm̄', content[x])
+            content[x] = re.sub('M~', 'M̄', content[x])
+            content[x] = re.sub('p~', 'p̄', content[x])
+            content[x] = re.sub('P~', 'P̄', content[x])
+            
+            content[x] = re.sub('w~', 'w\'', content[x])
+            content[x] = re.sub('k~', 'k\'', content[x])
+            
+            if x<len(content)-1:
+                content[x] = re.sub('/', '', content[x])
+            
+            
+
+            f.write(content[x])
+            x=x+1
 #extract() 
 markup()

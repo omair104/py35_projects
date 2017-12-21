@@ -2,8 +2,8 @@
 import os,re
 
 def extract():
-    org_path = r'C:\data\EEBO Phase 2\New folder2'
-    extracted_path = r'C:\data\EEBO Phase 2\EEBO TCP Phase 2'
+    org_path = r'C:\data\EEBO Phase 1\New folder2'
+    extracted_path = r'C:\data\EEBO Phase 1\EEBO TCP Phase 1'
     #org_path = r'C:\data\EEBO_new\New folder2'
     #extracted_path = r'C:\data\EEBO_new\extracted'
     file_number=0
@@ -59,8 +59,33 @@ def extract():
                         break
                     else:
                         break
-                #print(place_of_pub)
                 place_of_pub = re.sub("[^abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ]", '', place_of_pub)
+                    
+                for x in range(10, len(content)):
+                    while ('<PUBLISHER>' not in content[x]): 
+                        x=x+1
+                        if x == len(content)-1:
+                            publisher= ''
+                            break
+                    if x !=len(content)-1:
+                        publisher= re.findall('<PUBLISHER>.*?</PUBLISHER>',content[x])[0][11:-12]
+                        break
+                    else:
+                        break
+                    
+                for x in range(0, len(content)):
+                    while ('<TERM>' not in content[x]): 
+                        x=x+1
+                        if x == len(content)-1:
+                            keywords= ''
+                            break
+                    if x !=len(content)-1:
+                        keywords= re.findall('<TERM>.*?</TERM>',content[x])[0][6:-7]
+                        break
+                    else:
+                        break
+
+                
                 
                 if place_of_pub in ['ImprintedatLondon', 'PrintedatLondon', 'Londini', 'AtLondon', 'ImpryntedatLondon', 'EnpryntedatLondon', 'Londonprinted']:
                     place_of_pub = 'London'
@@ -102,8 +127,8 @@ def extract():
                 
                 
                 
-                written_header = '<file> <no=%s> <filename=%s> <corpus=early_english_books_online> <title=%s> <author=%s> <place_of_publication=%s> \
-<pubdate=%s> <idno=%s> <encoding=utf-8> <text> \n' %(file_number,filename, title, author, place_of_pub, pubdate, idno)
+                written_header = '<file> <no=%s> <filename=%s> <corpus=early_english_books_online> <title=%s> <author=%s> \
+<pubdate=%s> <keywords=%s> <place_of_publication=%s> <publisher=%s> <idno=%s> <encoding=utf-8> <text> \n' %(file_number,filename, title, author, pubdate, keywords, place_of_pub, publisher, idno)
                 
                 
                 
@@ -223,10 +248,36 @@ def subcorpus():
                         break
                 #print(idno)
                 
+                for x in range(10, len(content)):
+                    while ('<PUBLISHER>' not in content[x]): 
+                        x=x+1
+                        if x == len(content)-1:
+                            publisher= ''
+                            break
+                    if x !=len(content)-1:
+                        publisher= re.findall('<PUBLISHER>.*?</PUBLISHER>',content[x])[0][11:-12]
+                        break
+                    else:
+                        break
+                    
+                for x in range(0, len(content)):
+                    while ('<TERM>' not in content[x]): 
+                        x=x+1
+                        if x == len(content)-1:
+                            keywords= ''
+                            break
+                    if x !=len(content)-1:
+                        keywords= re.findall('<TERM>.*?</TERM>',content[x])[0][6:-7]
+                        if keywords[-1] =='.':
+                            keywords= keywords[:-1]
+                        break
+                    else:
+                        break
                 
                 
-                written_header = '<file> <no=%s> <filename=%s> <corpus=early_english_books_online> <title=%s> <author=%s> <place_of_publication=%s> \
-<pubdate=%s> <idno=%s> <encoding=utf-8> <text> \n' %(file_number,filename, title, author, place_of_pub, pubdate, idno)
+                
+                written_header = '<file> <no=%s> <filename=%s> <corpus=EEBO_samples> <title=%s> <author=%s> \
+<pubdate=%s> <keywords=%s> <place_of_publication=%s> <publisher=%s> <idno=%s> <encoding=utf-8> <text> \n' %(file_number,filename, title, author, pubdate, keywords, place_of_pub, publisher, idno)
                 
                 for n in all_dates:
                     if str(n) in pubdate:
@@ -355,10 +406,35 @@ def subcorpus2():
                         break
                 #print(idno)
                 
+                for x in range(10, len(content)):
+                    while ('<PUBLISHER>' not in content[x]): 
+                        x=x+1
+                        if x == len(content)-1:
+                            publisher= ''
+                            break
+                    if x !=len(content)-1:
+                        publisher= re.findall('<PUBLISHER>.*?</PUBLISHER>',content[x])[0][11:-12]
+                        break
+                    else:
+                        break
+                    
+                for x in range(0, len(content)):
+                    while ('<TERM>' not in content[x]): 
+                        x=x+1
+                        if x == len(content)-1:
+                            keywords= ''
+                            break
+                    if x !=len(content)-1:
+                        keywords= re.findall('<TERM>.*?</TERM>',content[x])[0][6:-7]
+                        if keywords[-1] =='.':
+                            keywords= keywords[:-1]
+                        break
+                    else:
+                        break
                 
                 
-                written_header = '<file> <no=%s> <filename=%s> <corpus=early_english_books_online> <title=%s> <author=%s> <place_of_publication=%s> \
-<pubdate=%s> <idno=%s> <encoding=utf-8> <text> \n' %(file_number,filename, title, author, place_of_pub, pubdate, idno)
+                written_header = '<file> <no=%s> <filename=%s> <corpus=EEBO_letters> <title=%s> <author=%s> \
+<pubdate=%s> <keywords=%s> <place_of_publication=%s> <publisher=%s> <idno=%s> <encoding=utf-8> <text> \n' %(file_number,filename, title, author, pubdate, keywords, place_of_pub, publisher, idno)
                 
                 div_flag=0
                 for x in range(0, len(content)):

@@ -1,8 +1,8 @@
 import os,re
 
 def extract():
-    org_path = r'F:\freelance work\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\CEDXML'
-    extracted_path = r'F:\freelance work\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
+    org_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\CEDXML'
+    extracted_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
     
     files = os.listdir(org_path)
     #print(files)
@@ -83,13 +83,13 @@ def extract():
 
 
 def markup():
-    extracted_path = r'F:\freelance work\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
-    cleaned_path = r'F:\freelance work\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\cleaned'
+    extracted_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
+    cleaned_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\cleaned'
     
     files= os.listdir(extracted_path)
     
     for file in files:
-        #file= 'D1CCHAPM.txt'
+        #file= 'D1MDANDO.txt'
         path_extracted_file= os.path.join(extracted_path, file)
         
         
@@ -194,8 +194,46 @@ def markup():
 
                     content[x]= re.sub(re.escape(c[0]),'', result)
                     
+            content[x] = re.sub('<FOREIGN', '<foreign', content[x])
+            content[x] = re.sub('/FOREIGN', '/foreign', content[x])
+            if '<foreign' in content[x]:
+                total_foreign = content[x]
+                while '/foreign>' not in content[x]:
+                    total_foreign = total_foreign[:-1]+content[x+1]
+                    content[x] = content[x][:-1]+content[x+1]
+                    content[x] = re.sub('<FOREIGN', '<foreign', content[x])
+                    content[x] = re.sub('/FOREIGN', '/foreign', content[x])
+                    content[x+1] = re.sub('<FOREIGN', '<foreign', content[x+1])
+                    content[x+1] = re.sub('/FOREIGN', '/foreign', content[x+1])
+                    x=x+1
                 
-            
+                #content[x] = content[x][:-1]+content[x+1]
+                    
+                    
+                foreign = re.findall('<foreign.*?foreign>', total_foreign)
+                for fo in foreign:
+                    total_foreign = re.sub(re.escape(fo), '...', total_foreign)
+                content[x] = total_foreign
+                    
+            content[x] = re.sub('<dialogueText>', '', content[x])
+            content[x] = re.sub('</dialogueText>', '', content[x])
+            content[x] = re.sub('<dialogue>', '', content[x])
+            content[x] = re.sub('</dialogue>', '', content[x])
+            content[x] = re.sub('<nonSpeech>', '', content[x])
+            content[x] = re.sub('</nonSpeech>', '', content[x])
+            content[x] = re.sub('<font>', '', content[x])
+            content[x] = re.sub('</font>', '', content[x])
+            content[x] = re.sub('<head>', '', content[x])
+            content[x] = re.sub('</head>', '', content[x])
+            content[x] = re.sub('</sample>', '', content[x])
+            content[x] = re.sub('<emendation>', '', content[x])
+            content[x] = re.sub('</emendation>', '', content[x])
+            content[x] = re.sub('<frontMatter>', '', content[x])
+            content[x] = re.sub('</frontMatter>', '', content[x])
+            content[x] = re.sub('</textBibliography>', '', content[x])
+            content[x] = re.sub('</dialogueHeader>', '', content[x])
+                
+            '''
             if '<foreign' in content[x]:
                     
                 foreign = re.findall('<foreign.*?foreign>', content[x])
@@ -213,7 +251,7 @@ def markup():
                     #print(content[x])
                     content[x] = content[x].split('</foreign>')[1]
                     
-                    '''
+                    
                     if 'FOREIGN' in content[x+1]:
                         content[x+1] = content[x+1].split('</FOREIGN>')[1]
                     else:
@@ -227,7 +265,8 @@ def markup():
                         print(content[x])
                         print(content[x+1])
                         content[x+1] = content[x+1].split('</FOREIGN>')[1]
-                    '''
+                '''
+                    
                 
 
             if '<pagebreak' in content[x]:

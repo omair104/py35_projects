@@ -2,8 +2,8 @@ import os,re
 
 
 def extract():
-    org_path = r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\All'
-    extracted_path = r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\extracted'
+    org_path = r'F:\freelance work\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\All'
+    extracted_path = r'F:\freelance work\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\extracted'
     
     files = os.listdir(org_path)
     #print(files)
@@ -218,7 +218,7 @@ def extract():
             with open(path_org_file2) as g:
                 content_text = g.readlines()
             x=0      
-            while(x<len(content_text)-1):        
+            while(x<len(content_text)):        
                 f.write(content_text[x])
                 x=x+1
             f.write('\n</text> </file>')
@@ -307,4 +307,4 @@ def markup():
                 f.write(content[x])
                 x=x+1
 extract() 
-markup()
+#markup()

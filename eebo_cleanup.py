@@ -1,8 +1,8 @@
 import os, re
 
 def subcorpus_markup():
-    extracted_path = r'C:\data\EEBO Phase 2\EEBO TCP Phase 2'
-    cleaned_path =   r'C:\data\EEBO Phase 2\EEBO TCP Phase 2_cleaned'
+    extracted_path = r'C:\data\EEBO Phase 2\EEBO Phase 2 letters'
+    cleaned_path =   r'C:\data\EEBO Phase 2\EEBO Phase 2 letters_cleaned'
     
     files= os.listdir(extracted_path)
     
@@ -33,11 +33,11 @@ def subcorpus_markup():
                 
                 SUB_start= re.findall('<SUB>',content[x])
                 for s in SUB_start:
-                    content[x] = re.sub(re.escape(s), '&', content[x])
+                    content[x] = re.sub(re.escape(s), '%', content[x])
                     
                 SUB_end= re.findall('</SUB>',content[x])
                 for s in SUB_end:
-                    content[x] = re.sub(re.escape(s), '&', content[x])
+                    content[x] = re.sub(re.escape(s), '%', content[x])
                     
                     
                 if 'FIGDESC' in content[x]:

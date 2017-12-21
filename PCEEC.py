@@ -3,13 +3,13 @@ from collections import defaultdict
 import re
 
 def extract():
-    directory_file = r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\extracted_new'
+    directory_file = r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\extracted_new'
     
-    org_file_directory=r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\txt'
+    org_file_directory=r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\txt'
     
     files = os.listdir(org_file_directory)
     count = 0
-    g=open(r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\ed_comments.txt', 'w')
+    g=open(r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\number_words.txt', 'w')
     for file in files:
         data_dict = defaultdict(list)
         file_name = file
@@ -33,19 +33,30 @@ def extract():
             
             x=0
             while x<len(content):
-            #for x in content:
+                '''
                 if '{ED' in content[x]:# and '{' not in x: #and 'CO' not in x and '@' not in x and '_C' not in x:
                     if '}' in content[x]:
-                        #print(file)
-                        #print(content[x])
-                        g.write(file)
+                        a= re.findall('{ED.*?}', content[x])
+
+                        #g.write(file)
                         g.write('\n')
-                        g.write(content[x])
+                        for b in a:
+                            g.write(b)
+                        #g.write(content[x])
                     else:
-                        g.write(file)
+                        #g.write(file)
                         g.write('\n')
                         g.write(content[x])
                         g.write(content[x+1])
+                '''
+                if '-1' in content[x] or '-2' in content[x] or '-3' in content[x] or '-4' in content[x] or '-5' in content[x] or '-6' in content[x] or '-7' in content[x] or '-8' in content[x] or '-9' in content[x]:
+                    words = content[x].split()
+                    for word in words:
+                        if '-1' in word or '-2' in word or '-3' in word or '-4' in word or '-5' in word or '-6' in word or '-7' in word or '-8' in word or '-9' in word:
+                            g.write(word)
+                            g.write('\n')
+                    
+
                 x=x+1
 
                 '''
@@ -191,6 +202,18 @@ def markup():
         
         x=0
         while x< len(content):
+            
+            if '{COM:' in content[x] and'}' not in content[x]:
+                content[x] = content[x][:-1] + content[x+1]
+                content[x+1]=''
+            if '{ED:' in content[x] and'}' not in content[x]:
+                content[x] = content[x][:-1] + content[x+1]
+                content[x+1]=''
+            if '{REMOVE:' in content[x] and'}' not in content[x]:
+                content[x] = content[x][:-1] + content[x+1]
+                content[x+1]=''
+                
+                
             
             if '{TEXT:' in content[x]:
                 removes= re.findall('{TEXT:.*?}', content[x])

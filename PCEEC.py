@@ -184,8 +184,8 @@ def extract():
                 
 
 def markup():
-    extracted_path = r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\extracted_new'
-    cleaned_path = r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\cleaned'
+    extracted_path = r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\extracted_new'
+    cleaned_path = r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\cleaned'
     
     files= os.listdir(extracted_path)
     
@@ -203,6 +203,42 @@ def markup():
         x=0
         while x< len(content):
             
+            content[x] = re.sub(re.escape('{COM:logicall_REPEATED}'), 'logicall', content[x])
+            content[x] = re.sub(re.escape('{COM:therefore_repeated}'), 'therefore', content[x])
+            content[x] = re.sub(re.escape('{COM:to_REPEATED}'), 'to', content[x])
+            content[x] = re.sub(re.escape('{COM:have_REPEATED}'), 'have', content[x])
+            content[x] = re.sub(re.escape('{COM:I_REPEATED}'), 'I', content[x])
+            content[x] = re.sub(re.escape('{COM:his_repeated}'), 'his', content[x])
+            content[x] = re.sub(re.escape('{COM:a_REPEATED}'), 'a', content[x])
+            content[x] = re.sub(re.escape('{COM:bee_REPEATED}'), 'bee', content[x])
+            content[x] = re.sub(re.escape('{COM:bin_REPEATED}'), 'bin', content[x])
+            content[x] = re.sub(re.escape('{COM:so_moche_money_REPEATED}'), 'so moche money', content[x])
+            content[x] = re.sub(re.escape('{COM:the_REPEATED}'), 'the', content[x])
+            content[x] = re.sub(re.escape('{COM:and_repeated}'), 'and', content[x])
+            content[x] = re.sub(re.escape('{ED:as_you_elected_REPEATED}'), 'as you elected', content[x])
+            content[x] = re.sub(re.escape('{ED:"for_+t"_REPEATED_IN_MS.} }'), 'for þ', content[x])
+            content[x] = re.sub(re.escape('{ED:IN_THE_MARGIN:1_Pet._3}'), '1 Pet. 3', content[x])
+            content[x] = re.sub(re.escape('{ED:IN_THE_MARGIN:1_Peter_2,_2,_3}'), '1 Peter 2, 2, 3', content[x])
+            content[x] = re.sub(re.escape('{ED:IN_THE_MARGIN:10_Matt.}'), '10 Matt.', content[x])
+            content[x] = re.sub(re.escape('{ED:IN_THE_MARGIN:Chpt._2}'), 'Chpt. 2', content[x])
+            content[x] = re.sub(re.escape('{ED:IN_THE_MARGIN:Ezekiel,_34}'), 'Ezekiel, 34', content[x])
+            content[x] = re.sub(re.escape('{ED:IN_THE_MARGIN:Joan._17}'), 'Joan. 17', content[x])
+            content[x] = re.sub(re.escape('{ED:IN_THE_MARGIN:Matt._10,_v._22}'), 'Matt. 10, v. 22', content[x])
+            content[x] = re.sub(re.escape('{ED:IN_THE_MARGIN:Matt._10,_v._33}'), 'Matt. 10, v. 33', content[x])
+            content[x] = re.sub(re.escape('{ED:IN_THE_MARGIN:Rom._8}'), 'Rom. 8', content[x])
+            content[x] = re.sub(re.escape('{ED:IN_THE_MARHIN:Heb._9}'), 'Heb. 9', content[x])
+            
+            content[x] = re.sub(re.escape('Audoeno {COM:DIAERESIS_ABOVE_THE_LETTER_e_IN_AUDOENO}'), 'Audoëno', content[x])
+            content[x] = re.sub(re.escape('the pedacos de historia {COM:A_CEDILLA_ON_LETTER_c_IN_pedacos}'), 'the pedaços de historia', content[x])
+            content[x] = re.sub(re.escape('Naive {COM:DIAERESIS_ABOVE_THE_i_IN_Naive}'), 'Naïve', content[x])
+            content[x] = re.sub(re.escape('{COM:A_CEDILLA_ON_THE_C_IN_THE_PREVIOUS_WORD}'), '', content[x])
+            content[x] = re.sub(re.escape('facon'), 'façon', content[x])
+            content[x] = re.sub(re.escape('{COM:DIAERESIS_ABOVE_a_IN_blasd}'), '', content[x])
+            content[x] = re.sub(re.escape('blasd'), 'bläsd', content[x])
+            content[x] = re.sub(re.escape('have hard'), 'have härd', content[x])
+            content[x] = re.sub(re.escape('aboveseid'), 'aböveseid', content[x])
+
+            
             if '{COM:' in content[x] and'}' not in content[x]:
                 content[x] = content[x][:-1] + content[x+1]
                 content[x+1]=''
@@ -212,6 +248,13 @@ def markup():
             if '{REMOVE:' in content[x] and'}' not in content[x]:
                 content[x] = content[x][:-1] + content[x+1]
                 content[x+1]=''
+                
+            if '<em>' in content[x] and'</em>' not in content[x]:
+                content[x] = content[x][:-1] + content[x+1]
+                content[x+1]=''
+            if '<em>' in content[x] and'</em>' not in content[x]:
+                content[x] = content[x][:-1] + content[x+2]
+                content[x+2]=''
                 
                 
             
@@ -355,8 +398,16 @@ def markup():
             
             content[x] = re.sub('`', '', content[x])
             
-            content[x] = re.sub('-2', 'r', content[x])
+            content[x] = re.sub('-1', '', content[x])
+            content[x] = re.sub('-2', '', content[x])
+            content[x] = re.sub('-3', '', content[x])
             content[x] = re.sub('-4', '', content[x])
+            content[x] = re.sub('-5', '', content[x])
+            content[x] = re.sub('-6', '', content[x])
+            content[x] = re.sub('-7', '', content[x])
+            content[x] = re.sub('-8', '', content[x])
+            content[x] = re.sub('-9', '', content[x])
+
             content[x] = re.sub(re.escape('+L'), '$', content[x])
             
             
@@ -463,5 +514,5 @@ def markup():
         
         
     
-extract()
-#markup()
+#extract()
+markup()

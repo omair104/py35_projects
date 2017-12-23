@@ -227,13 +227,13 @@ def extract():
         
         
 def markup():
-    extracted_path = r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\extracted'
-    cleaned_path = r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\cleaned'
+    extracted_path = r'F:\freelance work\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\extracted'
+    cleaned_path = r'F:\freelance work\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\cleaned'
     
     files= os.listdir(extracted_path)
     
     for file in files:
-        #file= 'D1CCHAPM.txt'
+        file= '1649_Winter_PretiousTreasury.txt'
         path_extracted_file= os.path.join(extracted_path, file)
         
         
@@ -243,7 +243,7 @@ def markup():
         file= os.path.join(cleaned_path, str(file))
         f= open(file, 'w+', encoding='utf-8')
         
-        x=0
+        x=378
         while x< len(content):
             
             if '[^' in content[x]:
@@ -313,8 +313,6 @@ def markup():
             
             if x<len(content)-1:
                 content[x] = re.sub('/', '', content[x])
-            
-            
 
             f.write(content[x])
             x=x+1

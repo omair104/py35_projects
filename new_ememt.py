@@ -8,6 +8,7 @@ def extract():
     files = os.listdir(org_path)
     #print(files)
     file_number=0
+    h=open(r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\number_3.txt', 'w')
     for file in files:
 
         if os.path.splitext(file)[1]=='.html' and 'NORM' not in file:# and '_pt' not in file:
@@ -21,7 +22,7 @@ def extract():
                 content = f.readlines()
                 
             filename= file[:-10]
-    
+            
             
             for x in range(0, len(content)):
                 while ('<p><strong>Year of publication:' not in content[x]): 
@@ -208,7 +209,7 @@ def extract():
             written_header = '<file> <no=%s> <filename=%s> <corpus=early_modern_english_medical_texts> <title=%s> <author=%s> \
 <dates_of_birth_and_death=%s> <translator=%s> <pubdate=%s> <genre=medical> <pubformat=%s> <place_of_publication=%s> <publisher=%s> <idno=%s> <encoding=utf-8> <text> \n' %(file_number,filename, title, author, dob3, translator, pubdate, physical_description, place_publication, publisher, idno)
             
-            print(written_header)
+            #print(written_header)
         
             file= os.path.join(extracted_path, str(filename)+'.txt')
             f= open(file, 'w+', encoding='utf-8')
@@ -217,6 +218,17 @@ def extract():
             path_org_file2= os.path.join(org_path, filename + '.txt')
             with open(path_org_file2) as g:
                 content_text = g.readlines()
+                
+            for x in range(1, len(content_text)):
+                if '3' in content_text[x] and '[' not in content_text[x]:
+                    #h.write(file)
+                    #h.write('\n')
+                    words = content_text[x].split()
+                    for word in words:
+                        if '3' in word:
+                            h.write(word)
+                            h.write('\n')
+                    
             x=0      
             while(x<len(content_text)-1):        
                 f.write(content_text[x])
@@ -316,5 +328,5 @@ def markup():
 
             f.write(content[x])
             x=x+1
-#extract() 
-markup()
+extract() 
+#markup()

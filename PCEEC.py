@@ -82,7 +82,11 @@ def extract():
                 if header.startswith('AUTHOR'):
                     header_letter= content[x+2]
                     header_3 = header_letter.split(':')
+                    
                     letter_name = header_3[1]
+                    
+                    if not any(char.isdigit() for char in letter_name):
+                        letter_name= header_3[1] + '_'+ header_3[2] + '_' + header_3[3][0:4]
         
                     text_start_line = x+3
                     data_dict[letter_name].append(text_start_line)

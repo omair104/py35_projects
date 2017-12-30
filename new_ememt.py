@@ -8,7 +8,7 @@ def extract():
     files = os.listdir(org_path)
     #print(files)
     file_number=0
-    h=open(r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\number_3.txt', 'w')
+    h=open(r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT Full Corpus\EMEMT Full Corpus\EMEMT_Corpus\brackets.txt', 'w')
     for file in files:
 
         if os.path.splitext(file)[1]=='.html' and 'NORM' not in file:# and '_pt' not in file:
@@ -220,13 +220,15 @@ def extract():
                 content_text = g.readlines()
                 
             for x in range(1, len(content_text)):
-                if '3' in content_text[x] and '[' not in content_text[x]:
-                    #h.write(file)
-                    #h.write('\n')
-                    words = content_text[x].split()
-                    for word in words:
-                        if '3' in word:
-                            h.write(word)
+                if '[' in content_text[x]:
+                    #words = content_text[x].split()
+                    c = content_text[x].count('[')
+                    if c>1:
+                        ab = re.findall('\[.*?\[', content_text[x])
+                        if ']' not in ab[0]:
+                            h.write(filename)
+                            h.write('\n')
+                            h.write(content_text[x])
                             h.write('\n')
                     
             x=0      

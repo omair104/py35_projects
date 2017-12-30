@@ -1,7 +1,9 @@
 import os, re
 
-extracted_path = r'H:\circle\text_extractor\changes\EMEMT_new\EMEMT_new'
-cleaned_path = r'H:\circle\text_extractor\changes\EMEMT_new\cleaned'
+extracted_path = r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT_marco\EMEMT'
+cleaned_path = r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT_marco\cleaned'
+
+g=open(r'H:\circle\text_extractor\new corpus\EMEMT\EMEMT_marco\nepe.txt', 'w', encoding='utf-8')
 
 files= os.listdir(extracted_path)
 
@@ -13,39 +15,122 @@ for file in files:
     with open(path_extracted_file, encoding='utf-8') as f:
         content = f.readlines()
         
-    file= os.path.join(cleaned_path, str(file))
-    f= open(file, 'w+', encoding='utf-8')
+    file2= os.path.join(cleaned_path, str(file))
+    h= open(file2, 'w+', encoding='utf-8')
     
     x=0
     while x< len(content):
         
         
         if x>1:
-            content[x] = re.sub('w~', 'w\'', content[x])
-            content[x] = re.sub('k~', 'k\'', content[x])
-            content[x] = re.sub('<text>', '</text>', content[x])
-            content[x] = re.sub('<file>', '</file>', content[x])
-        else:
-            content[x] = re.sub('<author=>', '<author=X>', content[x])
-            content[x] = re.sub('<author=unknown>', '<author=X>', content[x])
-            content[x] = re.sub('Attributed to', '', content[x])
-            content[x] = re.sub(re.escape('['), '', content[x])
-            content[x] = re.sub(re.escape(']'), '', content[x])
-            content[x] = re.sub(re.escape('.>'), '>', content[x])
             
-            content[x] = re.sub('>  <', '> <', content[x])
-            content[x] = re.sub('Attributed to', '', content[x])
-            content[x] = re.sub('Attributed to', '', content[x])
-            content[x] = re.sub('Attributed to', '', content[x])
+            content[x] = re.sub('a~', 'ā', content[x])
+            content[x] = re.sub('A~', 'Ā', content[x])
+            content[x] = re.sub('e~', 'ē', content[x])
+            content[x] = re.sub('E~', 'Ē', content[x])
+            content[x] = re.sub('i~', 'ī', content[x])
+            content[x] = re.sub('I~', 'Ī', content[x])
+            content[x] = re.sub('o~', 'ō', content[x])
+            content[x] = re.sub('O~', 'Ō', content[x])
+            content[x] = re.sub('u~', 'ū', content[x])
+            content[x] = re.sub('U~', 'Ū', content[x])
+            content[x] = re.sub('v~', 'v̄', content[x])
+            content[x] = re.sub('V~', 'V̄', content[x])
+            content[x] = re.sub('y~', 'ȳ', content[x])
+            content[x] = re.sub('Y~', 'Ȳ', content[x])
+            content[x] = re.sub('m~', 'm̄', content[x])
+            content[x] = re.sub('M~', 'M̄', content[x])
+            content[x] = re.sub('p~', 'p̄', content[x])
+            content[x] = re.sub('P~', 'P̄', content[x])
             
-            content[x] = re.sub('anonymous', 'X', content[x])
-            content[x] = re.sub('Anonymous', 'X', content[x])
-            content[x] = re.sub('ȝ', '3', content[x])
             
+            content[x] = re.sub('Æ~', 'Ǣ', content[x])
+            content[x] = re.sub('æ~', 'ǣ', content[x])
+            content[x] = re.sub('B~', 'B̄', content[x])
+            content[x] = re.sub('b~', 'b̄', content[x])
+            content[x] = re.sub('C~', 'C̄', content[x])
+            content[x] = re.sub('c~', 'c̄', content[x])
+            content[x] = re.sub('D~', 'D̄', content[x])
+            content[x] = re.sub('d~', 'd̄', content[x])
+            content[x] = re.sub('G~', 'Ḡ', content[x])
+            content[x] = re.sub('g~', 'ḡ', content[x])
+            content[x] = re.sub('J~', 'J̄', content[x])
+            content[x] = re.sub('j~', 'j̄', content[x])
+            content[x] = re.sub('K~', 'K̄', content[x])
+            content[x] = re.sub('k~', 'k̄', content[x])
+            content[x] = re.sub('M~', 'M̄', content[x])
+            
+            content[x] = re.sub('m~', 'm̄', content[x])
+            content[x] = re.sub('N~', 'N̄', content[x])
+            
+            content[x] = re.sub('n~', 'n̄', content[x])
+            
+            content[x] = re.sub('P~', 'P̄', content[x])
+            content[x] = re.sub('p~', 'p̄', content[x])
+            content[x] = re.sub('Q~', 'Q̄', content[x])
+            content[x] = re.sub('q~', 'q̄', content[x])
+            
+            content[x] = re.sub('R~', 'R̄', content[x])
+            content[x] = re.sub('r~', 'r̄', content[x])
+            content[x] = re.sub('S~', 'S̄', content[x])
+            content[x] = re.sub('s~', 's̄', content[x])
+            content[x] = re.sub('T~', 'T̄', content[x])
+            content[x] = re.sub('t~', 't̄', content[x])
+            content[x] = re.sub('W~', 'W̄', content[x])
+            content[x] = re.sub('w~', 'w̄', content[x])
+            content[x] = re.sub('X~', 'X̄', content[x])
+            content[x] = re.sub('x~', 'x̄', content[x])
+            content[x] = re.sub('Z~', 'Z̄', content[x])
+            content[x] = re.sub('z~', 'z̄', content[x])
+
+            
+            
+            content[x] = re.sub('~', 'ō', content[x])
+            content[x] = re.sub(' \'s', '\'s', content[x])
+            
+            content[x] = re.sub('`', '', content[x])
+            
+            content[x] = re.sub('-1', '', content[x])
+            content[x] = re.sub('-2', '', content[x])
+            content[x] = re.sub('-3', '', content[x])
+            content[x] = re.sub('-4', '', content[x])
+            content[x] = re.sub('-5', '', content[x])
+            content[x] = re.sub('-6', '', content[x])
+            content[x] = re.sub('-7', '', content[x])
+            content[x] = re.sub('-8', '', content[x])
+            content[x] = re.sub('-9', '', content[x])
+
+            content[x] = re.sub(re.escape('+L'), '$', content[x])
+            
+            
+            content[x] = re.sub(re.escape('+g'), 'ƿ', content[x])
+            content[x] = re.sub(re.escape('+G'), 'Ƿ', content[x])
+            content[x] = re.sub(re.escape('+t'), 'þ', content[x])
+            content[x] = re.sub(re.escape('+T'), 'Þ', content[x])
+            content[x] = re.sub(re.escape('+d'), 'ð', content[x])
+            content[x] = re.sub(re.escape('+D'), 'Ð', content[x])
+            content[x] = re.sub(re.escape('+o'), 'œ', content[x])
+            content[x] = re.sub(re.escape('+O'), 'Œ', content[x])
+            content[x] = re.sub(re.escape('+a'), 'æ', content[x])
+            content[x] = re.sub(re.escape('+A'), 'Æ', content[x])
+            
+            
+            content[x] = re.sub(re.escape('brou3t'), 'brouȝt', content[x])
+            content[x] = re.sub(re.escape('Li3arde'), 'Liȝarde', content[x])
+            content[x] = re.sub(re.escape('mi3t'), 'miȝt', content[x])
+            content[x] = re.sub(re.escape('ne3e'), 'neȝe', content[x])
+            content[x] = re.sub(re.escape('neƿe'), 'neȝe', content[x])
+            content[x] = re.sub(re.escape('practi3e'), 'practiȝe', content[x])
+            content[x] = re.sub(re.escape('ri3t'), 'riȝt', content[x])
+            
+            
+            content[x] = re.sub(re.escape('+e'), 'e', content[x])
+            content[x] = re.sub(re.escape('+pit'), 'pit', content[x])
+     
 
             
     
         
 
-        f.write(content[x])
+        h.write(content[x])
         x=x+1

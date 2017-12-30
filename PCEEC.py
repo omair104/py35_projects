@@ -83,10 +83,12 @@ def extract():
                     header_letter= content[x+2]
                     header_3 = header_letter.split(':')
                     
-                    letter_name = header_3[1]
+                    header_1 = content[x].split(':')[1]
+                    author_first_name = header_1[0:4]
+                    letter_name = header_3[1] + '_' + header_3[3][0:4]+ '_' + author_first_name
                     
-                    if not any(char.isdigit() for char in letter_name):
-                        letter_name= header_3[1] + '_'+ header_3[2] + '_' + header_3[3][0:4]
+                    if not any(char.isdigit() for char in header_3[1]):
+                        letter_name= header_3[1] + '_'+ header_3[2] + '_' + header_3[3][0:4] + '_' + author_first_name
         
                     text_start_line = x+3
                     data_dict[letter_name].append(text_start_line)
@@ -125,7 +127,7 @@ def extract():
                 header_letter= content[header_start+2]
                 header_3 = header_letter.split(':')
                 #print(header_3)
-                letter_name = header_3[1].rstrip()
+                letter_name = file_name.rstrip()
                 letter_name= letter_name.upper()
                 letter_date = header_3[3].rstrip()
                 letter_date = re.sub("[^0-9]", "", letter_date)
@@ -231,6 +233,8 @@ def markup():
             content[x] = re.sub(re.escape('{ED:IN_THE_MARGIN:Matt._10,_v._33}'), 'Matt. 10, v. 33', content[x])
             content[x] = re.sub(re.escape('{ED:IN_THE_MARGIN:Rom._8}'), 'Rom. 8', content[x])
             content[x] = re.sub(re.escape('{ED:IN_THE_MARHIN:Heb._9}'), 'Heb. 9', content[x])
+            content[x] = re.sub(re.escape('{ED:bespeake_WRITTEN_ABOVE_appoint}'), 'bespeake', content[x])
+            content[x] = re.sub(re.escape('{ED:ordinary_WRITTEN_ABOVE_table}'), 'ordinary', content[x])
             
             content[x] = re.sub(re.escape('Audoeno {COM:DIAERESIS_ABOVE_THE_LETTER_e_IN_AUDOENO}'), 'Audoëno', content[x])
             content[x] = re.sub(re.escape('the pedacos de historia {COM:A_CEDILLA_ON_LETTER_c_IN_pedacos}'), 'the pedaços de historia', content[x])
@@ -262,11 +266,7 @@ def markup():
                 
                 
             
-            if '{TEXT:' in content[x]:
-                removes= re.findall('{TEXT:.*?}', content[x])
-                for remove in removes:
-                    content[x] = re.sub(re.escape('{TEXT:'), '', content[x])  
-                    content[x] = re.sub(re.escape('}'), '', content[x])  
+            
                     
             if '$' in content[x]:
                 #print(content[x])
@@ -297,6 +297,22 @@ def markup():
                 for remove in removes:
                     content[x] = re.sub(re.escape(remove), '', content[x]) 
                     
+            if '{ED' in content[x]:
+                removes= re.findall('{ED:.*?}', content[x])
+                for remove in removes:
+                    content[x] = re.sub(re.escape(remove), '', content[x]) 
+                    
+            if '{REMOVE' in content[x]:
+                removes= re.findall('{REMOVE:.*?}', content[x])
+                for remove in removes:
+                    content[x] = re.sub(re.escape(remove), '', content[x]) 
+                    
+                    
+            if '{TEXT:' in content[x]:
+                removes= re.findall('{TEXT:.*?}', content[x])
+                for remove in removes:
+                    content[x] = re.sub(re.escape('{TEXT:'), '', content[x])  
+                    #content[x] = re.sub(re.escape('}'), '', content[x])  
             
             
             content[x] = re.sub('out_of', 'out of', content[x])
@@ -518,5 +534,5 @@ def markup():
         
         
     
-#extract()
+extract()
 markup()

@@ -83,38 +83,8 @@ for file in files:
             content[x] = re.sub('Z~', 'Z̄', content[x])
             content[x] = re.sub('z~', 'z̄', content[x])
 
-            
-            
             content[x] = re.sub('~', 'ō', content[x])
-            content[x] = re.sub(' \'s', '\'s', content[x])
-            
-            content[x] = re.sub('`', '', content[x])
-            
-            content[x] = re.sub('-1', '', content[x])
-            content[x] = re.sub('-2', '', content[x])
-            content[x] = re.sub('-3', '', content[x])
-            content[x] = re.sub('-4', '', content[x])
-            content[x] = re.sub('-5', '', content[x])
-            content[x] = re.sub('-6', '', content[x])
-            content[x] = re.sub('-7', '', content[x])
-            content[x] = re.sub('-8', '', content[x])
-            content[x] = re.sub('-9', '', content[x])
 
-            content[x] = re.sub(re.escape('+L'), '$', content[x])
-            
-            
-            content[x] = re.sub(re.escape('+g'), 'ƿ', content[x])
-            content[x] = re.sub(re.escape('+G'), 'Ƿ', content[x])
-            content[x] = re.sub(re.escape('+t'), 'þ', content[x])
-            content[x] = re.sub(re.escape('+T'), 'Þ', content[x])
-            content[x] = re.sub(re.escape('+d'), 'ð', content[x])
-            content[x] = re.sub(re.escape('+D'), 'Ð', content[x])
-            content[x] = re.sub(re.escape('+o'), 'œ', content[x])
-            content[x] = re.sub(re.escape('+O'), 'Œ', content[x])
-            content[x] = re.sub(re.escape('+a'), 'æ', content[x])
-            content[x] = re.sub(re.escape('+A'), 'Æ', content[x])
-            
-            
             content[x] = re.sub(re.escape('brou3t'), 'brouȝt', content[x])
             content[x] = re.sub(re.escape('Li3arde'), 'Liȝarde', content[x])
             content[x] = re.sub(re.escape('mi3t'), 'miȝt', content[x])

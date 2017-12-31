@@ -33,21 +33,16 @@ def extract():
             
             x=0
             while x<len(content):
-                '''
-                if '{ED' in content[x]:# and '{' not in x: #and 'CO' not in x and '@' not in x and '_C' not in x:
-                    if '}' in content[x]:
-                        a= re.findall('{ED.*?}', content[x])
+                
+                if 'z' in content[x]:# and '{' not in x: #and 'CO' not in x and '@' not in x and '_C' not in x:
+                    words = content[x].split()
+                    for word in words: 
+                        if 'z' in word:
+                            g.write(word)
 
-                        #g.write(file)
-                        g.write('\n')
-                        for b in a:
-                            g.write(b)
-                        #g.write(content[x])
-                    else:
-                        #g.write(file)
-                        g.write('\n')
-                        g.write(content[x])
-                        g.write(content[x+1])
+
+                            g.write('\n')
+
                 '''
                 if '-1' in content[x] or '-2' in content[x] or '-3' in content[x] or '-4' in content[x] or '-5' in content[x] or '-6' in content[x] or '-7' in content[x] or '-8' in content[x] or '-9' in content[x]:
                     words = content[x].split()
@@ -55,18 +50,12 @@ def extract():
                         if '-1' in word or '-2' in word or '-3' in word or '-4' in word or '-5' in word or '-6' in word or '-7' in word or '-8' in word or '-9' in word:
                             g.write(word)
                             g.write('\n')
+                '''
                     
 
                 x=x+1
 
-                '''
-                a = re.findall('\{ED:.*?\}',x)
-                if a != []:
-                    for element in a:
-                        if element not in remove_list:
-                            remove_list.append(element)
-                '''
-                            
+            '''           
             for x in content:
                 a = re.findall('\<P_.*?\>',x)
                 if a != []:
@@ -186,6 +175,7 @@ def extract():
                 f.write(footer)
                 
                 f.close()
+            '''
             
                 
 
@@ -535,4 +525,4 @@ def markup():
         
     
 extract()
-markup()
+#markup()

@@ -85,18 +85,19 @@ def extract():
 def markup():
     extracted_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
     cleaned_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\cleaned'
+    g=open(r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\foreign2.txt', 'w')
     
     files= os.listdir(extracted_path)
     
-    for file in files:
+    for filename in files:
         #file= 'D1MDANDO.txt'
-        path_extracted_file= os.path.join(extracted_path, file)
+        path_extracted_file= os.path.join(extracted_path, filename)
         
         
         with open(path_extracted_file, encoding='utf-8') as f:
             content = f.readlines()
             
-        file= os.path.join(cleaned_path, str(file))
+        file= os.path.join(cleaned_path, str(filename))
         f= open(file, 'w+', encoding='utf-8')
         
         x=0
@@ -212,6 +213,10 @@ def markup():
                     
                 foreign = re.findall('<foreign.*?foreign>', total_foreign)
                 for fo in foreign:
+                    g.write(filename)
+                    g.write('\n')
+                    g.write(fo[9:-10])
+                    g.write('\n')
                     total_foreign = re.sub(re.escape(fo), '...', total_foreign)
                 content[x] = total_foreign
                     

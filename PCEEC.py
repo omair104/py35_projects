@@ -184,13 +184,13 @@ def extract():
                 
 
 def markup():
-    extracted_path = r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\extracted_new'
-    cleaned_path = r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\cleaned'
+    extracted_path = r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\extracted_new'
+    cleaned_path = r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\cleaned'
     
     files= os.listdir(extracted_path)
     
     for file in files:
-        #file= 'D1CCHAPM.txt'
+        #file= 'BACON_230.txt'
         path_extracted_file= os.path.join(extracted_path, file)
         
         
@@ -259,10 +259,18 @@ def markup():
                 
             
             if '{TEXT:' in content[x]:
-                removes= re.findall('{TEXT:.*?}', content[x])
-                for remove in removes:
-                    content[x] = re.sub(re.escape('{TEXT:'), '', content[x])  
-                    content[x] = re.sub(re.escape('}'), '', content[x])  
+                if 'DELETED' in content[x]:
+                    removes= re.findall('{TEXT:.*?}', content[x])
+                    for remove in removes:
+                        content[x] = re.sub(re.escape(remove), '', content[x]) 
+                else:
+                    removes= re.findall('{TEXT:.*?}', content[x])
+                    for remove in removes:
+                        left = remove
+                        left = re.sub(re.escape('{TEXT:'), '', left)  
+                        left = re.sub(re.escape('}'), '', left)  
+                        content[x] = re.sub(re.escape(remove), left, content[x])  
+                        #content[x] = re.sub(re.escape('}'), '', content[x])  
                     
             if '$' in content[x]:
                 #print(content[x])
@@ -290,6 +298,11 @@ def markup():
             '''  
             if '{COM' in content[x]:
                 removes= re.findall('{COM:.*?}', content[x])
+                for remove in removes:
+                    content[x] = re.sub(re.escape(remove), '', content[x]) 
+                    
+            if '{ED' in content[x]:
+                removes= re.findall('{ED:.*?}', content[x])
                 for remove in removes:
                     content[x] = re.sub(re.escape(remove), '', content[x]) 
                     

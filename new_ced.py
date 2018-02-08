@@ -1,8 +1,8 @@
 import os,re
 
 def extract():
-    org_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\CEDXML'
-    extracted_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
+    org_path = r'F:\freelance work\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\CEDXML'
+    extracted_path = r'F:\freelance work\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
     
     files = os.listdir(org_path)
     #print(files)
@@ -83,8 +83,8 @@ def extract():
 
 
 def markup():
-    extracted_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
-    cleaned_path = r'H:\circle\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\cleaned'
+    extracted_path = r'F:\freelance work\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\extracted'
+    cleaned_path = r'F:\freelance work\text_extractor\new corpus\CED\A Corpus of English Dialogues 1560-1760_ORIGINAL\2507\cleaned'
     
     files= os.listdir(extracted_path)
     
@@ -193,14 +193,15 @@ def markup():
                     c = re.findall('<comment.*?comment>', result)
 
                     content[x]= re.sub(re.escape(c[0]),'', result)
-                    
+            
+            
             content[x] = re.sub('<FOREIGN', '<foreign', content[x])
             content[x] = re.sub('/FOREIGN', '/foreign', content[x])
             if '<foreign' in content[x]:
                 total_foreign = content[x]
                 while '/foreign>' not in content[x]:
                     total_foreign = total_foreign[:-1]+content[x+1]
-                    content[x] = content[x][:-1]+content[x+1]
+                    content[x+1] = content[x][:-1]+content[x+1]
                     content[x] = re.sub('<FOREIGN', '<foreign', content[x])
                     content[x] = re.sub('/FOREIGN', '/foreign', content[x])
                     content[x+1] = re.sub('<FOREIGN', '<foreign', content[x+1])
@@ -209,12 +210,89 @@ def markup():
                 
                 #content[x] = content[x][:-1]+content[x+1]
                     
-                    
+            '''
                 foreign = re.findall('<foreign.*?foreign>', total_foreign)
                 for fo in foreign:
                     total_foreign = re.sub(re.escape(fo), '...', total_foreign)
                 content[x] = total_foreign
+            '''
                     
+            content[x] = re.sub('<foreign>Asmoroth ascende, veni Asmoroth, Asmoroth veni.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>ACTUS SECUNDUS, SCHAENA PRIMA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>De Arte Amandi</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Non oportet sapientem in aduersis dolore concidere</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Aduersis te proba, vt fortunam, cum necesse fuerit,patienter insultantem feras</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>In nomine Iesus vnde venis? E purgatorio</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Ex pura eleemosyna,</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Maius peccatum habes</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Claro micante Auro</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>ACTUS PRIMUS, SCENA PRIMA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>SCENA SECUNDA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>SCENA TERTIA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>SCOENA QUARTA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>ACTUS SECUNDUS. SCOENA PRIMA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>SCOENA SECUNDA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>SCENA TERTIA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Legere et non intelligere negligere est</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>In oreduorum aut trium testium peribit qui interficitur. Nemooccidatur uno contra se dicente testimonium.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Non stabit unus testis contra aliquem: quicquidillud peccati, et facinoris fuerit. Sed in ore duorum auttrium testium stabit omne verbum.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Nulli negabimus, nulli vendemus,nulli deferremus Justitiam</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Mi dispiace infinamente</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>interrumpato, gli Affari</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>una belissima Sorella in Verita`</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>O Cara Inghilterra</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Il nostro amico</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Il mio proprio Gusto</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>una Introduzione</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Senza Ceremonie</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Cosa e` questa -- Cosa, e`</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>O! Spiritoso Amico</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>il mio</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Conduttore` in tutte le Partite</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Multi ob stultitiam non putabant,multi ob ignorantiam non videbant, multi ob pravitatemnon credebant, &amp; non credendo conjurationem adjuvabant</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Quodnunquam de hoc facto animam in vita sua ipse purgaret.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Si steterit testis mendax contra hominem accusans cumprevaricatione, stabunt ambo, quorum causa est ante dominum, inconspectu sacerdotum, et judicum, qui fuerint in diebus illis</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Si judicaveritis tanquam jamjudicandi estis</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>ACTUS SECUNDUS, SCHAENA PRIMA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>ACTUS SECUNDUS, SCHAENA SECUNDA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>ACTUS TERTIUS, SCHAENA PRIMA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>ACTUS TERTIUS, SCAENA SECUNDA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>ACTUS TERTIUS, SCHAENA TERTIA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>ACTUS TERTIUS, SCHAENA QUARTA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>ACTUS TERTIUS, SCHAENA QUINTA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>ACTUS QUARTUS, SCHAENA PRIMA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>ACTUS QUARTUS, SHAENA SECUNDA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>ACTUS QUARTUS. SCHAENA TERTIA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>ACTUS QUARTUS, SCHAENA QUARTA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>ACTUS QUARTUS, SCHAENA QUINTA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>ACTUS QUINTUS, SHAENA PRIMA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>ACTUS QUINTUS, SCHAENA SECUNDA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>ACTUS QUINTUS, SCHAENA TERTIA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>ACTUS QUINTUS, SCHAENA QUARTA.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Patresaequum esse censent nos iam iam a pueris illico nasci senes, neque illarum affines esse rerum, quas fert adolescentia</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Est modusin rebus sunt, certi denique fines</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>O tempora, O mores, O Poetarum flores</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Ambubaiarum collegia, pharmacapolae, mendici mimi balatrones, hoc genus omne.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Exercizo te Conjuro te in Nomine, &amp;c.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Je l\'escorche</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>O Cives, Cives, quaerunda, pecuniaprimum,Virtus post nummos</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Nec tam praesentes alibi cognoscere Divos</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Manemirer</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Fe, fe, fe, fe, mai foy, il fait for chando,   Ie man voi a leCourt la grand affaires.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Ouy mette le au mon</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>de-peech</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>que ay ieoublie</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>sed nunquampenetravit, quamvis inter femine, semen suum consumpsit</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Gratus mihi aduenis quid me cum vis.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Optatum venis paucis to volo.</foreign>', '...', content[x])
+            content[x] = re.sub('<foreign>Si quid industria nostra tibi faciet dic      queso.</foreign>', '...', content[x])
+            content[x] = re.sub('si mal-a proposito', '...', content[x])
+            content[x] = re.sub('un Poco', '...', content[x])
+            content[x] = re.sub('CUM PRIUILEGO', '...', content[x])
+                    
+            content[x] = re.sub('<foreign>', '', content[x])
+            content[x] = re.sub('</foreign>', '', content[x])
+                         
             content[x] = re.sub('<dialogueText>', '', content[x])
             content[x] = re.sub('</dialogueText>', '', content[x])
             content[x] = re.sub('<dialogue>', '', content[x])
@@ -232,40 +310,6 @@ def markup():
             content[x] = re.sub('</frontMatter>', '', content[x])
             content[x] = re.sub('</textBibliography>', '', content[x])
             content[x] = re.sub('</dialogueHeader>', '', content[x])
-                
-            '''
-            if '<foreign' in content[x]:
-                    
-                foreign = re.findall('<foreign.*?foreign>', content[x])
-                for fo in foreign:
-                    content[x] = re.sub(re.escape(fo), '...', content[x])
-                    
-                if foreign== []:
-                    foreign_start = re.findall('<foreign.*?\n', content[x])
-                    for fo in foreign_start:
-                        content[x] = re.sub(re.escape(fo), '...', content[x])
-                    
-                    while 'foreign' not in content[x]:
-                        x=x+1
-                    #print(file)
-                    #print(content[x])
-                    content[x] = content[x].split('</foreign>')[1]
-                    
-                    
-                    if 'FOREIGN' in content[x+1]:
-                        content[x+1] = content[x+1].split('</FOREIGN>')[1]
-                    else:
-                        content[x+1] = re.sub('<foreign', '<FOREIGN', content[x+1])
-                        content[x+1] = re.sub('/foreign', '/FOREIGN', content[x+1])
-                        x=x+1
-                        content[x+1] = re.sub('<foreign', '<FOREIGN', content[x+1])
-                        content[x+1] = re.sub('/foreign', '/FOREIGN', content[x+1])
-                    
-                        print(file)
-                        print(content[x])
-                        print(content[x+1])
-                        content[x+1] = content[x+1].split('</FOREIGN>')[1]
-                '''
                     
                 
 
@@ -312,6 +356,8 @@ def markup():
                 
                 content[x] = re.sub('~', '', content[x])
                 content[x] = re.sub('è', 'e', content[x])
+                
+                content[x] = re.sub(re.escape('`'), '', content[x])
                 
                 content[x] = re.sub('<omission type="line" />', '', content[x])
                 content[x] = re.sub('<omission type="sentence" />', '', content[x])

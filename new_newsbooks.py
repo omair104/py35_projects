@@ -1,16 +1,18 @@
 import os,re,time
-from ctypes.test.test_pep3118 import Complete
+from collections import defaultdict
+data_dict = defaultdict(list)
 
 def extract():
-    org_path = r'H:\circle\text_extractor\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\all'
-    extracted_path = r'H:\circle\text_extractor\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\extracted'
+    org_path = r'F:\freelance work\text_extractor\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\all'
+    extracted_path = r'F:\freelance work\text_extractor\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\extracted'
     
-    #file_i= os.path.join(extracted_path, 'meta'+'.txt')
-    #g= open(file_i, 'w+', encoding='utf-8')
+    file_i= os.path.join(extracted_path, 'meta'+'.txt')
+    g= open(file_i, 'w+', encoding='utf-8')
     
     files = os.listdir(org_path)
     #print(files)
     file_number=0
+    
     for file in files:
         file_number= file_number+1
         path_org_file= os.path.join(org_path, file)
@@ -95,38 +97,49 @@ def extract():
             
         
         while(x<len(content)-1):    
-            '''
-            if '<i>' in content[x]:
-                a = re.findall('<i>.*?</i>', content[x])  
-                g.write(filename)
-                g.write('\n')
-                for b in a:
-                    g.write(b)
-                g.write('\n')  
-            '''
+            
+            #if '>' in content[x] and '> ' not in content[x]:# and 'level' not in content[x] and '<hr />' not in content[x] and '</newsbookText>' not in content[x] and 'img' not in content[x] and not content[x].startswith('<'):
+            words = content[x].split()
+            for word in words:
+                data_dict[word].append('a')
+            
+                    
+                    #g.write(filename)
+                    #g.write('\n')
+                    #g.write(content[x])
+                    #g.write('\n')  
+            
             f.write(content[x])
             x=x+1
         
             
         f.write('\n</text> </file>')
         f.close
+    
+    for name in data_dict:
+        g.write(name)
+        g.write('\n')
+        
         
 def markup():
-    extracted_path = r'H:\circle\text_extractor\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\extracted'
-    cleaned_path = r'H:\circle\text_extractor\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\cleaned'
+    extracted_path = r'F:\freelance work\text_extractor\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\extracted'
+    cleaned_path = r'F:\freelance work\text_extractor\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\cleaned'
     
     files= os.listdir(extracted_path)
     
-    for file in files:
+    file_i= r'F:\freelance work\text_extractor\new corpus\Newsbooks\The Lancaster Newsbooks Corpus (17th century)\2531\meta.txt'
+    g= open(file_i, 'w+', encoding='utf-8')
+    
+    for file2 in files:
         #print(file)
         #file= 'D1CCHAPM.txt'
-        path_extracted_file= os.path.join(extracted_path, file)
+        path_extracted_file= os.path.join(extracted_path, file2)
         
         
         with open(path_extracted_file) as f:
             content = f.readlines()
             
-        file= os.path.join(cleaned_path, str(file))
+        file= os.path.join(cleaned_path, str(file2))
         f= open(file, 'w+', encoding='utf-8')
         
         x=0
@@ -179,79 +192,79 @@ def markup():
                 content[x] = re.sub('&apos;', '\'', content[x])
                 content[x] = re.sub('&nbsp', ' ', content[x])
             
-                content[x] = re.sub('&Agrave;', 'Ã€', content[x])
-                content[x] = re.sub('&Aacute;', 'Ã�', content[x])
-                content[x] = re.sub('&Acirc;', 'Ã‚', content[x])
-                content[x] = re.sub('&Atilde;', 'Ä€', content[x])
-                content[x] = re.sub('&aring;', 'Ã¥', content[x])
-                content[x] = re.sub('&Aring;', 'Ã‚', content[x])
-                content[x] = re.sub('&AElig;', 'Ã†', content[x])
-                content[x] = re.sub('&Egrave;', 'Ãˆ', content[x])
-                content[x] = re.sub('&Eacute;', 'Ã‰', content[x])
-                content[x] = re.sub('&Ecirc;', 'ÃŠ', content[x])
-                content[x] = re.sub('&Igrave;', 'ÃŒ', content[x])
-                content[x] = re.sub('&Iacute;', 'Ã�', content[x])
-                content[x] = re.sub('&Icirc;', 'ÃŽ', content[x])
-                content[x] = re.sub('&ETH;', 'Ã�', content[x])
-                content[x] = re.sub('&Ograve;', 'Ã’', content[x])
-                content[x] = re.sub('&Oacute;', 'Ã“', content[x])
-                content[x] = re.sub('&Ocirc;', 'Ã”', content[x])
-                content[x] = re.sub('&Otilde;', 'ÅŒ', content[x])
-                content[x] = re.sub('&Ugrave;', 'Ã™', content[x])
-                content[x] = re.sub('&Uacute;', 'Ãš', content[x])
-                content[x] = re.sub('&Ucirc;', 'Ã›', content[x])
-                content[x] = re.sub('&THORN;', 'Ãž', content[x])
+                content[x] = re.sub('&Agrave;', 'À', content[x])
+                content[x] = re.sub('&Aacute;', 'Á', content[x])
+                content[x] = re.sub('&Acirc;', 'Â', content[x])
+                content[x] = re.sub('&Atilde;', 'Ā', content[x])
+                content[x] = re.sub('&aring;', 'å', content[x])
+                content[x] = re.sub('&Aring;', 'Â', content[x])
+                content[x] = re.sub('&AElig;', 'Æ', content[x])
+                content[x] = re.sub('&Egrave;', 'È', content[x])
+                content[x] = re.sub('&Eacute;', 'É', content[x])
+                content[x] = re.sub('&Ecirc;', 'Ê', content[x])
+                content[x] = re.sub('&Igrave;', 'Ì', content[x])
+                content[x] = re.sub('&Iacute;', 'Í', content[x])
+                content[x] = re.sub('&Icirc;', 'Î', content[x])
+                content[x] = re.sub('&ETH;', 'Ð', content[x])
+                content[x] = re.sub('&Ograve;', 'Ò', content[x])
+                content[x] = re.sub('&Oacute;', 'Ó', content[x])
+                content[x] = re.sub('&Ocirc;', 'Ô', content[x])
+                content[x] = re.sub('&Otilde;', 'Ō', content[x])
+                content[x] = re.sub('&Ugrave;', 'Ù', content[x])
+                content[x] = re.sub('&Uacute;', 'Ú', content[x])
+                content[x] = re.sub('&Ucirc;', 'Û', content[x])
+                content[x] = re.sub('&THORN;', 'Þ', content[x])
                 
-                content[x] = re.sub('&agrave;', 'Ã ', content[x])
-                content[x] = re.sub('&aacute;', 'Ã¡', content[x])
-                content[x] = re.sub('&acirc;', 'Ã¢', content[x])
-                content[x] = re.sub('&atilde;', 'Ä�', content[x])
-                content[x] = re.sub('&aelig;', 'Ã¦', content[x])
-                content[x] = re.sub('&egrave;', 'Ã¨', content[x])
-                content[x] = re.sub('&eacute;', 'Ã©', content[x])
-                content[x] = re.sub('&ecirc;', 'Ãª', content[x])
-                content[x] = re.sub('&igrave;', 'Ã¬', content[x])
-                content[x] = re.sub('&iacute;', 'Ã­', content[x])
-                content[x] = re.sub('&icirc;', 'Ã®', content[x])
-                content[x] = re.sub('&eth;', 'Ã°', content[x])
-                content[x] = re.sub('&ograve;', 'Ã²', content[x])
-                content[x] = re.sub('&oacute;', 'Ã³', content[x])
-                content[x] = re.sub('&ocirc;', 'Ã´', content[x])
-                content[x] = re.sub('&otilde;', 'Å�', content[x])
-                content[x] = re.sub('&ugrave;', 'Ã¹', content[x])
-                content[x] = re.sub('&uacute;', 'Ãº', content[x])
-                content[x] = re.sub('&ucirc;', 'Ã»', content[x])
-                content[x] = re.sub('&thorn;', 'Ã¾', content[x])
-                content[x] = re.sub('&OElig;', 'Å’', content[x])
-                content[x] = re.sub('&oelig;', 'Å“', content[x])
-                content[x] = re.sub('&mdash;', 'â€“', content[x])
-                content[x] = re.sub('&ndash;', 'â€“', content[x])
-                content[x] = re.sub('&rsquo;', 'â€™', content[x])
-                content[x] = re.sub('&prime;', 'â€²', content[x])
+                content[x] = re.sub('&agrave;', 'à', content[x])
+                content[x] = re.sub('&aacute;', 'á', content[x])
+                content[x] = re.sub('&acirc;', 'â', content[x])
+                content[x] = re.sub('&atilde;', 'ā', content[x])
+                content[x] = re.sub('&aelig;', 'æ', content[x])
+                content[x] = re.sub('&egrave;', 'è', content[x])
+                content[x] = re.sub('&eacute;', 'é', content[x])
+                content[x] = re.sub('&ecirc;', 'ê', content[x])
+                content[x] = re.sub('&igrave;', 'ì', content[x])
+                content[x] = re.sub('&iacute;', 'í', content[x])
+                content[x] = re.sub('&icirc;', 'î', content[x])
+                content[x] = re.sub('&eth;', 'ð', content[x])
+                content[x] = re.sub('&ograve;', 'ò', content[x])
+                content[x] = re.sub('&oacute;', 'ó', content[x])
+                content[x] = re.sub('&ocirc;', 'ô', content[x])
+                content[x] = re.sub('&otilde;', 'ō', content[x])
+                content[x] = re.sub('&ugrave;', 'ù', content[x])
+                content[x] = re.sub('&uacute;', 'ú', content[x])
+                content[x] = re.sub('&ucirc;', 'û', content[x])
+                content[x] = re.sub('&thorn;', 'þ', content[x])
+                content[x] = re.sub('&OElig;', 'Œ', content[x])
+                content[x] = re.sub('&oelig;', 'œ', content[x])
+                content[x] = re.sub('&mdash;', '–', content[x])
+                content[x] = re.sub('&ndash;', '–', content[x])
+                content[x] = re.sub('&rsquo;', '’', content[x])
+                content[x] = re.sub('&prime;', '′', content[x])
                 
-                content[x] = re.sub('&auml;', 'Ã¤', content[x])
-                content[x] = re.sub('&Auml;', 'Ã„', content[x])
-                content[x] = re.sub('&ccedil;', 'Ã§', content[x])
-                content[x] = re.sub('&Ccedil;', 'Ã‡', content[x])
-                content[x] = re.sub('&euml;', 'Ã«', content[x])
-                content[x] = re.sub('&Euml;', 'Ã‹', content[x])
-                content[x] = re.sub('&iuml;', 'Ã¯', content[x])
-                content[x] = re.sub('&Iuml;', 'Ã�', content[x])
-                content[x] = re.sub('&ntilde;', 'Ã±', content[x])
-                content[x] = re.sub('&Ntilde;', 'Ã‘', content[x])
-                content[x] = re.sub('&oslash;', 'Ç¿', content[x])
-                content[x] = re.sub('&Oslash;', 'Ã˜', content[x])
-                content[x] = re.sub('&ouml;', 'Ã¶', content[x])
-                content[x] = re.sub('&Ouml;', 'Ã–', content[x])
-                content[x] = re.sub('&uuml;', 'Ã¼', content[x])
-                content[x] = re.sub('&Uuml;', 'Ãœ', content[x])
-                content[x] = re.sub('&yacute;', 'Ã½', content[x])
-                content[x] = re.sub('&Yacute;', 'Ã�', content[x])
-                content[x] = re.sub('&yuml;', 'Ã¿', content[x])
-                content[x] = re.sub('&scaron;', 'Å¡', content[x])
-                content[x] = re.sub('&Scaron;', 'Å ', content[x])
-                content[x] = re.sub('&szlig;', 'ÃŸ', content[x])
-                content[x] = re.sub('&Yuml;', 'Å¸', content[x])
+                content[x] = re.sub('&auml;', 'ä', content[x])
+                content[x] = re.sub('&Auml;', 'Ä', content[x])
+                content[x] = re.sub('&ccedil;', 'ç', content[x])
+                content[x] = re.sub('&Ccedil;', 'Ç', content[x])
+                content[x] = re.sub('&euml;', 'ë', content[x])
+                content[x] = re.sub('&Euml;', 'Ë', content[x])
+                content[x] = re.sub('&iuml;', 'ï', content[x])
+                content[x] = re.sub('&Iuml;', 'Ï', content[x])
+                content[x] = re.sub('&ntilde;', 'ñ', content[x])
+                content[x] = re.sub('&Ntilde;', 'Ñ', content[x])
+                content[x] = re.sub('&oslash;', 'ǿ', content[x])
+                content[x] = re.sub('&Oslash;', 'Ø', content[x])
+                content[x] = re.sub('&ouml;', 'ö', content[x])
+                content[x] = re.sub('&Ouml;', 'Ö', content[x])
+                content[x] = re.sub('&uuml;', 'ü', content[x])
+                content[x] = re.sub('&Uuml;', 'Ü', content[x])
+                content[x] = re.sub('&yacute;', 'ý', content[x])
+                content[x] = re.sub('&Yacute;', 'Ý', content[x])
+                content[x] = re.sub('&yuml;', 'ÿ', content[x])
+                content[x] = re.sub('&scaron;', 'š', content[x])
+                content[x] = re.sub('&Scaron;', 'Š', content[x])
+                content[x] = re.sub('&szlig;', 'ß', content[x])
+                content[x] = re.sub('&Yuml;', 'Ÿ', content[x])
 
                 
                 content[x] = re.sub('&ldquo;', '', content[x])
@@ -307,7 +320,7 @@ def markup():
                 content[x] = re.sub('<td colspan="3" rowspan="3">', '', content[x])
                 
                 
-                content[x] = re.sub('&pound;','Â£', content[x])
+                content[x] = re.sub('&pound;','£', content[x])
                 content[x] = re.sub('&euro;' , '', content[x])
                 content[x] = re.sub('&permil;', '', content[x])
                 content[x] = re.sub('&bdquo;' , '', content[x])
@@ -365,15 +378,27 @@ def markup():
                 
                 
                 
-                if x>1 and x!= len(content)-1 and ('>' in content[x] or '<' in content[x]):
-                    print(file)
+                if x>1 and x!= len(content)-1 and ('Phenix' in content[x] ):
+                    print(file2)
                     print(content[x])
+                
+                words = content[x].split()
+                for word in words:
+                    data_dict[word].append(file2)
                 
     
                 f.write(content[x])
                 x=x+1
-
-
-extract()
-markup()
+                
+                
+    print('CAME HERE')
     
+    for name in data_dict:
+        g.write(name)
+        g.write('  ')
+        g.write(data_dict[name][0])
+        g.write('\n')
+
+
+#extract()
+markup()

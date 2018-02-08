@@ -1,15 +1,16 @@
+# -*- coding: utf-8 -*-
 import os
 from collections import defaultdict
 import re
 
 def extract():
-    directory_file = r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\extracted_new'
+    directory_file = r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\extracted_new'
     
-    org_file_directory=r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\txt'
+    org_file_directory=r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\txt'
     
     files = os.listdir(org_file_directory)
     count = 0
-    g=open(r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\number_words.txt', 'w')
+    #g=open(r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\number_words.txt', 'w')
     for file in files:
         data_dict = defaultdict(list)
         file_name = file
@@ -30,42 +31,8 @@ def extract():
             with open(path_org_file) as f:
                 content = f.readlines()
             
-            
-            x=0
-            while x<len(content):
-                '''
-                if '{ED' in content[x]:# and '{' not in x: #and 'CO' not in x and '@' not in x and '_C' not in x:
-                    if '}' in content[x]:
-                        a= re.findall('{ED.*?}', content[x])
 
-                        #g.write(file)
-                        g.write('\n')
-                        for b in a:
-                            g.write(b)
-                        #g.write(content[x])
-                    else:
-                        #g.write(file)
-                        g.write('\n')
-                        g.write(content[x])
-                        g.write(content[x+1])
-                '''
-                if '-1' in content[x] or '-2' in content[x] or '-3' in content[x] or '-4' in content[x] or '-5' in content[x] or '-6' in content[x] or '-7' in content[x] or '-8' in content[x] or '-9' in content[x]:
-                    words = content[x].split()
-                    for word in words:
-                        if '-1' in word or '-2' in word or '-3' in word or '-4' in word or '-5' in word or '-6' in word or '-7' in word or '-8' in word or '-9' in word:
-                            g.write(word)
-                            g.write('\n')
-                    
 
-                x=x+1
-
-                '''
-                a = re.findall('\{ED:.*?\}',x)
-                if a != []:
-                    for element in a:
-                        if element not in remove_list:
-                            remove_list.append(element)
-                '''
                             
             for x in content:
                 a = re.findall('\<P_.*?\>',x)
@@ -81,8 +48,31 @@ def extract():
                 header = (content[x])
                 if header.startswith('AUTHOR'):
                     header_letter= content[x+2]
-                    header_3 = header_letter.split(':')
+                    
+                    header_first = content[x]
+                    header_second = content[x+1]
+                    header_third = content[x+2]
+                    
+                    header_1 = header_first.split(':')
+                    header_2 = header_second.split(':')
+                    header_3 = header_third.split(':')
                     letter_name = header_3[1]
+                    #print(header_1)
+                    
+                    #print(header_2)
+                    if len(header_2)>5:
+                        a = header_2[5]
+                    else:
+                        a=''
+                    letter_name = header_3[1] +'_'+ header_1[1]+ '_' + header_2[1] #+ '_' + header_3[3]#+ '_' #+ a#header_2[5]
+                    letter_name = letter_name.replace(':', '_')
+                    letter_name = letter_name.replace('?', '')
+                    letter_name = letter_name.replace('[', '')
+                    letter_name = letter_name.replace(']', '')
+                    letter_name = letter_name.replace('.', '')
+                    letter_name = letter_name.replace('/', '')
+                    letter_name = letter_name.replace('\n', '')
+                    letter_name = letter_name[0:127]
         
                     text_start_line = x+3
                     data_dict[letter_name].append(text_start_line)
@@ -91,7 +81,7 @@ def extract():
             #print(data_dict)
             for file_name in data_dict:
                 file = os.path.join(directory_file, file_name+'.txt')
-                
+                print(file)
                 f =open(file, 'w+')
                 
                 header_start = data_dict[file_name][0]-3
@@ -121,8 +111,8 @@ def extract():
                 header_letter= content[header_start+2]
                 header_3 = header_letter.split(':')
                 #print(header_3)
-                letter_name = header_3[1].rstrip()
-                letter_name= letter_name.upper()
+                #letter_name = header_3[1].rstrip()
+                #letter_name= letter_name.upper()
                 letter_date = header_3[3].rstrip()
                 letter_date = re.sub("[^0-9]", "", letter_date)
                 letter_autograph= header_3[5].rstrip()
@@ -216,7 +206,6 @@ def markup():
             content[x] = re.sub(re.escape('{COM:the_REPEATED}'), 'the', content[x])
             content[x] = re.sub(re.escape('{COM:and_repeated}'), 'and', content[x])
             content[x] = re.sub(re.escape('{ED:as_you_elected_REPEATED}'), 'as you elected', content[x])
-            content[x] = re.sub(re.escape('{ED:"for_+t"_REPEATED_IN_MS.} }'), 'for þ', content[x])
             content[x] = re.sub(re.escape('{ED:IN_THE_MARGIN:1_Pet._3}'), '1 Pet. 3', content[x])
             content[x] = re.sub(re.escape('{ED:IN_THE_MARGIN:1_Peter_2,_2,_3}'), '1 Peter 2, 2, 3', content[x])
             content[x] = re.sub(re.escape('{ED:IN_THE_MARGIN:10_Matt.}'), '10 Matt.', content[x])
@@ -502,7 +491,7 @@ def markup():
                 content[x] = re.sub('unknown', 'X', content[x])
             
             if x<len(content)-1 and x>1:
-                content[x] = re.sub(re.escape('/'), '', content[x])
+                #content[x] = re.sub(re.escape('/'), '', content[x])
                 content[x] = re.sub(re.escape('<'), '', content[x])
                 content[x] = re.sub(re.escape('>'), '', content[x])
                 
@@ -527,5 +516,5 @@ def markup():
         
         
     
-#extract()
-markup()
+extract()
+#markup()

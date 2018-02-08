@@ -64,7 +64,7 @@ def extract():
                         a = header_2[5]
                     else:
                         a=''
-                    letter_name = header_3[1] +'_'+ header_1[1]+ '_' + header_2[1] #+ '_' + header_3[3]#+ '_' #+ a#header_2[5]
+                    letter_name = header_3[1] +'_'+ header_1[1]+ '_' + header_2[1] + '_' + header_3[2]
                     letter_name = letter_name.replace(':', '_')
                     letter_name = letter_name.replace('?', '')
                     letter_name = letter_name.replace('[', '')
@@ -111,8 +111,8 @@ def extract():
                 header_letter= content[header_start+2]
                 header_3 = header_letter.split(':')
                 #print(header_3)
-                #letter_name = header_3[1].rstrip()
-                #letter_name= letter_name.upper()
+                letter_name = header_3[1].rstrip()
+                letter_name= letter_name.upper()
                 letter_date = header_3[3].rstrip()
                 letter_date = re.sub("[^0-9]", "", letter_date)
                 letter_autograph= header_3[5].rstrip()

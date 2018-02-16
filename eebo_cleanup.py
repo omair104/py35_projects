@@ -1,13 +1,13 @@
 import os, re
-
+g=open(r'C:\data\EEBO Phase 1\plus_words.txt', 'w', encoding='utf-8')
 def subcorpus_markup():
-    extracted_path = r'C:\data\EEBO Phase 2\EEBO Phase 2 letters'
-    cleaned_path =   r'C:\data\EEBO Phase 2\EEBO Phase 2 letters_cleaned'
+    extracted_path = r'C:\data\EEBO Phase 2\EEBO Phase 2 samples'
+    cleaned_path =   r'C:\data\EEBO Phase 2\EEBO Phase 2 samples_cleaned'
     
     files= os.listdir(extracted_path)
     
     for file in files:
-        #file= 'D1CCHAPM.txt'
+        #file= 'A07194.txt'
         path_extracted_file= os.path.join(extracted_path, file)
         
         
@@ -45,6 +45,15 @@ def subcorpus_markup():
                     for fig in figdesc:
                         content[x] = re.sub(re.escape(fig), '', content[x])
                     
+            if x!= len(content)-1 and '<TEXT LANG=' in content[x] and 'eng' not in content[x]:
+                print(file)
+                while 'TEXT>' not in content[x]:
+                    x=x+1
+                content[x]= '...'
+                #print(file)
+                #print(content[x])
+                #break
+                #pass
                     
                     
             content[x] = re.sub('&amp;', '&', content[x])
@@ -62,16 +71,32 @@ def subcorpus_markup():
                 content[x] = re.sub(':black_small_square:', '', content[x])
                 if '=•=' not in content[x]:
                     content[x] = re.sub('•', '', content[x])
+                    
+                content[x] = re.sub('▪', '', content[x])
                 
             else:
                 content[x] = re.sub('unknown', 'X', content[x])
+                content[x] = re.sub('<keywords=>', '<keywords=X>', content[x])
+                content[x] = re.sub(',>', '>', content[x])
+                content[x] = re.sub('\.>', '>', content[x])
+                content[x] = re.sub('\?>', '>', content[x])
 
             
-            if x>1 and x!= len(content)-1 and '<TEXT LANG=' in content[x] and '<TEXT LANG="eng"' not in content[x]:
-                print(file)
-                print(content[x])
-                #break
-                #pass
+            if '▪' in content[x]:
+                #g.write(content[x])
+                #g.write('\n')
+                
+                words = content[x].split()
+                for word in words: 
+                    if '▪' in word:
+                        g.write(file)
+                        g.write('\n')
+                        g.write(word)
+                        g.write('\n')
+                #g.write(content[x]) 
+                
+                
+                
             
             f.write(content[x])
             x=x+1

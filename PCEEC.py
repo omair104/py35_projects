@@ -4,9 +4,9 @@ from collections import defaultdict
 import re
 
 def extract():
-    directory_file = r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\extracted_new'
+    directory_file = r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\extracted_new'
     
-    org_file_directory=r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\txt'
+    org_file_directory=r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\txt'
     
     files = os.listdir(org_file_directory)
     count = 0
@@ -30,6 +30,11 @@ def extract():
             #print(path_org_file)
             with open(path_org_file) as f:
                 content = f.readlines()
+                
+            for x in content:
+                if 'yow}' in x:
+                    print(file)
+                    print(x)
             
 
 
@@ -56,15 +61,12 @@ def extract():
                     header_1 = header_first.split(':')
                     header_2 = header_second.split(':')
                     header_3 = header_third.split(':')
-                    letter_name = header_3[1]
-                    #print(header_1)
-                    
-                    #print(header_2)
+
                     if len(header_2)>5:
                         a = header_2[5]
                     else:
                         a=''
-                    letter_name = header_3[1] +'_'+ header_1[1]+ '_' + header_2[1] + '_' + header_3[2]
+                    letter_name = header_3[1] +'_'+ header_1[1]+ '_' + header_2[1] + '_' + header_3[3]
                     letter_name = letter_name.replace(':', '_')
                     letter_name = letter_name.replace('?', '')
                     letter_name = letter_name.replace('[', '')
@@ -81,43 +83,29 @@ def extract():
             #print(data_dict)
             for file_name in data_dict:
                 file = os.path.join(directory_file, file_name+'.txt')
-                print(file)
+                #print(file)
                 f =open(file, 'w+')
                 
                 header_start = data_dict[file_name][0]-3
-                #print(header_start)
                 header = content[header_start]
-                #print(header)
                 header_1 = header.split(':')
-                #print(header_1)
                 author_name = header_1[1].rstrip()
                 author_gender= header_1[2].rstrip()
                 author_gender=author_gender.lower()
-                author_dob= header_1[4].rstrip()
                 author_age= header_1[5].rstrip()
                 
                 
                 header_recipient= content[header_start+1]
                 header_2 = header_recipient.split(':')
-                #print(header_2)
-                recipient_name = header_2[1].rstrip()
-                recipient_gender= header_2[2].rstrip()
-                recipient_dob= header_2[4].rstrip()
-                if len(header_2)>5:
-                    recipient_age= header_2[5].rstrip()
-                else:
-                    recipient_age='_'
+
                 
                 header_letter= content[header_start+2]
                 header_3 = header_letter.split(':')
-                #print(header_3)
-                letter_name = header_3[1].rstrip()
-                letter_name= letter_name.upper()
+
                 letter_date = header_3[3].rstrip()
                 letter_date = re.sub("[^0-9]", "", letter_date)
-                letter_autograph= header_3[5].rstrip()
                 corpus='parsed_corpus_of_early_english_correspondence'
-                num=letter_name[-1]
+
                 
                 count = count +1
                 author_name= author_name.lower().title()
@@ -140,6 +128,20 @@ def extract():
                 if letter_date=='':
                     letter_date='X'
                 
+                header_1 = header.split(':')
+                header_2 = header_recipient.split(':')
+                header_3 = header_letter.split(':')
+
+                letter_name = header_3[1] +'_'+ header_1[1]+ '_' + header_2[1] + '_' + header_3[3]
+                letter_name = letter_name.replace(':', '_')
+                letter_name = letter_name.replace('?', '')
+                letter_name = letter_name.replace('[', '')
+                letter_name = letter_name.replace(']', '')
+                letter_name = letter_name.replace('.', '')
+                letter_name = letter_name.replace('/', '')
+                letter_name = letter_name.replace('\n', '')
+                letter_name = letter_name[0:127]
+                    
                 written_header = '<file> <no=%s> <filename=%s> <corpus=%s> <author=%s> <authorage=%s> <author_gender=%s> <pubdate=%s> <genre1=letter> <encoding=utf-8> <text> \n' %(count, letter_name, corpus, author_name, author_age, author_gender,letter_date) 
                 
                 f.write(written_header+ '\n')
@@ -174,8 +176,8 @@ def extract():
                 
 
 def markup():
-    extracted_path = r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\extracted_new'
-    cleaned_path = r'F:\freelance work\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\cleaned'
+    extracted_path = r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\extracted_new'
+    cleaned_path = r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\cleaned'
     
     files= os.listdir(extracted_path)
     
@@ -400,15 +402,16 @@ def markup():
             
             content[x] = re.sub('`', '', content[x])
             
-            content[x] = re.sub('-1', '', content[x])
-            content[x] = re.sub('-2', '', content[x])
-            content[x] = re.sub('-3', '', content[x])
-            content[x] = re.sub('-4', '', content[x])
-            content[x] = re.sub('-5', '', content[x])
-            content[x] = re.sub('-6', '', content[x])
-            content[x] = re.sub('-7', '', content[x])
-            content[x] = re.sub('-8', '', content[x])
-            content[x] = re.sub('-9', '', content[x])
+            if x>1:
+                content[x] = re.sub('-1', '', content[x])
+                content[x] = re.sub('-2', '', content[x])
+                content[x] = re.sub('-3', '', content[x])
+                content[x] = re.sub('-4', '', content[x])
+                content[x] = re.sub('-5', '', content[x])
+                content[x] = re.sub('-6', '', content[x])
+                content[x] = re.sub('-7', '', content[x])
+                content[x] = re.sub('-8', '', content[x])
+                content[x] = re.sub('-9', '', content[x])
 
             content[x] = re.sub(re.escape('+L'), '$', content[x])
             
@@ -425,7 +428,7 @@ def markup():
             content[x] = re.sub(re.escape('+A'), 'Æ', content[x])
             
             content[x] = re.sub('yoW', 'yow', content[x])
-            content[x] = re.sub('-SBJ', 'yow', content[x])
+            #content[x] = re.sub('-SBJ', 'yow', content[x])
             
             content[x] = re.sub('{him}', 'him', content[x])
             content[x] = re.sub('{TEXT:ore}', 'ore', content[x])
@@ -434,21 +437,25 @@ def markup():
             content[x] = re.sub('{TEXT:cannot}', 'cannot', content[x])
 
             content[x] = re.sub('_ @', '', content[x])
-            content[x] = re.sub('_C ODE', '', content[x])
-            content[x] = re.sub('_CO DE', '', content[x])
-            content[x] = re.sub('_COD E', '', content[x])
-            content[x] = re.sub('_C', '', content[x])
-            content[x] = re.sub('_CO', '', content[x])
-            content[x] = re.sub('_COD', '', content[x])
             content[x] = re.sub('_CODE_X', '', content[x])
+            content[x] = re.sub('_COD E', '', content[x])
+            content[x] = re.sub('_COD', '', content[x])
+            content[x] = re.sub('_CO DE', '', content[x])
+            content[x] = re.sub('_CO', '', content[x])
+            content[x] = re.sub('_C ODE', '', content[x])
+            content[x] = re.sub('_C', '', content[x])
+            
+            
+            
             content[x] = re.sub('_CODE_VB', '', content[x])
             content[x] = re.sub('_MD', '', content[x])
             content[x] = re.sub('_CODE_NP', '', content[x])
             content[x] = re.sub('_CODE_NP-OB1', '', content[x])
-            content[x] = re.sub('_NP', '', content[x])
+            
             content[x] = re.sub('_NP-SBJ', '', content[x])
             content[x] = re.sub('_NP-OB1', '', content[x])
             content[x] = re.sub('_NP-OB2', '', content[x])
+            content[x] = re.sub('_NP', '', content[x])
             content[x] = re.sub('_BED', '', content[x])
             content[x] = re.sub('_BE', '', content[x])
             content[x] = re.sub('_BEN', '', content[x])

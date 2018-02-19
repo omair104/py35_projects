@@ -1,8 +1,8 @@
 import os, re
-g=open(r'C:\data\EEBO Phase 1\plus_words.txt', 'w', encoding='utf-8')
+g=open(r'C:\data\EEBO Phase 2\q_lang.txt', 'w', encoding='utf-8')
 def subcorpus_markup():
-    extracted_path = r'C:\data\EEBO Phase 2\EEBO Phase 2 samples'
-    cleaned_path =   r'C:\data\EEBO Phase 2\EEBO Phase 2 samples_cleaned'
+    extracted_path = r'C:\data\EEBO Phase 2\EEBO TCP Phase 2'
+    cleaned_path =   r'C:\data\EEBO Phase 2\EEBO TCP Phase 2_cleaned'
     
     files= os.listdir(extracted_path)
     
@@ -19,6 +19,11 @@ def subcorpus_markup():
         
         x=0
         while x< len(content):
+            
+            if '<Q LANG=' in content[x]:
+                g.write(file)
+                g.write(content[x])
+                g.write('\n')
             
             if x>1 and x!= len(content)-1:
                 SUP_start= re.findall('<SUP>',content[x])
@@ -45,7 +50,7 @@ def subcorpus_markup():
                     for fig in figdesc:
                         content[x] = re.sub(re.escape(fig), '', content[x])
                     
-            if x!= len(content)-1 and '<TEXT LANG=' in content[x] and 'eng' not in content[x]:
+            if x!= len(content)-1 and '<TEXT LANG=' in content[x] and 'eng' not in content[x] and 'sco' not in content[x]:
                 print(file)
                 while 'TEXT>' not in content[x]:
                     x=x+1
@@ -68,6 +73,8 @@ def subcorpus_markup():
                 content[x] = re.sub('¶', '', content[x])
                 content[x] = re.sub('❧', '', content[x])
                 content[x] = re.sub('☞', '', content[x])
+                content[x] = re.sub('\*', '', content[x])
+                content[x] = re.sub('✚', '', content[x])
                 content[x] = re.sub(':black_small_square:', '', content[x])
                 if '=•=' not in content[x]:
                     content[x] = re.sub('•', '', content[x])
@@ -80,12 +87,17 @@ def subcorpus_markup():
                 content[x] = re.sub(',>', '>', content[x])
                 content[x] = re.sub('\.>', '>', content[x])
                 content[x] = re.sub('\?>', '>', content[x])
+                content[x] = re.sub('<place_of_publication=EnpryntedinthecyteofLondon>', '<place_of_publication=London>', content[x])
+                content[x] = re.sub('<publisher=Printed,>', '<publisher=X>', content[x])
+                content[x] = re.sub('<publisher=Printed>', '<publisher=X>', content[x])
 
             
-            if '▪' in content[x]:
-                #g.write(content[x])
-                #g.write('\n')
+            if '<Q LANG=' in content[x]:
+                g.write(file)
+                g.write(content[x])
+                g.write('\n')
                 
+                '''
                 words = content[x].split()
                 for word in words: 
                     if '▪' in word:
@@ -94,7 +106,7 @@ def subcorpus_markup():
                         g.write(word)
                         g.write('\n')
                 #g.write(content[x]) 
-                
+                '''
                 
                 
             

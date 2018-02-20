@@ -1,8 +1,8 @@
 import os, re
 g=open(r'C:\data\EEBO Phase 2\q_lang.txt', 'w', encoding='utf-8')
 def subcorpus_markup():
-    extracted_path = r'C:\data\EEBO Phase 2\EEBO TCP Phase 2'
-    cleaned_path =   r'C:\data\EEBO Phase 2\EEBO TCP Phase 2_cleaned'
+    extracted_path = r'C:\data\EEBO Phase 1\EEBO Phase 1 letters'
+    cleaned_path =   r'C:\data\EEBO Phase 1\EEBO Phase 1 letters_cleaned'
     
     files= os.listdir(extracted_path)
     
@@ -84,10 +84,15 @@ def subcorpus_markup():
             else:
                 content[x] = re.sub('unknown', 'X', content[x])
                 content[x] = re.sub('<keywords=>', '<keywords=X>', content[x])
-                content[x] = re.sub(',>', '>', content[x])
-                content[x] = re.sub('\.>', '>', content[x])
-                content[x] = re.sub('\?>', '>', content[x])
+                content[x] = re.sub(',> <idno', '> <idno', content[x])
+                content[x] = re.sub('\.> <idno', '> <idno', content[x])
+                content[x] = re.sub('\?> <idno', '> <idno', content[x])
+                content[x] = re.sub('\:> <idno', '> <idno', content[x])
+                content[x] = re.sub('\;> <idno', '> <idno', content[x])
+                content[x] = re.sub('\]> <idno', '> <idno', content[x])
                 content[x] = re.sub('<place_of_publication=EnpryntedinthecyteofLondon>', '<place_of_publication=London>', content[x])
+                content[x] = re.sub('<place_of_publication=AtMalborowinthelandeofHesseieAntwerp>', '<place_of_publication=Antwerp>', content[x])
+                content[x] = re.sub('<place_of_publication=PrintedatLondonandreprintedatEdinburgh>', '<place_of_publication=London and Edinburgh>', content[x])
                 content[x] = re.sub('<publisher=Printed,>', '<publisher=X>', content[x])
                 content[x] = re.sub('<publisher=Printed>', '<publisher=X>', content[x])
 

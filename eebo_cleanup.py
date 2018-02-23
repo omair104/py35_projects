@@ -1,8 +1,8 @@
 import os, re
 g=open(r'C:\data\EEBO Phase 2\q_lang.txt', 'w', encoding='utf-8')
 def subcorpus_markup():
-    extracted_path = r'C:\data\EEBO Phase 1\EEBO Phase 1 letters'
-    cleaned_path =   r'C:\data\EEBO Phase 1\EEBO Phase 1 letters_cleaned'
+    extracted_path = r'C:\data\EEBO Phase 2\EEBO TCP Phase 2'
+    cleaned_path =   r'C:\data\EEBO Phase 2\EEBO TCP Phase 2'
     
     files= os.listdir(extracted_path)
     

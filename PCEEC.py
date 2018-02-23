@@ -3,6 +3,7 @@ import os
 from collections import defaultdict
 import re
 
+g=open(r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\dollar_words.txt', 'w', encoding='utf-8')
 def extract():
     directory_file = r'H:\circle\text_extractor\Parsed Corpus of Early English Correspondence (RAW AND FULL)\2510\PCEEC\corpus\extracted_new'
     
@@ -32,9 +33,9 @@ def extract():
                 content = f.readlines()
                 
             for x in content:
-                if 'yow}' in x:
-                    print(file)
-                    print(x)
+                if (('$' in x and 'TEXT' not in x) or ('$' in x and '<em>' in x) )and '$' not in x.split()[-1]:
+                    g.write(file)
+                    g.write(x)
             
 
 
@@ -521,5 +522,5 @@ def markup():
         
         
     
-#extract()
-markup()
+extract()
+#markup()

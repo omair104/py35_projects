@@ -2,8 +2,8 @@
 import os,re
 
 def extract():
-    org_path = r'C:\data\EEBO Phase 1\New folder2'
-    extracted_path = r'C:\data\EEBO Phase 1\EEBO TCP Phase 1'
+    org_path = r'C:\data\EEBO Phase 2\New folder2'
+    extracted_path = r'C:\data\EEBO Phase 2\EEBO TCP Phase 2'
     #org_path = r'C:\data\EEBO_new\New folder2'
     #extracted_path = r'C:\data\EEBO_new\extracted'
     file_number=0
@@ -141,8 +141,8 @@ def extract():
                  
                 while(x<len(content)-1):      
                     
-                    if '+' in content[x]:
-                        g.write(content[x])  
+                    #if '+' in content[x]:
+                     #   g.write(content[x])  
                         
                     f.write(content[x])
                     x=x+1
@@ -491,6 +491,6 @@ def subcorpus2():
                             all_dates.remove(n)
                             break
 
-#extract()
-subcorpus()
-subcorpus2()
+extract()
+#subcorpus()
+#subcorpus2()

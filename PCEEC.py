@@ -248,6 +248,23 @@ def markup():
                 content[x] = content[x][:-1] + content[x+2]
                 content[x+2]=''
                 
+            em_starts = content[x].count('<em>')
+            em_ends = content[x].count('</em>')
+            if em_starts>em_ends:
+                content[x] = content[x][:-1] + content[x+1]
+                content[x+1]=''
+                
+            em_starts = content[x].count('<em>')
+            em_ends = content[x].count('</em>')
+            if em_starts>em_ends:
+                content[x] = content[x][:-1] + content[x+2]
+                content[x+2]=''
+                
+            em_starts = content[x].count('<em>')
+            em_ends = content[x].count('</em>')
+            if em_starts>em_ends:
+                content[x] = content[x][:-1] + content[x+3]
+                content[x+3]=''
                 
             
             if '{TEXT:' in content[x]:
@@ -277,6 +294,9 @@ def markup():
                 #print(removes)
                 for remove in removes:
                     content[x] = re.sub(re.escape(remove), '', content[x])   
+                    
+            #content[x] = re.sub('<em>', '', content[x])
+            #content[x] = re.sub('</em>', '', content[x])
             
             content[x] = re.sub(re.escape('{to}P'), '', content[x])
             #content[x] = re.sub(re.escape('_P'), '', content[x])
@@ -400,6 +420,8 @@ def markup():
             
             content[x] = re.sub('~', 'ō', content[x])
             content[x] = re.sub(' \'s', '\'s', content[x])
+            if content[x].startswith('\'s'):
+                content[x]= content[x][2:]
             
             content[x] = re.sub('`', '', content[x])
             
@@ -522,5 +544,5 @@ def markup():
         
         
     
-extract()
-#markup()
+#extract()
+markup()

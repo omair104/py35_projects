@@ -138,12 +138,13 @@ def extract():
                 f.write(written_header)
                 
                 x=0
+                while ('<TEXT>' not in content[x] and '<TEXT ' not in content[x]): 
+                    x=x+1    
                  
                 while(x<len(content)-1):      
                     
                     #if '+' in content[x]:
-                     #   g.write(content[x])  
-                        
+                    #g.write(content[x])  
                     f.write(content[x])
                     x=x+1
                 f.write('\n</text> </file>')

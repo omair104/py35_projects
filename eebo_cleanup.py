@@ -1,13 +1,13 @@
 import os, re
 g=open(r'C:\data\EEBO Phase 2\q_lang.txt', 'w', encoding='utf-8')
 def subcorpus_markup():
-    extracted_path = r'C:\data\EEBO Phase 2\EEBO TCP Phase 2'
-    cleaned_path =   r'C:\data\EEBO Phase 2\EEBO TCP Phase 2_cleaned'
+    extracted_path = r'C:\data\EEBO Phase 2\EEBO Phase 2 samples'
+    cleaned_path =   r'C:\data\EEBO Phase 2\EEBO Phase 2 samples_cleaned'
     
     files= os.listdir(extracted_path)
     
     for file in files:
-        #file= 'A07194.txt'
+        #file= 'A57999.txt'
         path_extracted_file= os.path.join(extracted_path, file)
         
         
@@ -19,6 +19,10 @@ def subcorpus_markup():
         
         x=0
         while x< len(content):
+            
+            if content[x].startswith('\'s'):
+                print(file)
+                print(content[x])
             
             if '<Q LANG=' in content[x]:
                 g.write(file)
@@ -51,10 +55,12 @@ def subcorpus_markup():
                         content[x] = re.sub(re.escape(fig), '', content[x])
                     
             if x!= len(content)-1 and '<TEXT LANG=' in content[x] and 'eng' not in content[x] and 'sco' not in content[x]:
-                print(file)
+                #print(file)
                 while 'TEXT>' not in content[x]:
                     x=x+1
-                content[x]= '...'
+                part2 = content[x].split('TEXT>')[1]
+                content[x] = '...'+ part2
+                #content[x]= '...'
                 #print(file)
                 #print(content[x])
                 #break
@@ -63,6 +69,12 @@ def subcorpus_markup():
                     
             content[x] = re.sub('&amp;', '&', content[x])
             if x>0 and x!= len(content)-1:# and '<TEXT L' not in content[x]:
+                
+                content[x] = re.sub('</SEG>', '', content[x])
+                if 'GAP DESC' in content[x] and ' <GAP DESC' not in content[x]:
+                    gaps = re.findall('<GAP DESC.*?>', content[x])
+                    for gap in gaps:
+                        content[x] = re.sub(re.escape(gap), '^', content[x])
                 
                 in_brackets= re.findall('<.*?>',content[x])
                 for element in in_brackets:

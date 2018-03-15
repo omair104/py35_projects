@@ -241,6 +241,25 @@ def markup():
                 content[x] = content[x][:-1] + content[x+1]
                 content[x+1]=''
                 
+            
+                
+            
+            if '{TEXT:' in content[x]:
+                if 'DELETED' in content[x]:
+                    removes= re.findall('{TEXT:.*?}', content[x])
+                    for remove in removes:
+                        content[x] = re.sub(re.escape(remove), '', content[x]) 
+                else:
+                    removes= re.findall('{TEXT:.*?}', content[x])
+                    for remove in removes:
+                        left = remove
+                        left = re.sub(re.escape('{TEXT:'), '', left)  
+                        left = re.sub(re.escape('}'), '', left)  
+                        content[x] = re.sub(re.escape(remove), left, content[x])  
+                        #content[x] = re.sub(re.escape('}'), '', content[x])  
+                    
+            
+                    
             if '<em>' in content[x] and'</em>' not in content[x]:
                 content[x] = content[x][:-1] + content[x+1]
                 content[x+1]=''
@@ -265,28 +284,6 @@ def markup():
             if em_starts>em_ends:
                 content[x] = content[x][:-1] + content[x+3]
                 content[x+3]=''
-                
-            
-            if '{TEXT:' in content[x]:
-                if 'DELETED' in content[x]:
-                    removes= re.findall('{TEXT:.*?}', content[x])
-                    for remove in removes:
-                        content[x] = re.sub(re.escape(remove), '', content[x]) 
-                else:
-                    removes= re.findall('{TEXT:.*?}', content[x])
-                    for remove in removes:
-                        left = remove
-                        left = re.sub(re.escape('{TEXT:'), '', left)  
-                        left = re.sub(re.escape('}'), '', left)  
-                        content[x] = re.sub(re.escape(remove), left, content[x])  
-                        #content[x] = re.sub(re.escape('}'), '', content[x])  
-                    
-            if '$' in content[x]:
-                #print(content[x])
-                removes= re.findall('\$.*?\s', content[x])
-                #print(removes)
-                for remove in removes:
-                    content[x] = re.sub(re.escape(remove), '', content[x])   
                     
             if '<em' in content[x]:
                 #print(content[x])
@@ -295,6 +292,23 @@ def markup():
                 for remove in removes:
                     content[x] = re.sub(re.escape(remove), '', content[x])   
                     
+            if x<len(content)-1:
+                if content[x+1].startswith('\'s'):
+                    content[x] = content[x][:-1] + content[x+1]
+                    content[x+1]=''
+                
+            content[x] = re.sub(' \'s ', '\'s ', content[x])
+            content[x] = re.sub(' \'s\n', '\'s\n', content[x])
+            content[x] = re.sub(' \'s=', '\'s=', content[x])
+                    
+            if '$' in content[x]:
+                #print(content[x])
+                removes= re.findall('\$.*?\s', content[x])
+                #print(removes)
+                for remove in removes:
+                    content[x] = re.sub(re.escape(remove), '', content[x])   
+                    
+                    
             #content[x] = re.sub('<em>', '', content[x])
             #content[x] = re.sub('</em>', '', content[x])
             
@@ -302,6 +316,8 @@ def markup():
             #content[x] = re.sub(re.escape('_P'), '', content[x])
             content[x] = re.sub(re.escape('_MD'), '', content[x])
             content[x] = re.sub(re.escape('<em>'), '', content[x])
+            content[x] = re.sub(re.escape('</em>'), '', content[x])
+            content[x] = re.sub(re.escape('/em'), '', content[x])
             '''
             if '{' in content[x]:
                 removes= re.findall('{.*?}', content[x])
@@ -419,9 +435,8 @@ def markup():
             
             
             content[x] = re.sub('~', 'ō', content[x])
-            content[x] = re.sub(' \'s', '\'s', content[x])
-            if content[x].startswith('\'s'):
-                content[x]= content[x][2:]
+            
+            
             
             content[x] = re.sub('`', '', content[x])
             

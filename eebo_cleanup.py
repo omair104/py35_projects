@@ -1,8 +1,8 @@
 import os, re
 g=open(r'C:\data\EEBO Phase 2\q_lang.txt', 'w', encoding='utf-8')
 def subcorpus_markup():
-    extracted_path = r'C:\data\EEBO Phase 2\EEBO Phase 2 samples'
-    cleaned_path =   r'C:\data\EEBO Phase 2\EEBO Phase 2 samples_cleaned'
+    extracted_path = r'C:\data\EEBO Phase 1\EEBO Phase 1 samples'
+    cleaned_path =   r'C:\data\EEBO Phase 1\EEBO Phase 1 samples_cleaned'
     
     files= os.listdir(extracted_path)
     
@@ -71,14 +71,18 @@ def subcorpus_markup():
             if x>0 and x!= len(content)-1:# and '<TEXT L' not in content[x]:
                 
                 content[x] = re.sub('</SEG>', '', content[x])
-                if 'GAP DESC' in content[x] and ' <GAP DESC' not in content[x]:
+                if 'GAP DESC' in content[x] and ' <GAP DESC' not in content[x] and '> ' not in content[x]:
                     gaps = re.findall('<GAP DESC.*?>', content[x])
                     for gap in gaps:
                         content[x] = re.sub(re.escape(gap), '^', content[x])
+
                 
                 in_brackets= re.findall('<.*?>',content[x])
                 for element in in_brackets:
-                    content[x] = re.sub(re.escape(element), ' ', content[x])
+                    if '>\'s' not in content[x]:
+                        content[x] = re.sub(re.escape(element), ' ', content[x])
+                    else:
+                        content[x] = re.sub(re.escape(element), '', content[x])
                     
                 content[x] = re.sub('∣', '', content[x])
                 content[x] = re.sub('¦', '', content[x])

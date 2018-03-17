@@ -31,4 +31,4 @@ for file in files:
 
 for file in files:
     os.rename(os.path.join(folder_location, file), os.path.join(folder_location, file)[:-4] + '_P1.txt')
-    
+

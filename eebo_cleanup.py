@@ -1,13 +1,13 @@
 import os, re
 g=open(r'C:\data\EEBO Phase 2\q_lang.txt', 'w', encoding='utf-8')
 def subcorpus_markup():
-    extracted_path = r'C:\data\EEBO Phase 1\EEBO Phase 1 samples'
-    cleaned_path =   r'C:\data\EEBO Phase 1\EEBO Phase 1 samples_cleaned'
+    extracted_path = r'C:\data\EEBO Phase 2\EEBO TCP Phase 2'
+    cleaned_path =   r'C:\data\EEBO Phase 2\EEBO TCP Phase 2_cleaned'
     
     files= os.listdir(extracted_path)
     
     for file in files:
-        #file= 'A57999.txt'
+        #file= 'A40366.txt'
         path_extracted_file= os.path.join(extracted_path, file)
         
         
@@ -17,17 +17,29 @@ def subcorpus_markup():
         file= os.path.join(cleaned_path, str(file))
         f= open(file, 'w+', encoding='utf-8')
         
+        x= 0
+        while x< len(content):
+            if '<LANGUAGE' in content[x] and 'eng' not in content[x]:
+                y=0
+                while '<TEXT LANG=' not in content[y]:
+                    y=y+1
+                    if y> len(content)-2:
+                        print(file)
+                        break
+            x=x+1
+                    
+                        
+                
+        
         x=0
         while x< len(content):
             
-            if content[x].startswith('\'s'):
-                print(file)
-                print(content[x])
-            
+            '''
             if '<Q LANG=' in content[x]:
                 g.write(file)
                 g.write(content[x])
                 g.write('\n')
+            '''
             
             if x>1 and x!= len(content)-1:
                 SUP_start= re.findall('<SUP>',content[x])
@@ -53,25 +65,24 @@ def subcorpus_markup():
                     figdesc= re.findall('<FIGDESC.*?FIGDESC>',content[x])
                     for fig in figdesc:
                         content[x] = re.sub(re.escape(fig), '', content[x])
-                    
+                 
+            
             if x!= len(content)-1 and '<TEXT LANG=' in content[x] and 'eng' not in content[x] and 'sco' not in content[x]:
                 #print(file)
                 while 'TEXT>' not in content[x]:
                     x=x+1
                 part2 = content[x].split('TEXT>')[1]
                 content[x] = '...'+ part2
-                #content[x]= '...'
-                #print(file)
-                #print(content[x])
-                #break
-                #pass
+                
+
+
                     
                     
             content[x] = re.sub('&amp;', '&', content[x])
             if x>0 and x!= len(content)-1:# and '<TEXT L' not in content[x]:
                 
                 content[x] = re.sub('</SEG>', '', content[x])
-                if 'GAP DESC' in content[x] and ' <GAP DESC' not in content[x] and '> ' not in content[x]:
+                if 'GAP DESC' in content[x] and ' <GAP DESC' not in content[x] and '> ' not in content[x] and '>\n' not in content[x] and not content[x].startswith('<GAP'):
                     gaps = re.findall('<GAP DESC.*?>', content[x])
                     for gap in gaps:
                         content[x] = re.sub(re.escape(gap), '^', content[x])

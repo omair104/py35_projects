@@ -617,7 +617,7 @@ def markup_dollar():
                 #print(content[x])
                 removes= re.findall('\$.*?\s', content[x])
                 #print(removes)
-                if '{' in content[x]:
+                if '{TEXT' in content[x]:
                     for remove in removes:
                         content[x] = re.sub(re.escape(remove), '', content[x]) 
                 else:

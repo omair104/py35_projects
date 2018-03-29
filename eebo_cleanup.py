@@ -7,7 +7,7 @@ def subcorpus_markup():
     files= os.listdir(extracted_path)
     
     for file in files:
-        #file= 'A40366.txt'
+        #file= '1540_A05373.txt'
         path_extracted_file= os.path.join(extracted_path, file)
         
         
@@ -79,16 +79,25 @@ def subcorpus_markup():
                     
                     
             content[x] = re.sub('&amp;', '&', content[x])
-            if x>0 and x!= len(content)-1:# and '<TEXT L' not in content[x]:
+            if x>1 and x!= len(content)-1:# and '<TEXT L' not in content[x]:
                 
                 content[x] = re.sub('</SEG>', '', content[x])
                 if 'GAP DESC' in content[x]:
-                    if ' <GAP DESC' in content[x] and ('> ' in content[x]) and not content[x].startswith('<GAP'):
-                        pass
-                    else:
-                        gaps = re.findall('<GAP DESC.*?>', content[x])
-                        for gap in gaps:
-                            content[x] = re.sub(re.escape(gap), '^', content[x])
+                    
+                    gaps = re.findall('<GAP DESC.*?>', content[x])
+                    previous_index = 0
+                    for gap in gaps:
+                        #ending_point = len(gap)
+                        length = len(gap)
+                        ind = content[x].find(gap, previous_index)
+                        #print(content[x])
+                        #print(ind,length)
+                        if content[x][ind-1] ==' ' and content[x][ind+length]==' ':
+                            pass
+                            #content[x] = re.sub(re.escape(gap), 'EXCEPTION HERE', content[x],1)
+                        else:
+                            content[x] = re.sub(re.escape(gap), '^', content[x],1)
+                        previous_index = ind+1
 
                 
                 in_brackets= re.findall('<.*?>',content[x])

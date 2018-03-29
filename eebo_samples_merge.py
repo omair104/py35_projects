@@ -1,6 +1,6 @@
 import os
 
-folder_location = r'C:\data\EEBO Phase 1 samples_cleaned'
+folder_location = r'C:\data\EEBO Phase 2 samples_cleaned'
 
 
 files= os.listdir(folder_location)
@@ -15,7 +15,7 @@ for file in files:
     print(size)
     
     
-    if year not in years_done and int(year)%2==1 or ( int(year)%3==1 and size<30000):
+    if year not in years_done and int(year)%2==0 or ( int(year)%3==0 and size<30000):
         years_done.append(year)
         
     else:
@@ -30,5 +30,5 @@ for file in files:
 '''
 
 for file in files:
-    os.rename(os.path.join(folder_location, file), os.path.join(folder_location, file)[:-4] + '_P1.txt')
+    os.rename(os.path.join(folder_location, file), os.path.join(folder_location, file)[:-4] + '_P2.txt')
 

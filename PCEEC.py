@@ -650,15 +650,7 @@ def markup_dollar():
                         content[x] = re.sub(re.escape(remove), left, content[x])  
                         #content[x] = re.sub(re.escape('}'), '', content[x])  
                     
-            
             '''
-            if '<em>' in content[x] and'</em>' not in content[x]:
-                content[x] = content[x][:-1] + content[x+1]
-                content[x+1]=''
-            if '<em>' in content[x] and'</em>' not in content[x]:
-                content[x] = content[x][:-1] + content[x+2]
-                content[x+2]=''
-            ''' 
             em_starts = content[x].count('<em>')
             em_ends = content[x].count('</em>')
             if em_starts>em_ends:
@@ -691,6 +683,18 @@ def markup_dollar():
                             em_sentence_new = re.sub(re.escape(word), new_word, em_sentence_new)  
                             done_list.append(word) 
                     content[x] = re.sub(em_sentence, em_sentence_new, content[x])
+            '''
+            if '<em' in content[x]:
+                em_starts = content[x].count('<em>')
+                em_ends = content[x].count('</em>')
+                if em_starts==em_ends:
+                    removes= re.findall('<em.*?/em>', content[x])
+                elif em_starts>em_ends:
+                    pass
+                elif em_starts<em_ends:
+                    pass
+                    
+                    
                     
             if x<len(content)-1:
                 if content[x+1].startswith('\'s'):

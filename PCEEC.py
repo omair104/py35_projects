@@ -25,8 +25,7 @@ def extract():
             name = os.path.splitext(file_name)[0]
             scan_upto = name.upper()+','
 
-            remove_list= [ '</paren>' ,'<paren>', 
-                          '<heading>','</heading>']
+            remove_list= [ '<heading>','</heading>']
             
             #print(path_org_file)
             with open(path_org_file) as f:
@@ -44,7 +43,7 @@ def extract():
                 a = re.findall('\<P_.*?\>',x)
                 if a != []:
                     for element in a:
-                        if element not in remove_list:
+                        if element not in remove_list and element not in ['<paren>', '</paren>']:
                             remove_list.append(element)
                         
             #print(remove_list)
@@ -195,7 +194,10 @@ def markup():
         
         x=0
         while x< len(content):
-            
+            if '<paren>' in content[x]:
+                print(file)
+            content[x] = re.sub('<paren>', '(', content[x])
+            content[x] = re.sub('</paren>', ')', content[x])
             content[x] = re.sub(re.escape('{COM:logicall_REPEATED}'), 'logicall', content[x])
             content[x] = re.sub(re.escape('{COM:therefore_repeated}'), 'therefore', content[x])
             content[x] = re.sub(re.escape('{COM:to_REPEATED}'), 'to', content[x])
@@ -340,6 +342,7 @@ def markup():
             content[x] = re.sub('out_of', 'out of', content[x])
             content[x] = re.sub('{in}_P {her_to_be}', 'in', content[x])
             content[x] = re.sub('{in}_P {that_I_am}', 'in', content[x])
+            content[x] = re.sub('that_I_would_receive', '', content[x])
             content[x] = re.sub('{TEXT:through}_P', 'through', content[x])
 
             content[x] = re.sub(re.escape('_P'), '', content[x])
@@ -452,7 +455,7 @@ def markup():
                 content[x] = re.sub('-8', '', content[x])
                 content[x] = re.sub('-9', '', content[x])
 
-            content[x] = re.sub(re.escape('+L'), '$', content[x])
+            content[x] = re.sub(re.escape('+L'), '£', content[x])
             
             
             content[x] = re.sub(re.escape('+g'), 'ƿ', content[x])
@@ -875,6 +878,7 @@ def markup_dollar():
             content[x] = re.sub('{TEXT:cannot}', 'cannot', content[x])
 
             if x>1:
+                content[x] = re.sub('_@', '', content[x])
                 content[x] = re.sub('_ @', '', content[x])
                 content[x] = re.sub('_CODE_X', '', content[x])
                 content[x] = re.sub('_COD E', '', content[x])
@@ -890,6 +894,7 @@ def markup_dollar():
                 content[x] = re.sub('_NP-SBJ', '', content[x])
                 content[x] = re.sub('_NP-OB1', '', content[x])
                 content[x] = re.sub('_NP-OB2', '', content[x])
+                content[x] = re.sub('_NPR', '', content[x])
                 content[x] = re.sub('_NP', '', content[x])
                 content[x] = re.sub('_BED', '', content[x])
                 content[x] = re.sub('_BEN', '', content[x])
@@ -959,5 +964,5 @@ def markup_dollar():
         
         
 #extract()
-#markup()
-markup_dollar()
+markup()
+#markup_dollar()

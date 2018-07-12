@@ -1,13 +1,14 @@
 import os, re
-g=open(r'C:\data\EEBO Phase 2\q_lang.txt', 'w', encoding='utf-8')
+
+g=open(r'C:\data\EEBO Phase 1\char_samples_proc.txt', 'w', encoding='utf-8')
 def subcorpus_markup():
-    extracted_path = r'C:\data\EEBO Phase 1\EEBO Phase 1 samples'
-    cleaned_path =   r'C:\data\EEBO Phase 1\EEBO Phase 1 samples_cleaned'
+    extracted_path = r'C:\data\EEBO Phase 1\EEBO TCP Phase 1'
+    cleaned_path =   r'C:\data\EEBO Phase 1\EEBO TCP Phase 1_cleaned'
     
     files= os.listdir(extracted_path)
     
     for file in files:
-        #file= '1540_A05373.txt'
+        #file= '1529_A01279.txt'
         path_extracted_file= os.path.join(extracted_path, file)
         
         
@@ -24,7 +25,7 @@ def subcorpus_markup():
                 while '<TEXT LANG=' not in content[y]:
                     y=y+1
                     if y> len(content)-2:
-                        print(file)
+                        #print(file)
                         break
             x=x+1
                     
@@ -33,15 +34,32 @@ def subcorpus_markup():
         
         x=0
         while x< len(content):
-            
             '''
-            if '<Q LANG=' in content[x]:
-                g.write(file)
-                g.write(content[x])
-                g.write('\n')
+            curly_brackets = re.findall('{.*?}', content[x])
+            for c in curly_brackets:
+                if c not in ['{is}','{us}', '{que}']:
+                    print(file)
+                    print(c)
             '''
+
+            curly_exceptions = ['{D}', '{d}', '{F}', '{f}', '{g}', '{G}', '{R}', '{r}', '{S}', '{s}', '{T}', '{t}', '{LL}', '{ll}', '{W}', '{w}', '{Y}', '{y}', '{ou}', '{bus}', '{CON}', '{con}', '{er}', '{is}', '{PER}', '{per}', '{pre}', '{pri}', '{PRI}', '{PRO}', '{pro}', '{qu}', '{quam}', '{que}', '{QUE}', '{qui}', '{QUOD}', '{quod}', '{ris}', '{rum}', '{RUM}', '{sed}', '{ser}', '{ur}', '{us}', '{US}', '{es}', '{etc}', '{THAT}', '{that}', '{fj}']
+            if any (word in content[x] for word in curly_exceptions):
+                pass
+            else:
+                if '{' in content[x] and '}' in content[x]:
+
+                    curly_brackets = re.findall('{.*?}', content[x])
+                    for c in curly_brackets:
+                        content[x] = re.sub(re.escape(c), ' ', content[x])
+                        
+                    g.write(file)
+                    g.write(content[x])
+
             
-            if x>1 and x!= len(content)-1:
+    
+            
+            
+            if x>0 and x!= len(content)-1:
                 SUP_start= re.findall('<SUP>',content[x])
                 for s in SUP_start:
                     content[x] = re.sub(re.escape(s), '=', content[x])
@@ -74,16 +92,31 @@ def subcorpus_markup():
                 part2 = content[x].split('TEXT>')[1]
                 content[x] = '...'+ part2
                 
-
-
+            '''
+            a = re.findall('<ADD.*?ADD>', content[x])
+            for b in a:
+                g.write(file)
+                g.write(b)
                     
+            if 'TYPE="modern' in content[x]:
+                g.write(file)
+                g.write(content[x])
+            ''' 
+            if 'DIV1 TYPE="modern' in content[x]:
+                while '/DIV1' not in content[x]:
+                    x=x+1
                     
             content[x] = re.sub('&amp;', '&', content[x])
-            if x>1 and x!= len(content)-1:# and '<TEXT L' not in content[x]:
+            if x>0 and x!= len(content)-1:# and '<TEXT L' not in content[x]:
                 
                 content[x] = re.sub('</SEG>', '', content[x])
                 if 'GAP DESC' in content[x]:
-                    
+                    '''
+                    if content[x][-3:-1]=='/>' and content[x+1][:4] == '<GAP':
+                        g.write(file)
+                        g.write(content[x])
+                        g.write(content[x+1])
+                    '''
                     gaps = re.findall('<GAP DESC.*?>', content[x])
                     previous_index = 0
                     for gap in gaps:
@@ -92,8 +125,8 @@ def subcorpus_markup():
                         ind = content[x].find(gap, previous_index)
                         #print(content[x])
                         #print(ind,length)
-                        if content[x][ind-1] ==' ' and content[x][ind+length]==' ':
-                            pass
+                        if content[x][ind-1] in [' ', '>', '\n'] and content[x][ind+length] in [' ', '<', '\n']:
+                            content[x] = re.sub(re.escape(gap), '', content[x],1)
                             #content[x] = re.sub(re.escape(gap), 'EXCEPTION HERE', content[x],1)
                         else:
                             content[x] = re.sub(re.escape(gap), '^', content[x],1)
@@ -107,16 +140,36 @@ def subcorpus_markup():
                     else:
                         content[x] = re.sub(re.escape(element), '', content[x])
                     
+                special_characters = ['✿', '❍', '⦾', '★', '●']
+                if any (word in content[x] for word in special_characters):
+                    
+                    content[x] = re.sub('✿', '', content[x])
+                    content[x] = re.sub('❍', '', content[x])
+                    content[x] = re.sub('⦾', '', content[x])
+                    content[x] = re.sub('★', '', content[x])
+                    content[x] = re.sub('●', '', content[x])
+                    g.write(file)
+                    g.write(content[x])
+                    
                 content[x] = re.sub('∣', '', content[x])
                 content[x] = re.sub('¦', '', content[x])
                 content[x] = re.sub('¶', '', content[x])
                 content[x] = re.sub('❧', '', content[x])
                 content[x] = re.sub('☞', '', content[x])
+                content[x] = re.sub('❀', '', content[x])
+                content[x] = re.sub('☜', '', content[x])
                 content[x] = re.sub('\*', '', content[x])
                 content[x] = re.sub('✚', '', content[x])
                 content[x] = re.sub(':black_small_square:', '', content[x])
                 if '=•=' not in content[x]:
                     content[x] = re.sub('•', '', content[x])
+                content[x] = re.sub('✿', '', content[x])
+                content[x] = re.sub('❍', '', content[x])
+                content[x] = re.sub('⦾', '', content[x])
+                content[x] = re.sub('★', '', content[x])
+                content[x] = re.sub('●', '', content[x])
+
+            
                     
                 content[x] = re.sub('▪', '', content[x])
                 
@@ -135,23 +188,7 @@ def subcorpus_markup():
                 content[x] = re.sub('<publisher=Printed,>', '<publisher=X>', content[x])
                 content[x] = re.sub('<publisher=Printed>', '<publisher=X>', content[x])
 
-            
-            if '<Q LANG=' in content[x]:
-                g.write(file)
-                g.write(content[x])
-                g.write('\n')
-                
-                '''
-                words = content[x].split()
-                for word in words: 
-                    if '▪' in word:
-                        g.write(file)
-                        g.write('\n')
-                        g.write(word)
-                        g.write('\n')
-                #g.write(content[x]) 
-                '''
-                
+
                 
             
             f.write(content[x])

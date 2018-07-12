@@ -11,6 +11,7 @@ def extract():
     #files = os.listdir(org_path)
     for path, subdirs, files in os.walk(org_path):
         for filename in files:
+            #filename = 'A53042.headed.xml'
             if os.path.splitext(filename)[1] == '.xml':
                 file = os.path.join(path, filename)
                 #print(file)
@@ -137,16 +138,17 @@ def extract():
                 f= open(file, 'w+', encoding='utf-8')
                 f.write(written_header)
                 
-                x=0
-                while ('<TEXT>' not in content[x] and '<TEXT ' not in content[x]): 
-                    x=x+1    
-                 
-                while(x<len(content)-1):      
+                if filename in ['A01639', 'A01809', 'A40366', 'A46029', 'A51116', 'A53042']:
+                    f.write('...')
+                else:
+                    x=0
+                    while ('<TEXT>' not in content[x] and '<TEXT ' not in content[x]): 
+                        x=x+1    
+                     
+                    while(x<len(content)-1):      
+                        f.write(content[x])
+                        x=x+1
                     
-                    #if '+' in content[x]:
-                    #g.write(content[x])  
-                    f.write(content[x])
-                    x=x+1
                 f.write('\n</text> </file>')
                 f.close
                 

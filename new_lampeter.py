@@ -382,7 +382,6 @@ def markup():
                 content[x] = re.sub('&sect;', '', content[x])
                 content[x] = re.sub('&verbar;', '', content[x])
                 content[x] = re.sub('&ascnode;', '', content[x])
-                content[x] = re.sub('&because;', '', content[x])
                 content[x] = re.sub('&dag;', '', content[x])
                 content[x] = re.sub('&dcross;', '', content[x])
                 content[x] = re.sub('&deg;', '', content[x])
